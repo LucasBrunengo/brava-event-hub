@@ -1,12 +1,94 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState } from 'react';
+import { useApp } from '@/context/AppContext';
+import { WelcomeScreen } from '@/components/auth/WelcomeScreen';
+import { Dashboard } from '@/components/dashboard/Dashboard';
+import { CreateEventForm } from '@/components/events/CreateEventForm';
+import { EventDetail } from '@/components/events/EventDetail';
+import { ProfilePage } from '@/components/profile/ProfilePage';
+import { BottomNav } from '@/components/layout/BottomNav';
+import { Event } from '@/types';
+
+type View = 'dashboard' | 'create' | 'profile' | 'event-detail';
 
 const Index = () => {
+  const { isAuthenticated } = useApp();
+  const [currentView, setCurrentView] = useState<View>('dashboard');
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+
+  if (!isAuthenticated) {
+    return <WelcomeScreen />;
+  }
+
+  const handleEventClick = (event: Event) => {
+    setSelectedEvent(event);
+    setCurrentView('event-detail');
+  };
+
+  const handleCreateEvent = () => {
+    setCurrentView('create');
+  };
+
+  const handleEventCreated = () => {
+    setCurrentView('dashboard');
+  };
+
+  const handleBack = () => {
+    setSelectedEvent(null);
+    setCurrentView('dashboard');
+  };
+
+  const handleTabChange = (tab: 'events' | 'create' | 'profile') => {
+    if (tab === 'events') {
+      setCurrentView('dashboard');
+    } else if (tab === 'create') {
+      setCurrentView('create');
+    } else if (tab === 'profile') {
+      setCurrentView('profile');
+    }
+  };
+
+  const getActiveTab = (): 'events' | 'create' | 'profile' => {
+    if (currentView === 'create') return 'create';
+    if (currentView === 'profile') return 'profile';
+    return 'events';
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-md mx-auto pb-20">
+        <div className="p-4">
+          {currentView === 'dashboard' && (
+            <Dashboard 
+              onCreateEvent={handleCreateEvent}
+              onEventClick={handleEventClick}
+            />
+          )}
+          
+          {currentView === 'create' && (
+            <CreateEventForm 
+              onBack={handleBack}
+              onEventCreated={handleEventCreated}
+            />
+          )}
+          
+          {currentView === 'event-detail' && selectedEvent && (
+            <EventDetail 
+              event={selectedEvent}
+              onBack={handleBack}
+            />
+          )}
+          
+          {currentView === 'profile' && (
+            <ProfilePage />
+          )}
+        </div>
       </div>
+
+      <BottomNav 
+        activeTab={getActiveTab()}
+        onTabChange={handleTabChange}
+      />
     </div>
   );
 };
