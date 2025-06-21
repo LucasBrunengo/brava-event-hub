@@ -5,13 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Calendar, MapPin, User, MessageSquare, ExternalLink, Ticket } from 'lucide-react';
-import { Event } from '@/types';
+import { ArrowLeft, Calendar, MapPin, User, MessageSquare, ExternalLink, Ticket, Euro } from 'lucide-react';
+import { Event, UserProfile as UserProfileType } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { format } from 'date-fns';
 import { ExpenseSection } from './ExpenseSection';
 import { CommentSection } from './CommentSection';
 import { BarcelonaMap } from './BarcelonaMap';
+import { PhotoGallery } from './PhotoGallery';
+import { UserProfile } from '../profile/UserProfile';
 
 interface EventDetailProps {
   event: Event;
@@ -19,8 +21,9 @@ interface EventDetailProps {
 }
 
 export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
-  const { currentUser, updateEventRSVP } = useApp();
+  const { currentUser, updateEventRSVP, users, events } = useApp();
   const [isUpdatingRSVP, setIsUpdatingRSVP] = useState(false);
+  const [showUserProfile, setShowUserProfile] = useState<UserProfileType | null>(null);
 
   const currentUserAttendee = event.attendees.find(a => a.userId === currentUser?.id);
   const currentStatus = currentUserAttendee?.status || null;
@@ -40,6 +43,31 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
     }
   };
 
+  const handleOrganizerClick = () => {
+    // Create mock user profile data
+    const sharedEvents = events.filter(e => 
+      e.attendees.some(a => a.userId === currentUser?.id && a.status === 'going') &&
+      e.attendees.some(a => a.userId === event.organizerId && a.status === 'going')
+    );
+
+    const userProfile: UserProfileType = {
+      user: event.organizer,
+      mutualFriends: Math.floor(Math.random() * 15) + 1,
+      sharedEvents,
+      sharedPhotos: [],
+      friendship: {
+        id: 'friendship-1',
+        userId1: currentUser?.id || '',
+        userId2: event.organizerId,
+        status: 'accepted',
+        createdAt: new Date().toISOString(),
+        sharedEvents: sharedEvents.map(e => e.id)
+      }
+    };
+
+    setShowUserProfile(userProfile);
+  };
+
   const getStatusButtonClass = (status: 'going' | 'maybe' | 'not-going') => {
     if (currentStatus === status) {
       switch (status) {
@@ -51,6 +79,20 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
     return 'bg-muted hover:bg-muted/80';
   };
 
+  const getDiscountedPrice = () => {
+    if (!event.ticketPrice || !event.discountPercentage) return event.ticketPrice;
+    return event.ticketPrice * (1 - event.discountPercentage / 100);
+  };
+
+  if (showUserProfile) {
+    return (
+      <UserProfile 
+        userProfile={showUserProfile} 
+        onBack={() => setShowUserProfile(null)} 
+      />
+    );
+  }
+
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
@@ -60,7 +102,15 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
         </Button>
         <div className="flex-1">
           <h1 className="text-2xl font-bold">{event.name}</h1>
-          <p className="text-muted-foreground">Organized by {event.organizer.name}</p>
+          <p className="text-muted-foreground">
+            Organized by{' '}
+            <button 
+              onClick={handleOrganizerClick}
+              className="text-primary hover:underline font-medium"
+            >
+              {event.organizer.name}
+            </button>
+          </p>
         </div>
       </div>
 
@@ -83,19 +133,46 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
               
               <div className="flex items-center gap-2 text-muted-foreground">
                 <User className="w-4 h-4" />
-                <span>Organized by {event.organizer.name}</span>
+                <span>
+                  Organized by{' '}
+                  <button 
+                    onClick={handleOrganizerClick}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    {event.organizer.name}
+                  </button>
+                </span>
               </div>
+
+              {event.ticketPrice && (
+                <div className="flex items-center gap-2">
+                  <Euro className="w-4 h-4 text-muted-foreground" />
+                  <div className="flex items-center gap-2">
+                    {event.isPromoted && event.discountPercentage ? (
+                      <>
+                        <span className="line-through text-muted-foreground">€{event.ticketPrice.toFixed(2)}</span>
+                        <span className="font-semibold text-green-600 text-lg">€{getDiscountedPrice()?.toFixed(2)}</span>
+                        <Badge className="bg-green-100 text-green-800">
+                          -{event.discountPercentage}% OFF
+                        </Badge>
+                      </>
+                    ) : (
+                      <span className="font-semibold text-lg">€{event.ticketPrice.toFixed(2)}</span>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-wrap gap-2">
-              {event.hasExpenseSplitting && (
+              {!event.isPublic && event.hasExpenseSplitting && (
                 <Badge variant="outline">
                   💰 Expense splitting enabled
                 </Badge>
               )}
-              {event.ticketPrice && (
-                <Badge variant="outline">
-                  🎫 ${event.ticketPrice}
+              {event.isPublic && event.isPromoted && (
+                <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                  Promoted Event
                 </Badge>
               )}
             </div>
@@ -106,7 +183,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
                 className="w-full brava-gradient"
               >
                 <Ticket className="w-4 h-4 mr-2" />
-                Buy Tickets - ${event.ticketPrice}
+                Buy Tickets - €{event.isPromoted && event.discountPercentage ? getDiscountedPrice()?.toFixed(2) : event.ticketPrice?.toFixed(2)}
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>
             )}
@@ -116,27 +193,6 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
 
       {/* Map */}
       <BarcelonaMap location={event.location} eventName={event.name} />
-
-      {/* Event Photos */}
-      {event.photos && event.photos.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Event Gallery</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-3">
-              {event.photos.slice(0, 4).map((photo, index) => (
-                <img
-                  key={index}
-                  src={photo}
-                  alt={`${event.name} photo ${index + 1}`}
-                  className="aspect-square object-cover rounded-lg"
-                />
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* RSVP Section */}
       <Card>
@@ -219,57 +275,34 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
         </CardContent>
       </Card>
 
-      {/* Tabs for Expenses, Photos, Comments */}
+      {/* Photo Gallery */}
+      <PhotoGallery 
+        photos={event.photos || []} 
+        attendees={event.attendees.map(a => a.user)}
+        eventId={event.id}
+      />
+
+      {/* Comments and Expenses */}
       <Tabs defaultValue="comments" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className={`grid w-full ${!event.isPublic && event.hasExpenseSplitting ? 'grid-cols-2' : 'grid-cols-1'}`}>
           <TabsTrigger value="comments">
             <MessageSquare className="w-4 h-4 mr-2" />
             Comments
           </TabsTrigger>
-          {event.hasExpenseSplitting && (
+          {!event.isPublic && event.hasExpenseSplitting && (
             <TabsTrigger value="expenses">💰 Expenses</TabsTrigger>
           )}
-          <TabsTrigger value="photos">📷 Photos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="comments">
           <CommentSection eventId={event.id} />
         </TabsContent>
 
-        {event.hasExpenseSplitting && (
+        {!event.isPublic && event.hasExpenseSplitting && (
           <TabsContent value="expenses">
             <ExpenseSection event={event} />
           </TabsContent>
         )}
-
-        <TabsContent value="photos">
-          <Card>
-            <CardContent className="p-6">
-              {event.photos && event.photos.length > 0 ? (
-                <div className="grid grid-cols-2 gap-3">
-                  {event.photos.map((photo, index) => (
-                    <img
-                      key={index}
-                      src={photo}
-                      alt={`Event photo ${index + 1}`}
-                      className="aspect-square object-cover rounded-lg"
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                    📷
-                  </div>
-                  <h3 className="font-semibold mb-2">No Photos Yet</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Photos from the event will appear here
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
     </div>
   );

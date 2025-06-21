@@ -101,7 +101,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="expense-amount">Total Amount ($)</Label>
+                    <Label htmlFor="expense-amount">Total Amount (€)</Label>
                     <Input
                       id="expense-amount"
                       type="number"
@@ -115,7 +115,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
                     <Label>Split Between ({newExpense.splitBetween.length} people)</Label>
                     {newExpense.amount && newExpense.splitBetween.length > 0 && (
                       <p className="text-sm text-muted-foreground mb-2">
-                        ${(parseFloat(newExpense.amount) / newExpense.splitBetween.length).toFixed(2)} per person
+                        €{(parseFloat(newExpense.amount) / newExpense.splitBetween.length).toFixed(2)} per person
                       </p>
                     )}
                     <div className="space-y-2 mt-2 max-h-40 overflow-y-auto">
@@ -155,13 +155,13 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
           <div className="grid grid-cols-2 gap-4 text-center">
             <div>
               <p className="text-2xl font-bold text-green-600">
-                ${getTotalPaid(currentUser?.id || '').toFixed(2)}
+                €{getTotalPaid(currentUser?.id || '').toFixed(2)}
               </p>
               <p className="text-sm text-muted-foreground">You've Paid</p>
             </div>
             <div>
               <p className="text-2xl font-bold text-orange-600">
-                ${getTotalOwed(currentUser?.id || '').toFixed(2)}
+                €{getTotalOwed(currentUser?.id || '').toFixed(2)}
               </p>
               <p className="text-sm text-muted-foreground">You Owe</p>
             </div>
@@ -195,9 +195,9 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold">${expense.amount.toFixed(2)}</p>
+                    <p className="font-semibold">€{expense.amount.toFixed(2)}</p>
                     <p className="text-sm text-muted-foreground">
-                      ${(expense.amount / expense.splitBetween.length).toFixed(2)} each ({expense.splitBetween.length} people)
+                      €{(expense.amount / expense.splitBetween.length).toFixed(2)} each ({expense.splitBetween.length} people)
                     </p>
                   </div>
                 </div>
@@ -219,7 +219,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
                           <span>{user.name}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span>${payment.amount.toFixed(2)}</span>
+                          <span>€{payment.amount.toFixed(2)}</span>
                           <Badge
                             className={
                               payment.status === 'paid' ? 'bg-green-100 text-green-800' :
@@ -259,7 +259,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
           <div className="grid grid-cols-3 gap-3">
             <Button variant="outline" className="h-12 flex flex-col items-center justify-center">
               <div className="w-6 h-6 bg-black rounded-md flex items-center justify-center text-white font-bold text-xs mb-1">
-                
+                🍎
               </div>
               <div className="text-xs">Apple Pay</div>
             </Button>

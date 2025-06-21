@@ -5,6 +5,9 @@ export interface User {
   email: string;
   avatar?: string;
   phone?: string;
+  bio?: string;
+  location?: string;
+  joinedDate?: string;
 }
 
 export interface Event {
@@ -18,7 +21,7 @@ export interface Event {
   organizer: User;
   attendees: EventAttendee[];
   expenses?: Expense[];
-  photos?: string[];
+  photos?: EventPhoto[];
   createdAt: string;
   hasExpenseSplitting: boolean;
   isPublic?: boolean;
@@ -26,6 +29,31 @@ export interface Event {
   ticketPrice?: number;
   isPromoted?: boolean;
   discountPercentage?: number;
+}
+
+export interface EventPhoto {
+  id: string;
+  url: string;
+  uploadedBy: string;
+  uploadedAt: string;
+  reactions: PhotoReaction[];
+  comments: PhotoComment[];
+  taggedUsers: string[];
+}
+
+export interface PhotoReaction {
+  id: string;
+  userId: string;
+  emoji: string;
+  createdAt: string;
+}
+
+export interface PhotoComment {
+  id: string;
+  userId: string;
+  user: User;
+  message: string;
+  createdAt: string;
 }
 
 export interface EventAttendee {
@@ -63,4 +91,21 @@ export interface Comment {
   user: User;
   message: string;
   createdAt: string;
+}
+
+export interface Friendship {
+  id: string;
+  userId1: string;
+  userId2: string;
+  status: 'pending' | 'accepted' | 'blocked';
+  createdAt: string;
+  sharedEvents: string[];
+}
+
+export interface UserProfile {
+  user: User;
+  mutualFriends: number;
+  sharedEvents: Event[];
+  sharedPhotos: EventPhoto[];
+  friendship?: Friendship;
 }

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, MapPin, User, Clock, Tag } from 'lucide-react';
+import { Calendar, MapPin, User, Clock, Tag, Euro } from 'lucide-react';
 import { Event } from '@/types';
 import { format } from 'date-fns';
 
@@ -36,6 +36,11 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
     return 'Upcoming';
   };
 
+  const getDiscountedPrice = () => {
+    if (!event.ticketPrice || !event.discountPercentage) return event.ticketPrice;
+    return event.ticketPrice * (1 - event.discountPercentage / 100);
+  };
+
   return (
     <Card 
       className="cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-[1.02] animate-fade-in"
@@ -46,7 +51,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="font-semibold text-lg text-foreground">{event.name}</h3>
-              {event.isPromoted && (
+              {event.isPublic && event.isPromoted && (
                 <Badge className="bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs">
                   <Tag className="w-3 h-3 mr-1" />
                   -{event.discountPercentage}%
@@ -73,6 +78,25 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
             <span className="truncate">{event.location}</span>
           </div>
 
+          {event.isPublic && event.ticketPrice && (
+            <div className="flex items-center gap-2 text-sm">
+              <Euro className="w-4 h-4 text-muted-foreground" />
+              <div className="flex items-center gap-2">
+                {event.isPromoted && event.discountPercentage ? (
+                  <>
+                    <span className="line-through text-muted-foreground">€{event.ticketPrice.toFixed(2)}</span>
+                    <span className="font-semibold text-green-600">€{getDiscountedPrice()?.toFixed(2)}</span>
+                    <Badge className="bg-green-100 text-green-800 text-xs">
+                      -{event.discountPercentage}% OFF
+                    </Badge>
+                  </>
+                ) : (
+                  <span className="font-semibold">€{event.ticketPrice.toFixed(2)}</span>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <User className="w-4 h-4" />
             <span>by {event.organizer.name}</span>
@@ -88,12 +112,12 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
           </div>
           
           <div className="flex gap-2">
-            {event.hasExpenseSplitting && (
+            {!event.isPublic && event.hasExpenseSplitting && (
               <Badge variant="outline" className="text-xs">
                 💰 Split Bills
               </Badge>
             )}
-            {event.isPromoted && (
+            {event.isPublic && event.isPromoted && (
               <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs">
                 Promoted
               </Badge>
