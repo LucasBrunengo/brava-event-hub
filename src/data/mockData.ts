@@ -38,6 +38,9 @@ export const mockUsers: User[] = [
   },
 ];
 
+// Export the current user (Alice Johnson)
+export const mockCurrentUser: User = mockUsers[0];
+
 export const mockEvents: Event[] = [
   {
     id: '1',
@@ -167,6 +170,9 @@ export const mockEvents: Event[] = [
     isPublic: true,
   },
 ];
+
+// Extract public events from mockEvents
+export const mockPublicEvents: Event[] = mockEvents.filter(event => event.isPublic);
 
 export const mockExpenses: Expense[] = [
   {
