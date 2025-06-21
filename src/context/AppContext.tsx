@@ -6,8 +6,8 @@ interface AppContextType {
   // Authentication
   isAuthenticated: boolean;
   currentUser: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<boolean>;
+  register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
 
   // Events
@@ -36,14 +36,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [expenses, setExpenses] = useState<Expense[]>(mockExpenses);
   const [comments, setComments] = useState<Comment[]>(mockComments);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     console.log('Logging in with:', email, password);
     setIsAuthenticated(true);
     setCurrentUser(mockCurrentUser);
+    return true;
   };
 
-  const signup = async (name: string, email: string, password: string) => {
-    console.log('Signing up with:', name, email, password);
+  const register = async (name: string, email: string, password: string): Promise<boolean> => {
+    console.log('Registering with:', name, email, password);
     const newUser: User = {
       id: Date.now().toString(),
       name,
@@ -51,6 +52,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
     setCurrentUser(newUser);
     setIsAuthenticated(true);
+    return true;
   };
 
   const logout = () => {
@@ -171,7 +173,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     isAuthenticated,
     currentUser,
     login,
-    signup,
+    register,
     logout,
     events,
     publicEvents,
