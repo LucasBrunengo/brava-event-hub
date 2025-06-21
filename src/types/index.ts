@@ -24,6 +24,8 @@ export interface Event {
   isPublic?: boolean;
   ticketUrl?: string;
   ticketPrice?: number;
+  isPromoted?: boolean;
+  discountPercentage?: number;
 }
 
 export interface EventAttendee {

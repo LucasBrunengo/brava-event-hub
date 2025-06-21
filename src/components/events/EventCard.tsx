@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, MapPin, User, Clock } from 'lucide-react';
+import { Calendar, MapPin, User, Clock, Tag } from 'lucide-react';
 import { Event } from '@/types';
 import { format } from 'date-fns';
 
@@ -44,7 +44,15 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-3">
           <div className="flex-1">
-            <h3 className="font-semibold text-lg text-foreground mb-1">{event.name}</h3>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-semibold text-lg text-foreground">{event.name}</h3>
+              {event.isPromoted && (
+                <Badge className="bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs">
+                  <Tag className="w-3 h-3 mr-1" />
+                  -{event.discountPercentage}%
+                </Badge>
+              )}
+            </div>
             <p className="text-sm text-muted-foreground line-clamp-2">{event.description}</p>
           </div>
           <Badge className={getStatusColor()}>
@@ -79,11 +87,18 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
             )}
           </div>
           
-          {event.hasExpenseSplitting && (
-            <Badge variant="outline" className="text-xs">
-              💰 Split Bills
-            </Badge>
-          )}
+          <div className="flex gap-2">
+            {event.hasExpenseSplitting && (
+              <Badge variant="outline" className="text-xs">
+                💰 Split Bills
+              </Badge>
+            )}
+            {event.isPromoted && (
+              <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs">
+                Promoted
+              </Badge>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>

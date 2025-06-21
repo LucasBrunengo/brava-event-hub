@@ -18,8 +18,16 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({ onCreateEvent, onEventClick }) => {
   const { events, currentUser } = useApp();
 
-  const upcomingEvents = events.filter(event => new Date(event.date) >= new Date());
-  const pastEvents = events.filter(event => new Date(event.date) < new Date());
+  // Filter to show only upcoming events in "My Events" tab
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const upcomingEvents = events.filter(event => {
+    const eventDate = new Date(event.date);
+    eventDate.setHours(0, 0, 0, 0);
+    return eventDate >= today;
+  });
+  
   const organizedCount = events.filter(event => event.organizerId === currentUser?.id).length;
   const attendingCount = events.filter(event => 
     event.attendees.some(a => a.userId === currentUser?.id && a.status === 'going')
@@ -29,18 +37,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateEvent, onEventClic
     <div className="space-y-6 animate-fade-in">
       {/* Header with Background */}
       <div className="relative">
-        <div 
-          className="absolute inset-0 h-48 bg-gradient-to-br from-purple-500 via-blue-500 to-purple-600 rounded-lg opacity-90"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600&h=300&fit=crop)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundBlendMode: 'overlay'
-          }}
-        />
-        <div className="relative z-10 p-6 text-white">
+        <div className="absolute inset-0 h-48 brava-gradient rounded-lg opacity-90" />
+        <div className="relative z-10 p-6 text-white text-center">
+          <div className="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
+            <span className="text-2xl font-bold text-white">B</span>
+          </div>
           <h1 className="text-3xl font-bold mb-2">Welcome to Brava</h1>
-          <p className="text-white/90 mb-6">Organize events without the WhatsApp chaos</p>
+          <p className="text-white/90 mb-6">Organize events seamlessly with your friends</p>
           
           <Button 
             onClick={onCreateEvent}
@@ -78,53 +81,34 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateEvent, onEventClic
         </TabsList>
 
         <TabsContent value="private" className="space-y-4">
-          {upcomingEvents.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Upcoming Events</CardTitle>
-              </CardHeader>
-              <CardContent>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Upcoming Events</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {upcomingEvents.length > 0 ? (
                 <EventsList 
                   events={upcomingEvents} 
                   onEventClick={onEventClick}
                   emptyMessage="No upcoming events planned"
                 />
-              </CardContent>
-            </Card>
-          )}
-
-          {pastEvents.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Past Events</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <EventsList 
-                  events={pastEvents} 
-                  onEventClick={onEventClick}
-                  emptyMessage="No past events"
-                />
-              </CardContent>
-            </Card>
-          )}
-
-          {events.length === 0 && (
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                  📅
+              ) : (
+                <div className="text-center py-6">
+                  <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                    📅
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">No Upcoming Events</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Start organizing your next event with friends!
+                  </p>
+                  <Button onClick={onCreateEvent} className="brava-gradient">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Your First Event
+                  </Button>
                 </div>
-                <h3 className="font-semibold text-lg mb-2">No Events Yet</h3>
-                <p className="text-muted-foreground mb-4">
-                  Start organizing your first event and say goodbye to WhatsApp chaos!
-                </p>
-                <Button onClick={onCreateEvent} className="brava-gradient">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Your First Event
-                </Button>
-              </CardContent>
-            </Card>
-          )}
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="public" className="space-y-4">

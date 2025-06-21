@@ -91,6 +91,26 @@
     overflow: hidden;
   }
 
+  /* Hide scrollbars */
+  .phone-screen {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+
+  .phone-screen::-webkit-scrollbar {
+    display: none; /* WebKit */
+  }
+
+  /* Also hide scrollbars in any scrollable content inside */
+  .phone-screen * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .phone-screen *::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Phone frame styles */
   .phone-frame {
     width: 375px;
