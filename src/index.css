@@ -80,22 +80,47 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 text-foreground min-h-screen;
+    background: linear-gradient(135deg, 
+      #0f0f23 0%, 
+      #1a1a2e 25%, 
+      #16213e 50%, 
+      #0f3460 75%, 
+      #533483 100%);
     background-attachment: fixed;
+    @apply text-foreground min-h-screen;
+    overflow: hidden;
   }
 
   /* Phone frame styles */
   .phone-frame {
-    max-width: 375px;
+    width: 375px;
+    height: 812px;
     margin: 20px auto;
-    background: #000;
-    border-radius: 25px;
-    padding: 8px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(145deg, #1a1a1a, #333);
+    border-radius: 40px;
+    padding: 12px;
+    box-shadow: 
+      0 0 0 2px #444,
+      0 25px 80px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
     position: relative;
+    overflow: hidden;
   }
 
   .phone-frame::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 6px;
+    background: #333;
+    border-radius: 3px;
+    z-index: 10;
+  }
+
+  .phone-frame::after {
     content: '';
     position: absolute;
     top: 15px;
@@ -103,16 +128,34 @@
     transform: translateX(-50%);
     width: 60px;
     height: 4px;
-    background: #333;
+    background: #000;
     border-radius: 2px;
+    z-index: 11;
   }
 
   .phone-screen {
-    background: white;
-    border-radius: 18px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 28px;
     overflow: hidden;
-    min-height: calc(100vh - 40px);
+    height: 100%;
     position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Tech pattern overlay */
+  .phone-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
   }
 }
 

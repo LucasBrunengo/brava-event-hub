@@ -5,10 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useApp } from '@/context/AppContext';
-import { LogOut, Calendar, Users, Clock } from 'lucide-react';
+import { LogOut, Calendar, Users, Clock, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
+import { Event } from '@/types';
 
-export const ProfilePage: React.FC = () => {
+interface ProfilePageProps {
+  onPastEventClick?: (event: Event) => void;
+}
+
+export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) => {
   const { currentUser, events, expenses, logout } = useApp();
 
   if (!currentUser) return null;
@@ -31,6 +36,8 @@ export const ProfilePage: React.FC = () => {
     .filter((event, index, self) => self.findIndex(e => e.id === event.id) === index)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5);
+
+  const pastEvents = recentEvents.filter(event => new Date(event.date) < new Date());
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -89,41 +96,40 @@ export const ProfilePage: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Recent Activity */}
+      {/* Past Events - Clickable */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Recent Events</CardTitle>
+          <CardTitle className="text-lg">Past Events</CardTitle>
         </CardHeader>
         <CardContent>
-          {recentEvents.length === 0 ? (
+          {pastEvents.length === 0 ? (
             <div className="text-center py-6">
               <Calendar className="w-12 h-12 mx-auto mb-3 text-muted-foreground/50" />
-              <p className="text-muted-foreground">No recent events</p>
+              <p className="text-muted-foreground">No past events</p>
             </div>
           ) : (
             <div className="space-y-3">
-              {recentEvents.map((event) => (
-                <div key={event.id} className="flex items-center justify-between p-3 border rounded-lg">
+              {pastEvents.map((event) => (
+                <div 
+                  key={event.id} 
+                  className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => onPastEventClick?.(event)}
+                >
                   <div className="flex-1">
                     <h4 className="font-medium">{event.name}</h4>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Clock className="w-3 h-3" />
                       <span>{format(new Date(event.date), 'MMM d, yyyy')}</span>
                     </div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      📸 Click to see photos & who attended
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
                     {event.organizerId === currentUser.id && (
                       <Badge variant="outline" className="text-xs">Organizer</Badge>
                     )}
-                    <Badge 
-                      className={
-                        new Date(event.date) > new Date() 
-                          ? 'bg-blue-100 text-blue-800' 
-                          : 'bg-gray-100 text-gray-800'
-                      }
-                    >
-                      {new Date(event.date) > new Date() ? 'Upcoming' : 'Past'}
-                    </Badge>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </div>
                 </div>
               ))}
@@ -142,7 +148,7 @@ export const ProfilePage: React.FC = () => {
             <div className="flex items-center justify-between p-3 border rounded-lg">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold text-xs">
-                  
+                  🍎
                 </div>
                 <span className="font-medium">Apple Pay</span>
               </div>

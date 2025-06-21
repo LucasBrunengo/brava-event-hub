@@ -11,7 +11,7 @@ import { useApp } from '@/context/AppContext';
 import { format } from 'date-fns';
 import { ExpenseSection } from './ExpenseSection';
 import { CommentSection } from './CommentSection';
-import { EventMap } from './EventMap';
+import { BarcelonaMap } from './BarcelonaMap';
 
 interface EventDetailProps {
   event: Event;
@@ -115,7 +115,28 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
       </Card>
 
       {/* Map */}
-      <EventMap location={event.location} eventName={event.name} />
+      <BarcelonaMap location={event.location} eventName={event.name} />
+
+      {/* Event Photos */}
+      {event.photos && event.photos.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Event Gallery</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-3">
+              {event.photos.slice(0, 4).map((photo, index) => (
+                <img
+                  key={index}
+                  src={photo}
+                  alt={`${event.name} photo ${index + 1}`}
+                  className="aspect-square object-cover rounded-lg"
+                />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* RSVP Section */}
       <Card>
