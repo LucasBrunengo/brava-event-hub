@@ -5,12 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Calendar, MapPin, User, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, User, MessageSquare, ExternalLink, Ticket } from 'lucide-react';
 import { Event } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { format } from 'date-fns';
 import { ExpenseSection } from './ExpenseSection';
 import { CommentSection } from './CommentSection';
+import { EventMap } from './EventMap';
 
 interface EventDetailProps {
   event: Event;
@@ -86,14 +87,35 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
               </div>
             </div>
 
-            {event.hasExpenseSplitting && (
-              <Badge variant="outline" className="w-fit">
-                💰 Expense splitting enabled
-              </Badge>
+            <div className="flex flex-wrap gap-2">
+              {event.hasExpenseSplitting && (
+                <Badge variant="outline">
+                  💰 Expense splitting enabled
+                </Badge>
+              )}
+              {event.ticketPrice && (
+                <Badge variant="outline">
+                  🎫 ${event.ticketPrice}
+                </Badge>
+              )}
+            </div>
+
+            {event.ticketUrl && (
+              <Button 
+                onClick={() => window.open(event.ticketUrl, '_blank')}
+                className="w-full brava-gradient"
+              >
+                <Ticket className="w-4 h-4 mr-2" />
+                Buy Tickets - ${event.ticketPrice}
+                <ExternalLink className="w-4 h-4 ml-2" />
+              </Button>
             )}
           </div>
         </CardContent>
       </Card>
+
+      {/* Map */}
+      <EventMap location={event.location} eventName={event.name} />
 
       {/* RSVP Section */}
       <Card>
@@ -146,10 +168,19 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
                       {attendee.user.name.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="font-medium">{attendee.user.name}</span>
-                  {event.organizerId === attendee.userId && (
-                    <Badge variant="outline" className="text-xs">Organizer</Badge>
-                  )}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{attendee.user.name}</span>
+                      {event.organizerId === attendee.userId && (
+                        <Badge variant="outline" className="text-xs">Organizer</Badge>
+                      )}
+                    </div>
+                    {attendee.hasPurchasedTicket !== undefined && (
+                      <div className="text-xs text-muted-foreground">
+                        {attendee.hasPurchasedTicket ? '🎫 Ticket purchased' : '⏳ Ticket pending'}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <Badge 
                   className={

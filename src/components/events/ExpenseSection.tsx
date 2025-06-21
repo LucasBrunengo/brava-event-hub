@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -100,19 +101,24 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="expense-amount">Amount ($)</Label>
+                    <Label htmlFor="expense-amount">Total Amount ($)</Label>
                     <Input
                       id="expense-amount"
                       type="number"
                       step="0.01"
-                      placeholder="0.00"
+                      placeholder="100.00"
                       value={newExpense.amount}
                       onChange={(e) => setNewExpense(prev => ({ ...prev, amount: e.target.value }))}
                     />
                   </div>
                   <div>
-                    <Label>Split Between</Label>
-                    <div className="space-y-2 mt-2">
+                    <Label>Split Between ({newExpense.splitBetween.length} people)</Label>
+                    {newExpense.amount && newExpense.splitBetween.length > 0 && (
+                      <p className="text-sm text-muted-foreground mb-2">
+                        ${(parseFloat(newExpense.amount) / newExpense.splitBetween.length).toFixed(2)} per person
+                      </p>
+                    )}
+                    <div className="space-y-2 mt-2 max-h-40 overflow-y-auto">
                       {goingAttendees.map((attendee) => (
                         <div key={attendee.userId} className="flex items-center space-x-2">
                           <Checkbox
@@ -120,7 +126,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
                             checked={newExpense.splitBetween.includes(attendee.userId)}
                             onCheckedChange={(checked) => handleSplitToggle(attendee.userId, checked as boolean)}
                           />
-                          <Label htmlFor={attendee.userId} className="flex items-center gap-2">
+                          <Label htmlFor={attendee.userId} className="flex items-center gap-2 flex-1">
                             <Avatar className="w-6 h-6">
                               <AvatarImage src={attendee.user.avatar} />
                               <AvatarFallback className="text-xs">
@@ -133,7 +139,11 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
                       ))}
                     </div>
                   </div>
-                  <Button onClick={handleAddExpense} className="w-full brava-gradient">
+                  <Button 
+                    onClick={handleAddExpense} 
+                    className="w-full brava-gradient"
+                    disabled={!newExpense.name || !newExpense.amount || newExpense.splitBetween.length === 0}
+                  >
                     Add Expense
                   </Button>
                 </div>
@@ -187,7 +197,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
                   <div className="text-right">
                     <p className="font-semibold">${expense.amount.toFixed(2)}</p>
                     <p className="text-sm text-muted-foreground">
-                      ${(expense.amount / expense.splitBetween.length).toFixed(2)} each
+                      ${(expense.amount / expense.splitBetween.length).toFixed(2)} each ({expense.splitBetween.length} people)
                     </p>
                   </div>
                 </div>
@@ -240,7 +250,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
         </div>
       )}
 
-      {/* Payment Methods with Real Logos */}
+      {/* Payment Methods */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Quick Pay</CardTitle>

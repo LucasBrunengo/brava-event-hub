@@ -1,3 +1,4 @@
+
 export interface User {
   id: string;
   name: string;
@@ -21,6 +22,8 @@ export interface Event {
   createdAt: string;
   hasExpenseSplitting: boolean;
   isPublic?: boolean;
+  ticketUrl?: string;
+  ticketPrice?: number;
 }
 
 export interface EventAttendee {
@@ -28,6 +31,7 @@ export interface EventAttendee {
   user: User;
   status: 'going' | 'maybe' | 'not-going';
   joinedAt: string;
+  hasPurchasedTicket?: boolean;
 }
 
 export interface Expense {

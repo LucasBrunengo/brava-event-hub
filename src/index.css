@@ -80,7 +80,39 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 text-foreground min-h-screen;
+    background-attachment: fixed;
+  }
+
+  /* Phone frame styles */
+  .phone-frame {
+    max-width: 375px;
+    margin: 20px auto;
+    background: #000;
+    border-radius: 25px;
+    padding: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+
+  .phone-frame::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
+  }
+
+  .phone-screen {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    min-height: calc(100vh - 40px);
+    position: relative;
   }
 }
 

@@ -37,6 +37,31 @@ export const mockUsers: User[] = [
     id: '7',
     name: 'David Kim',
     email: 'david@example.com'
+  },
+  {
+    id: '8',
+    name: 'Sophie Martinez',
+    email: 'sophie@example.com'
+  },
+  {
+    id: '9',
+    name: 'Ryan Thompson',
+    email: 'ryan@example.com'
+  },
+  {
+    id: '10',
+    name: 'Mia Garcia',
+    email: 'mia@example.com'
+  },
+  {
+    id: '11',
+    name: 'Carlos Hernandez',
+    email: 'carlos@example.com'
+  },
+  {
+    id: '12',
+    name: 'Ashley Brown',
+    email: 'ashley@example.com'
   }
 ];
 
@@ -83,6 +108,9 @@ export const mockEvents: Event[] = [
       { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-06-10T15:00:00Z' },
       { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-06-10T17:00:00Z' },
       { userId: '5', user: mockUsers[4], status: 'not-going', joinedAt: '2024-06-10T18:00:00Z' }
+    ],
+    photos: [
+      'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop'
     ]
   },
   {
@@ -101,6 +129,9 @@ export const mockEvents: Event[] = [
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-06-15T20:00:00Z' },
       { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-06-15T21:00:00Z' },
       { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-06-15T22:00:00Z' }
+    ],
+    photos: [
+      'https://images.unsplash.com/photo-1489599689654-03c4f703b45b?w=400&h=300&fit=crop'
     ]
   },
   {
@@ -122,6 +153,38 @@ export const mockEvents: Event[] = [
       { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-06-18T17:00:00Z' },
       { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-06-18T18:00:00Z' },
       { userId: '6', user: mockUsers[5], status: 'not-going', joinedAt: '2024-06-18T19:00:00Z' }
+    ],
+    photos: [
+      'https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&h=300&fit=crop'
+    ]
+  },
+  {
+    id: '5',
+    name: 'Coachella 2024',
+    description: 'Music festival weekend! Who\'s ready to dance under the desert sun? Let me know if you got your tickets!',
+    date: '2024-08-10',
+    time: '12:00',
+    location: 'Coachella Valley, Indio, CA',
+    organizerId: '1',
+    organizer: mockUsers[0],
+    hasExpenseSplitting: true,
+    createdAt: '2024-06-01T08:00:00Z',
+    isPublic: false,
+    ticketUrl: 'https://coachella.com/tickets',
+    ticketPrice: 429,
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-06-01T08:00:00Z', hasPurchasedTicket: true },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-06-01T09:00:00Z', hasPurchasedTicket: true },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-06-01T10:00:00Z', hasPurchasedTicket: false },
+      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-06-01T11:00:00Z', hasPurchasedTicket: false },
+      { userId: '5', user: mockUsers[4], status: 'not-going', joinedAt: '2024-06-01T12:00:00Z', hasPurchasedTicket: false },
+      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-06-01T13:00:00Z', hasPurchasedTicket: true },
+      { userId: '7', user: mockUsers[6], status: 'maybe', joinedAt: '2024-06-01T14:00:00Z', hasPurchasedTicket: false },
+      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-06-01T15:00:00Z', hasPurchasedTicket: false }
+    ],
+    photos: [
+      'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=300&fit=crop'
     ]
   }
 ];
@@ -139,10 +202,16 @@ export const mockPublicEvents: Event[] = [
     hasExpenseSplitting: false,
     createdAt: '2024-06-01T09:00:00Z',
     isPublic: true,
+    ticketUrl: 'https://eventbrite.com/summer-music-fest',
+    ticketPrice: 45,
     attendees: [
       { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-06-01T09:00:00Z' },
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-06-02T10:00:00Z' },
-      { userId: '7', user: mockUsers[6], status: 'maybe', joinedAt: '2024-06-03T11:00:00Z' }
+      { userId: '7', user: mockUsers[6], status: 'maybe', joinedAt: '2024-06-03T11:00:00Z' },
+      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-06-04T12:00:00Z' },
+      { userId: '9', user: mockUsers[8], status: 'going', joinedAt: '2024-06-05T13:00:00Z' },
+      { userId: '10', user: mockUsers[9], status: 'maybe', joinedAt: '2024-06-06T14:00:00Z' },
+      { userId: '11', user: mockUsers[10], status: 'going', joinedAt: '2024-06-07T15:00:00Z' }
     ],
     photos: [
       'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop'
@@ -163,7 +232,10 @@ export const mockPublicEvents: Event[] = [
     attendees: [
       { userId: '7', user: mockUsers[6], status: 'going', joinedAt: '2024-06-05T12:00:00Z' },
       { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-06-06T13:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-06-07T14:00:00Z' }
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-06-07T14:00:00Z' },
+      { userId: '8', user: mockUsers[7], status: 'maybe', joinedAt: '2024-06-08T15:00:00Z' },
+      { userId: '9', user: mockUsers[8], status: 'going', joinedAt: '2024-06-09T16:00:00Z' },
+      { userId: '11', user: mockUsers[10], status: 'going', joinedAt: '2024-06-10T17:00:00Z' }
     ]
   },
   {
@@ -181,7 +253,31 @@ export const mockPublicEvents: Event[] = [
     attendees: [
       { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-06-10T16:00:00Z' },
       { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-06-11T17:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-06-12T18:00:00Z' }
+      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-06-12T18:00:00Z' },
+      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-06-13T19:00:00Z' },
+      { userId: '10', user: mockUsers[9], status: 'going', joinedAt: '2024-06-14T20:00:00Z' },
+      { userId: '11', user: mockUsers[10], status: 'maybe', joinedAt: '2024-06-15T21:00:00Z' }
+    ]
+  },
+  {
+    id: 'pub4',
+    name: 'Tech Startup Networking',
+    description: 'Connect with fellow entrepreneurs and tech enthusiasts. Pitch your ideas and find co-founders!',
+    date: '2024-07-05',
+    time: '18:00',
+    location: 'Innovation Hub Downtown',
+    organizerId: '8',
+    organizer: mockUsers[7],
+    hasExpenseSplitting: true,
+    createdAt: '2024-06-08T14:00:00Z',
+    isPublic: true,
+    ticketPrice: 25,
+    attendees: [
+      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-06-08T14:00:00Z' },
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-06-09T15:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'maybe', joinedAt: '2024-06-10T16:00:00Z' },
+      { userId: '9', user: mockUsers[8], status: 'going', joinedAt: '2024-06-11T17:00:00Z' },
+      { userId: '10', user: mockUsers[9], status: 'going', joinedAt: '2024-06-12T18:00:00Z' }
     ]
   }
 ];
@@ -215,6 +311,21 @@ export const mockExpenses: Expense[] = [
       { id: '6', expenseId: '2', userId: '2', amount: 60, status: 'paid', paidAt: '2024-06-05T16:00:00Z' },
       { id: '7', expenseId: '2', userId: '3', amount: 60, status: 'pending' },
       { id: '8', expenseId: '2', userId: '4', amount: 60, status: 'paid', paidAt: '2024-06-06T11:00:00Z' }
+    ]
+  },
+  {
+    id: '3',
+    eventId: 'pub4',
+    name: 'Venue Rental',
+    amount: 300,
+    paidBy: '8',
+    splitBetween: ['8', '1', '9', '10'],
+    createdAt: '2024-06-08T14:00:00Z',
+    payments: [
+      { id: '9', expenseId: '3', userId: '8', amount: 75, status: 'paid', paidAt: '2024-06-08T14:00:00Z' },
+      { id: '10', expenseId: '3', userId: '1', amount: 75, status: 'pending' },
+      { id: '11', expenseId: '3', userId: '9', amount: 75, status: 'paid', paidAt: '2024-06-09T15:00:00Z' },
+      { id: '12', expenseId: '3', userId: '10', amount: 75, status: 'pending' }
     ]
   }
 ];
@@ -259,5 +370,21 @@ export const mockComments: Comment[] = [
     user: mockUsers[1],
     message: 'Perfect! I have Ticket to Ride too. This is going to be fun! 🎲',
     createdAt: '2024-06-19T11:30:00Z'
+  },
+  {
+    id: '6',
+    eventId: '5',
+    userId: '2',
+    user: mockUsers[1],
+    message: 'Just got my ticket! Who else is confirmed?',
+    createdAt: '2024-06-02T10:00:00Z'
+  },
+  {
+    id: '7',
+    eventId: '5',
+    userId: '6',
+    user: mockUsers[5],
+    message: 'Got mine too! This is going to be epic! 🎵',
+    createdAt: '2024-06-02T11:00:00Z'
   }
 ];

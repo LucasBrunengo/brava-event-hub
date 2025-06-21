@@ -17,7 +17,13 @@ const Index = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   if (!isAuthenticated) {
-    return <WelcomeScreen />;
+    return (
+      <div className="phone-frame">
+        <div className="phone-screen">
+          <WelcomeScreen />
+        </div>
+      </div>
+    );
   }
 
   const handleEventClick = (event: Event) => {
@@ -55,40 +61,42 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-md mx-auto pb-20">
-        <div className="p-4">
-          {currentView === 'dashboard' && (
-            <Dashboard 
-              onCreateEvent={handleCreateEvent}
-              onEventClick={handleEventClick}
-            />
-          )}
-          
-          {currentView === 'create' && (
-            <CreateEventForm 
-              onBack={handleBack}
-              onEventCreated={handleEventCreated}
-            />
-          )}
-          
-          {currentView === 'event-detail' && selectedEvent && (
-            <EventDetail 
-              event={selectedEvent}
-              onBack={handleBack}
-            />
-          )}
-          
-          {currentView === 'profile' && (
-            <ProfilePage />
-          )}
+    <div className="phone-frame">
+      <div className="phone-screen">
+        <div className="pb-20">
+          <div className="p-4">
+            {currentView === 'dashboard' && (
+              <Dashboard 
+                onCreateEvent={handleCreateEvent}
+                onEventClick={handleEventClick}
+              />
+            )}
+            
+            {currentView === 'create' && (
+              <CreateEventForm 
+                onBack={handleBack}
+                onEventCreated={handleEventCreated}
+              />
+            )}
+            
+            {currentView === 'event-detail' && selectedEvent && (
+              <EventDetail 
+                event={selectedEvent}
+                onBack={handleBack}
+              />
+            )}
+            
+            {currentView === 'profile' && (
+              <ProfilePage />
+            )}
+          </div>
         </div>
-      </div>
 
-      <BottomNav 
-        activeTab={getActiveTab()}
-        onTabChange={handleTabChange}
-      />
+        <BottomNav 
+          activeTab={getActiveTab()}
+          onTabChange={handleTabChange}
+        />
+      </div>
     </div>
   );
 };
