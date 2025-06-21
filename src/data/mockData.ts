@@ -1,4 +1,3 @@
-
 import { User, Event, Expense, Payment, Comment } from '@/types';
 
 export const mockUsers: User[] = [
@@ -28,6 +27,16 @@ export const mockUsers: User[] = [
     id: '5',
     name: 'James Park',
     email: 'james@example.com'
+  },
+  {
+    id: '6',
+    name: 'Lisa Rodriguez',
+    email: 'lisa@example.com'
+  },
+  {
+    id: '7',
+    name: 'David Kim',
+    email: 'david@example.com'
   }
 ];
 
@@ -45,6 +54,7 @@ export const mockEvents: Event[] = [
     organizer: mockUsers[0],
     hasExpenseSplitting: true,
     createdAt: '2024-06-01T10:00:00Z',
+    isPublic: false,
     attendees: [
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-06-01T10:00:00Z' },
       { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-06-01T11:00:00Z' },
@@ -67,6 +77,7 @@ export const mockEvents: Event[] = [
     organizer: mockUsers[1],
     hasExpenseSplitting: true,
     createdAt: '2024-06-10T15:00:00Z',
+    isPublic: false,
     attendees: [
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-06-10T16:00:00Z' },
       { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-06-10T15:00:00Z' },
@@ -85,10 +96,92 @@ export const mockEvents: Event[] = [
     organizer: mockUsers[0],
     hasExpenseSplitting: false,
     createdAt: '2024-06-15T20:00:00Z',
+    isPublic: false,
     attendees: [
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-06-15T20:00:00Z' },
       { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-06-15T21:00:00Z' },
       { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-06-15T22:00:00Z' }
+    ]
+  },
+  {
+    id: '4',
+    name: 'Private Game Night',
+    description: 'Board games and pizza with close friends only. Bring your competitive spirit!',
+    date: '2024-06-30',
+    time: '19:30',
+    location: "Sarah's Place",
+    organizerId: '2',
+    organizer: mockUsers[1],
+    hasExpenseSplitting: true,
+    createdAt: '2024-06-18T14:00:00Z',
+    isPublic: false,
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-06-18T15:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-06-18T14:00:00Z' },
+      { userId: '3', user: mockUsers[2], status: 'not-going', joinedAt: '2024-06-18T16:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-06-18T17:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-06-18T18:00:00Z' },
+      { userId: '6', user: mockUsers[5], status: 'not-going', joinedAt: '2024-06-18T19:00:00Z' }
+    ]
+  }
+];
+
+export const mockPublicEvents: Event[] = [
+  {
+    id: 'pub1',
+    name: 'Summer Music Festival',
+    description: 'Join hundreds of music lovers for an amazing outdoor festival featuring local bands and food trucks.',
+    date: '2024-07-20',
+    time: '14:00',
+    location: 'Central Park Amphitheater',
+    organizerId: '6',
+    organizer: mockUsers[5],
+    hasExpenseSplitting: false,
+    createdAt: '2024-06-01T09:00:00Z',
+    isPublic: true,
+    attendees: [
+      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-06-01T09:00:00Z' },
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-06-02T10:00:00Z' },
+      { userId: '7', user: mockUsers[6], status: 'maybe', joinedAt: '2024-06-03T11:00:00Z' }
+    ],
+    photos: [
+      'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop'
+    ]
+  },
+  {
+    id: 'pub2',
+    name: 'Community Art Workshop',
+    description: 'Free painting workshop for all skill levels. Materials provided. Come create and connect with fellow artists!',
+    date: '2024-06-28',
+    time: '10:00',
+    location: 'Downtown Community Center',
+    organizerId: '7',
+    organizer: mockUsers[6],
+    hasExpenseSplitting: false,
+    createdAt: '2024-06-05T12:00:00Z',
+    isPublic: true,
+    attendees: [
+      { userId: '7', user: mockUsers[6], status: 'going', joinedAt: '2024-06-05T12:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-06-06T13:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-06-07T14:00:00Z' }
+    ]
+  },
+  {
+    id: 'pub3',
+    name: 'Food Truck Friday',
+    description: 'Weekly gathering of the best food trucks in the city. Come hungry and discover new flavors!',
+    date: '2024-06-21',
+    time: '11:30',
+    location: 'City Square',
+    organizerId: '6',
+    organizer: mockUsers[5],
+    hasExpenseSplitting: false,
+    createdAt: '2024-06-10T16:00:00Z',
+    isPublic: true,
+    attendees: [
+      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-06-10T16:00:00Z' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-06-11T17:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-06-12T18:00:00Z' }
     ]
   }
 ];
@@ -150,5 +243,21 @@ export const mockComments: Comment[] = [
     user: mockUsers[3],
     message: 'Count me in for the carpool! 🚗',
     createdAt: '2024-06-02T16:15:00Z'
+  },
+  {
+    id: '4',
+    eventId: '4',
+    userId: '1',
+    user: mockUsers[0],
+    message: 'What games are we playing? I can bring Settlers of Catan!',
+    createdAt: '2024-06-19T10:00:00Z'
+  },
+  {
+    id: '5',
+    eventId: '4',
+    userId: '2',
+    user: mockUsers[1],
+    message: 'Perfect! I have Ticket to Ride too. This is going to be fun! 🎲',
+    createdAt: '2024-06-19T11:30:00Z'
   }
 ];

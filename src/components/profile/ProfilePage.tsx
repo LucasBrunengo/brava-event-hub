@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useApp } from '@/context/AppContext';
-import { LogOut, Calendar, Users, DollarSign, Clock } from 'lucide-react';
+import { LogOut, Calendar, Users, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 
 export const ProfilePage: React.FC = () => {
@@ -18,14 +18,13 @@ export const ProfilePage: React.FC = () => {
     event.attendees.some(a => a.userId === currentUser.id && a.status === 'going')
   );
 
-  const totalPaid = expenses.reduce((total, expense) => {
-    const userPayment = expense.payments.find(p => p.userId === currentUser.id && p.status === 'paid');
-    return total + (userPayment?.amount || 0);
-  }, 0);
-
-  const totalPending = expenses.reduce((total, expense) => {
-    const userPayment = expense.payments.find(p => p.userId === currentUser.id && p.status === 'pending');
-    return total + (userPayment?.amount || 0);
+  const totalOwedToMe = expenses.reduce((total, expense) => {
+    if (expense.paidBy === currentUser.id) {
+      return total + expense.payments
+        .filter(p => p.userId !== currentUser.id && p.status === 'pending')
+        .reduce((sum, p) => sum + p.amount, 0);
+    }
+    return total;
   }, 0);
 
   const recentEvents = [...organizedEvents, ...attendedEvents]
@@ -35,17 +34,27 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="text-center space-y-4">
-        <Avatar className="w-24 h-24 mx-auto">
-          <AvatarImage src={currentUser.avatar} />
-          <AvatarFallback className="text-2xl">
-            {currentUser.name.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <div>
-          <h1 className="text-2xl font-bold">{currentUser.name}</h1>
-          <p className="text-muted-foreground">{currentUser.email}</p>
+      {/* Header with Background */}
+      <div className="relative">
+        <div 
+          className="absolute inset-0 h-32 bg-gradient-to-br from-purple-500 via-blue-500 to-purple-600 rounded-lg opacity-20"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=200&fit=crop)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        />
+        <div className="relative z-10 text-center space-y-4 pt-8 pb-6">
+          <Avatar className="w-24 h-24 mx-auto border-4 border-white shadow-lg">
+            <AvatarImage src={currentUser.avatar} />
+            <AvatarFallback className="text-2xl bg-white">
+              {currentUser.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <h1 className="text-2xl font-bold">{currentUser.name}</h1>
+            <p className="text-muted-foreground">{currentUser.email}</p>
+          </div>
         </div>
       </div>
 
@@ -67,21 +76,15 @@ export const ProfilePage: React.FC = () => {
         </Card>
       </div>
 
-      {/* Payment Summary */}
+      {/* Money Owed To Me */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Payment Summary</CardTitle>
+          <CardTitle className="text-lg">Financial Summary</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
-              <p className="text-2xl font-bold text-green-600">${totalPaid.toFixed(2)}</p>
-              <p className="text-sm text-muted-foreground">Total Paid</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-orange-600">${totalPending.toFixed(2)}</p>
-              <p className="text-sm text-muted-foreground">Pending</p>
-            </div>
+          <div className="text-center">
+            <p className="text-3xl font-bold text-green-600">${totalOwedToMe.toFixed(2)}</p>
+            <p className="text-sm text-muted-foreground">Friends owe you</p>
           </div>
         </CardContent>
       </Card>
@@ -138,8 +141,8 @@ export const ProfilePage: React.FC = () => {
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 border rounded-lg">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                  📱
+                <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold text-xs">
+                  
                 </div>
                 <span className="font-medium">Apple Pay</span>
               </div>
@@ -147,8 +150,8 @@ export const ProfilePage: React.FC = () => {
             </div>
             <div className="flex items-center justify-between p-3 border rounded-lg">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  🔵
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">
+                  P
                 </div>
                 <span className="font-medium">PayPal</span>
               </div>
@@ -156,8 +159,8 @@ export const ProfilePage: React.FC = () => {
             </div>
             <div className="flex items-center justify-between p-3 border rounded-lg">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                  🟢
+                <div className="w-8 h-8 bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">
+                  G
                 </div>
                 <span className="font-medium">Google Pay</span>
               </div>

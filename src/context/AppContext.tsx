@@ -1,89 +1,61 @@
-
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { User, Event, Expense, Comment } from '@/types';
-import { mockCurrentUser, mockEvents, mockExpenses, mockComments } from '@/data/mockData';
+import { mockCurrentUser, mockEvents, mockExpenses, mockComments, mockPublicEvents } from '@/data/mockData';
 
 interface AppContextType {
-  currentUser: User | null;
-  events: Event[];
-  expenses: Expense[];
-  comments: Comment[];
+  // Authentication
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (name: string, email: string, password: string) => Promise<boolean>;
+  currentUser: User | null;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
-  createEvent: (event: Partial<Event>) => void;
+
+  // Events
+  events: Event[];
+  publicEvents: Event[];
+  createEvent: (eventData: Partial<Event>) => void;
   updateEventRSVP: (eventId: string, status: 'going' | 'maybe' | 'not-going') => void;
-  addComment: (eventId: string, message: string) => void;
-  addExpense: (expense: Partial<Expense>) => void;
+
+  // Expenses
+  expenses: Expense[];
+  addExpense: (expenseData: { eventId: string; name: string; amount: number; splitBetween: string[] }) => void;
   updatePaymentStatus: (paymentId: string, status: 'paid' | 'pending' | 'overdue') => void;
+
+  // Comments
+  comments: Comment[];
+  addComment: (eventId: string, message: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const useApp = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error('useApp must be used within AppProvider');
-  }
-  return context;
-};
+export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [currentUser, setCurrentUser] = useState<User | null>(mockCurrentUser);
+  const [events, setEvents] = useState<Event[]>(mockEvents);
+  const [publicEvents] = useState<Event[]>(mockPublicEvents);
+  const [expenses, setExpenses] = useState<Expense[]>(mockExpenses);
+  const [comments, setComments] = useState<Comment[]>(mockComments);
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // Load data from localStorage or use mock data
-    const savedUser = localStorage.getItem('bravaCurrentUser');
-    const savedEvents = localStorage.getItem('bravaEvents');
-    const savedExpenses = localStorage.getItem('bravaExpenses');
-    const savedComments = localStorage.getItem('bravaComments');
-
-    if (savedUser) {
-      setCurrentUser(JSON.parse(savedUser));
-      setIsAuthenticated(true);
-    }
-
-    setEvents(savedEvents ? JSON.parse(savedEvents) : mockEvents);
-    setExpenses(savedExpenses ? JSON.parse(savedExpenses) : mockExpenses);
-    setComments(savedComments ? JSON.parse(savedComments) : mockComments);
-  }, []);
-
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // Mock login - in real app, this would call an API
-    if (email && password) {
-      setCurrentUser(mockCurrentUser);
-      setIsAuthenticated(true);
-      localStorage.setItem('bravaCurrentUser', JSON.stringify(mockCurrentUser));
-      return true;
-    }
-    return false;
+  const login = async (email: string, password: string) => {
+    console.log('Logging in with:', email, password);
+    setIsAuthenticated(true);
+    setCurrentUser(mockCurrentUser);
   };
 
-  const register = async (name: string, email: string, password: string): Promise<boolean> => {
-    // Mock registration
-    if (name && email && password) {
-      const newUser: User = {
-        id: Date.now().toString(),
-        name,
-        email,
-      };
-      setCurrentUser(newUser);
-      setIsAuthenticated(true);
-      localStorage.setItem('bravaCurrentUser', JSON.stringify(newUser));
-      return true;
-    }
-    return false;
+  const signup = async (name: string, email: string, password: string) => {
+    console.log('Signing up with:', name, email, password);
+    const newUser: User = {
+      id: Date.now().toString(),
+      name,
+      email,
+    };
+    setCurrentUser(newUser);
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
-    setCurrentUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('bravaCurrentUser');
+    setCurrentUser(null);
   };
 
   const createEvent = (eventData: Partial<Event>) => {
@@ -108,48 +80,76 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           joinedAt: new Date().toISOString(),
         },
       ],
-      expenses: [],
-      photos: [],
     };
 
-    const updatedEvents = [newEvent, ...events];
-    setEvents(updatedEvents);
-    localStorage.setItem('bravaEvents', JSON.stringify(updatedEvents));
+    setEvents(prev => [newEvent, ...prev]);
   };
 
   const updateEventRSVP = (eventId: string, status: 'going' | 'maybe' | 'not-going') => {
     if (!currentUser) return;
 
-    const updatedEvents = events.map(event => {
-      if (event.id === eventId) {
-        const existingAttendee = event.attendees.find(a => a.userId === currentUser.id);
-        if (existingAttendee) {
-          return {
-            ...event,
-            attendees: event.attendees.map(a =>
-              a.userId === currentUser.id ? { ...a, status } : a
-            ),
-          };
-        } else {
-          return {
-            ...event,
-            attendees: [
-              ...event.attendees,
-              {
-                userId: currentUser.id,
-                user: currentUser,
-                status,
-                joinedAt: new Date().toISOString(),
-              },
-            ],
-          };
-        }
-      }
-      return event;
-    });
+    setEvents(prev => prev.map(event => {
+      if (event.id !== eventId) return event;
 
-    setEvents(updatedEvents);
-    localStorage.setItem('bravaEvents', JSON.stringify(updatedEvents));
+      const existingAttendee = event.attendees.find(a => a.userId === currentUser.id);
+      
+      if (existingAttendee) {
+        return {
+          ...event,
+          attendees: event.attendees.map(a =>
+            a.userId === currentUser.id ? { ...a, status } : a
+          ),
+        };
+      } else {
+        return {
+          ...event,
+          attendees: [
+            ...event.attendees,
+            {
+              userId: currentUser.id,
+              user: currentUser,
+              status,
+              joinedAt: new Date().toISOString(),
+            },
+          ],
+        };
+      }
+    }));
+  };
+
+  const addExpense = (expenseData: { eventId: string; name: string; amount: number; splitBetween: string[] }) => {
+    if (!currentUser) return;
+
+    const newExpense: Expense = {
+      id: Date.now().toString(),
+      eventId: expenseData.eventId,
+      name: expenseData.name,
+      amount: expenseData.amount,
+      paidBy: currentUser.id,
+      splitBetween: expenseData.splitBetween,
+      createdAt: new Date().toISOString(),
+      payments: expenseData.splitBetween.map(userId => ({
+        id: `${Date.now()}-${userId}`,
+        expenseId: Date.now().toString(),
+        userId,
+        amount: expenseData.amount / expenseData.splitBetween.length,
+        status: userId === currentUser.id ? 'paid' : 'pending' as const,
+        paidAt: userId === currentUser.id ? new Date().toISOString() : undefined,
+      })),
+    };
+
+    setExpenses(prev => [...prev, newExpense]);
+  };
+
+  const updatePaymentStatus = (paymentId: string, status: 'paid' | 'pending' | 'overdue') => {
+    setExpenses(prev => prev.map(expense => ({
+      ...expense,
+      payments: expense.payments.map(payment =>
+        payment.id === paymentId
+          ? { ...payment, status, paidAt: status === 'paid' ? new Date().toISOString() : undefined }
+          : payment
+      ),
+    })));
   };
 
   const addComment = (eventId: string, message: string) => {
@@ -164,74 +164,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       createdAt: new Date().toISOString(),
     };
 
-    const updatedComments = [newComment, ...comments];
-    setComments(updatedComments);
-    localStorage.setItem('bravaComments', JSON.stringify(updatedComments));
+    setComments(prev => [...prev, newComment]);
   };
 
-  const addExpense = (expenseData: Partial<Expense>) => {
-    if (!currentUser) return;
-
-    const newExpense: Expense = {
-      id: Date.now().toString(),
-      eventId: expenseData.eventId || '',
-      name: expenseData.name || '',
-      amount: expenseData.amount || 0,
-      paidBy: currentUser.id,
-      splitBetween: expenseData.splitBetween || [],
-      createdAt: new Date().toISOString(),
-      payments: expenseData.splitBetween?.map(userId => ({
-        id: `${Date.now()}-${userId}`,
-        expenseId: Date.now().toString(),
-        userId,
-        amount: (expenseData.amount || 0) / (expenseData.splitBetween?.length || 1),
-        status: userId === currentUser.id ? 'paid' : 'pending',
-        ...(userId === currentUser.id && { paidAt: new Date().toISOString() }),
-      })) || [],
-    };
-
-    const updatedExpenses = [newExpense, ...expenses];
-    setExpenses(updatedExpenses);
-    localStorage.setItem('bravaExpenses', JSON.stringify(updatedExpenses));
+  const value: AppContextType = {
+    isAuthenticated,
+    currentUser,
+    login,
+    signup,
+    logout,
+    events,
+    publicEvents,
+    createEvent,
+    updateEventRSVP,
+    expenses,
+    addExpense,
+    updatePaymentStatus,
+    comments,
+    addComment,
   };
 
-  const updatePaymentStatus = (paymentId: string, status: 'paid' | 'pending' | 'overdue') => {
-    const updatedExpenses = expenses.map(expense => ({
-      ...expense,
-      payments: expense.payments.map(payment =>
-        payment.id === paymentId
-          ? {
-              ...payment,
-              status,
-              ...(status === 'paid' && { paidAt: new Date().toISOString() }),
-            }
-          : payment
-      ),
-    }));
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+};
 
-    setExpenses(updatedExpenses);
-    localStorage.setItem('bravaExpenses', JSON.stringify(updatedExpenses));
-  };
-
-  return (
-    <AppContext.Provider
-      value={{
-        currentUser,
-        events,
-        expenses,
-        comments,
-        isAuthenticated,
-        login,
-        register,
-        logout,
-        createEvent,
-        updateEventRSVP,
-        addComment,
-        addExpense,
-        updatePaymentStatus,
-      }}
-    >
-      {children}
-    </AppContext.Provider>
-  );
+export const useApp = () => {
+  const context = useContext(AppContext);
+  if (context === undefined) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
+  return context;
 };

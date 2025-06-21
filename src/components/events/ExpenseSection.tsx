@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -241,30 +240,30 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
         </div>
       )}
 
-      {/* Payment Methods Mock */}
+      {/* Payment Methods with Real Logos */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Quick Pay</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-3 gap-3">
-            <Button variant="outline" className="h-12">
-              <div className="text-center">
-                <div className="text-lg">📱</div>
-                <div className="text-xs">Apple Pay</div>
+            <Button variant="outline" className="h-12 flex flex-col items-center justify-center">
+              <div className="w-6 h-6 bg-black rounded-md flex items-center justify-center text-white font-bold text-xs mb-1">
+                
               </div>
+              <div className="text-xs">Apple Pay</div>
             </Button>
-            <Button variant="outline" className="h-12">
-              <div className="text-center">
-                <div className="text-lg">🔵</div>
-                <div className="text-xs">PayPal</div>
+            <Button variant="outline" className="h-12 flex flex-col items-center justify-center">
+              <div className="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center text-white font-bold text-xs mb-1">
+                P
               </div>
+              <div className="text-xs">PayPal</div>
             </Button>
-            <Button variant="outline" className="h-12">
-              <div className="text-center">
-                <div className="text-lg">🟢</div>
-                <div className="text-xs">Google Pay</div>
+            <Button variant="outline" className="h-12 flex flex-col items-center justify-center">
+              <div className="w-6 h-6 bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 rounded-md flex items-center justify-center text-white font-bold text-xs mb-1">
+                G
               </div>
+              <div className="text-xs">Google Pay</div>
             </Button>
           </div>
           <p className="text-xs text-muted-foreground text-center mt-2">

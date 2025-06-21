@@ -1,4 +1,3 @@
-
 export interface User {
   id: string;
   name: string;
@@ -21,6 +20,7 @@ export interface Event {
   photos?: string[];
   createdAt: string;
   hasExpenseSplitting: boolean;
+  isPublic?: boolean;
 }
 
 export interface EventAttendee {
