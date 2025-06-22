@@ -103,10 +103,16 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
       {/* Action Buttons */}
       <div className="flex items-center justify-center gap-2">
         {currentUser?.id === event.organizerId && (
-          <Button variant="outline" size="sm">
-            <Edit className="w-4 h-4 mr-2" />
-            Edit Event
-          </Button>
+          <>
+            <Button variant="outline" size="sm">
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Event
+            </Button>
+            <Button variant="outline" size="sm">
+              <User className="w-4 h-4 mr-2" />
+              Invite Friends
+            </Button>
+          </>
         )}
         {onShare && (
           <Button variant="outline" size="sm" onClick={onShare}>
