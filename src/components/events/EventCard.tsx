@@ -15,6 +15,9 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
   const goingCount = event.attendees.filter(a => a.status === 'going').length;
   const maybeCount = event.attendees.filter(a => a.status === 'maybe').length;
 
+  // For public events, use totalAttendees if available, otherwise use actual attendees count
+  const displayGoingCount = event.isPublic && event.totalAttendees ? event.totalAttendees : goingCount;
+
   const getStatusColor = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -98,7 +101,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
 
         <div className="flex justify-between items-center mt-4">
           <div className="flex gap-4 text-sm">
-            <span className="text-green-600 font-medium">{goingCount} Going</span>
+            <span className="text-green-600 font-medium">{displayGoingCount} Going</span>
             {maybeCount > 0 && (
               <span className="text-yellow-600">{maybeCount} Maybe</span>
             )}
