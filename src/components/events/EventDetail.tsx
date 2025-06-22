@@ -15,6 +15,7 @@ import { PhotoGallery } from './PhotoGallery';
 import { UserProfile } from '../profile/UserProfile';
 import { QuickPay } from './QuickPay';
 import { EditEventForm } from './EditEventForm';
+import { InviteFriendsModal } from './InviteFriendsModal';
 
 interface EventDetailProps {
   event: Event;
@@ -26,6 +27,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   const { currentUser, events } = useApp();
   const [showUserProfile, setShowUserProfile] = useState<UserProfileType | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   const currentUserAttendee = event.attendees.find(a => a.userId === currentUser?.id);
   const [displayRsvpStatus, setDisplayRsvpStatus] = useState(currentUserAttendee?.status || null);
@@ -44,6 +46,10 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
 
   const handleEventUpdated = () => {
     setIsEditing(false);
+  };
+
+  const handleInviteFriends = () => {
+    setShowInviteModal(true);
   };
 
   const handleOrganizerClick = () => {
@@ -128,7 +134,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
               <Edit className="w-4 h-4 mr-2" />
               Edit Event
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={handleInviteFriends}>
               <User className="w-4 h-4 mr-2" />
               Invite Friends
             </Button>
@@ -141,6 +147,13 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
           </Button>
         )}
       </div>
+
+      {/* Invite Friends Modal */}
+      <InviteFriendsModal
+        event={event}
+        isOpen={showInviteModal}
+        onClose={() => setShowInviteModal(false)}
+      />
 
       {/* Event Info */}
       <Card>

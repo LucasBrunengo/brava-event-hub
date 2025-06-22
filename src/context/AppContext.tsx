@@ -24,6 +24,7 @@ interface AppContextType {
   createEvent: (eventData: Partial<Event>) => void;
   updateEvent: (eventId: string, eventData: Partial<Event>) => void;
   updateEventRSVP: (eventId: string, status: 'going' | 'maybe' | 'not-going') => void;
+  inviteFriendsToEvent: (eventId: string, friendIds: string[], message: string) => void;
 
   // Expenses
   addExpense: (expenseData: { eventId: string; name: string; amount: number; splitBetween: string[] }) => void;
@@ -231,6 +232,55 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     );
   };
 
+  const inviteFriendsToEvent = (eventId: string, friendIds: string[], message: string) => {
+    if (!currentUser) return;
+
+    // Find the event
+    const event = events.find(e => e.id === eventId);
+    if (!event) return;
+
+    // Add friends to the event attendees
+    setEvents(prev => 
+      prev.map(e => {
+        if (e.id === eventId) {
+          const newAttendees = [...e.attendees];
+          
+          friendIds.forEach(friendId => {
+            const friend = users.find(u => u.id === friendId);
+            if (friend && !newAttendees.some(a => a.userId === friendId)) {
+              newAttendees.push({
+                userId: friendId,
+                user: friend,
+                status: 'maybe', // Default status for invited friends
+                joinedAt: new Date().toISOString()
+              });
+            }
+          });
+          
+          return { ...e, attendees: newAttendees };
+        }
+        return e;
+      })
+    );
+
+    // Send notifications to invited friends
+    friendIds.forEach(friendId => {
+      const newNotification: Notification = {
+        id: `notification-${Date.now()}-${friendId}`,
+        type: 'event_invite',
+        title: `You're invited to ${event.name}!`,
+        message: message || `${currentUser.name} has invited you to their event.`,
+        userId: friendId,
+        relatedEventId: eventId,
+        relatedUserId: currentUser.id,
+        isRead: false,
+        createdAt: new Date().toISOString()
+      };
+      
+      setNotifications(prev => [...prev, newNotification]);
+    });
+  };
+
   const value: AppContextType = {
     isAuthenticated,
     currentUser,
@@ -253,6 +303,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     addExpense,
     updatePaymentStatus,
     addComment,
+    inviteFriendsToEvent,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
