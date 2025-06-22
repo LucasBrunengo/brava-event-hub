@@ -71,7 +71,7 @@ export const LoadingScreen = ({ onLoadingComplete }: LoadingScreenProps) => {
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center h-full w-full bg-white">
+    <div className="flex flex-col items-center justify-center h-full w-full bg-white overflow-hidden">
       <div className="relative flex flex-col items-center justify-center h-full w-full">
         {/* Animated particles */}
         <div className="absolute inset-0 pointer-events-none">
