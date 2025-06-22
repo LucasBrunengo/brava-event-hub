@@ -1,41 +1,36 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Users, Calendar } from 'lucide-react';
+import { Plus, Users, Calendar, Filter } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { EventsList } from '@/components/events/EventsList';
 import { PublicEventsList } from '@/components/events/PublicEventsList';
 import { Event } from '@/types';
-import { mockEvents } from '@/data/mockData';
 
 interface DashboardProps {
   onCreateEvent: () => void;
   onEventClick: (event: Event) => void;
+  myEvents: Event[];
+  publicEvents: Event[];
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ onCreateEvent, onEventClick }) => {
-  const { events, currentUser } = useApp();
-
-  // Filter to show only upcoming events in "My Events" tab
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+export const Dashboard: React.FC<DashboardProps> = ({ 
+  onCreateEvent, 
+  onEventClick,
+  myEvents,
+  publicEvents
+}) => {
+  const { currentUser } = useApp();
+  const [filter, setFilter] = useState<'my-events' | 'public'>('my-events');
   
-  const upcomingEvents = events.filter(event => {
-    const eventDate = new Date(event.date);
-    eventDate.setHours(0, 0, 0, 0);
-    return eventDate >= today;
-  });
-  
-  const organizedCount = events.filter(event => event.organizerId === currentUser?.id).length;
-  const attendingCount = events.filter(event => 
+  const organizedCount = myEvents.filter(event => event.organizerId === currentUser?.id).length;
+  const attendingCount = myEvents.filter(event => 
     event.attendees.some(a => a.userId === currentUser?.id && a.status === 'going')
   ).length;
-  const publicEvents = mockEvents.filter(event => event.isPublic);
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header with Background */}
+      {/* Header */}
       <div className="relative">
         <div className="absolute inset-0 h-40 brava-gradient rounded-lg opacity-90" />
         <div className="relative z-10 p-4 text-white text-center">
@@ -78,58 +73,55 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateEvent, onEventClic
         </Card>
       </div>
 
-      {/* Events Tabs */}
-      <Tabs defaultValue="private" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="private">My Events</TabsTrigger>
-          <TabsTrigger value="public">Public Events</TabsTrigger>
-        </TabsList>
+      {/* Filter Buttons */}
+      <div className="flex items-center gap-2">
+        <Filter className="w-5 h-5 text-muted-foreground" />
+        <h3 className="font-semibold text-lg">Filter Events</h3>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <Button
+          variant={filter === 'my-events' ? 'default' : 'outline'}
+          onClick={() => setFilter('my-events')}
+          className={filter === 'my-events' ? 'brava-gradient' : ''}
+        >
+          My Events
+        </Button>
+        <Button
+          variant={filter === 'public' ? 'default' : 'outline'}
+          onClick={() => setFilter('public')}
+          className={filter === 'public' ? 'brava-gradient' : ''}
+        >
+          Public Events
+        </Button>
+      </div>
 
-        <TabsContent value="private" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Upcoming Events</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {upcomingEvents.length > 0 ? (
-                <EventsList 
-                  events={upcomingEvents} 
-                  onEventClick={onEventClick}
-                  emptyMessage="No upcoming events planned"
-                />
-              ) : (
-                <div className="text-center py-6">
-                  <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                    📅
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">No Upcoming Events</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Start organizing your next event with friends!
-                  </p>
-                  <Button onClick={onCreateEvent} className="brava-gradient">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Your First Event
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="public" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Discover Public Events</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <PublicEventsList 
-                events={publicEvents} 
-                onEventClick={onEventClick}
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+      {/* Events List */}
+      {filter === 'my-events' ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">My Upcoming Events</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EventsList 
+              events={myEvents} 
+              onEventClick={onEventClick}
+              emptyMessage="You have no upcoming events. Why not create one?"
+            />
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Discover Public Events</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PublicEventsList 
+              events={publicEvents} 
+              onEventClick={onEventClick}
+            />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

@@ -107,6 +107,14 @@ const Index = () => {
     return 'events';
   };
 
+  const myEvents = events.filter(event => {
+    const isOrganizer = event.organizerId === currentUser?.id;
+    const isAttending = event.attendees.some(a => a.userId === currentUser?.id);
+    return isOrganizer || isAttending;
+  });
+
+  const publicEvents = events.filter(event => event.isPublic);
+
   const handleNotificationClick = (notification: any) => {
     setShowNotifications(false);
     if (notification.relatedEventId) {
@@ -181,7 +189,14 @@ const Index = () => {
         {/* Main Content */}
         <div className="flex-1 overflow-y-auto pb-20">
           <div className="p-4">
-            {currentView === 'dashboard' && <Dashboard onCreateEvent={handleCreateEvent} onEventClick={handleEventClick} />}
+            {currentView === 'dashboard' && (
+              <Dashboard 
+                onCreateEvent={handleCreateEvent} 
+                onEventClick={handleEventClick}
+                myEvents={myEvents}
+                publicEvents={publicEvents}
+              />
+            )}
             {currentView === 'create' && <CreateEventForm onBack={handleBack} onEventCreated={handleEventCreated} />}
             {currentView === 'event-detail' && selectedEvent && (
               <EventDetail 
