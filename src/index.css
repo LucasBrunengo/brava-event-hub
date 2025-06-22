@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+html, body {
   overflow: hidden;
 }
 
@@ -36,9 +36,9 @@ body {
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 262 83% 58%;
+    --ring: 215 20.2% 65.1%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
     /* Brava brand colors */
     --brava-purple: 262 83% 58%;
