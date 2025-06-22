@@ -101,10 +101,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                 <Switch
                   id="privacy-switch"
                   checked={isPublic}
-                  onCheckedChange={(checked: boolean) => {
-                    console.log('Switch changed:', checked);
-                    setIsPublic(checked);
-                  }}
+                  onCheckedChange={setIsPublic}
                 />
               </div>
               <div className="flex items-center space-x-2">

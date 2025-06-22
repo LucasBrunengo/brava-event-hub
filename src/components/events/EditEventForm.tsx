@@ -101,10 +101,7 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({ event, onBack, onE
                 <Switch
                   id="privacy-switch"
                   checked={isPublic}
-                  onCheckedChange={(checked: boolean) => {
-                    console.log('Privacy switch changed:', checked);
-                    setIsPublic(checked);
-                  }}
+                  onCheckedChange={setIsPublic}
                 />
               </div>
             </div>
@@ -117,10 +114,7 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({ event, onBack, onE
                 <Switch
                   id="expense-switch"
                   checked={hasExpenseSplitting}
-                  onCheckedChange={(checked: boolean) => {
-                    console.log('Expense switch changed:', checked);
-                    setHasExpenseSplitting(checked);
-                  }}
+                  onCheckedChange={setHasExpenseSplitting}
                 />
               </div>
             </div>
@@ -144,10 +138,7 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({ event, onBack, onE
                 <Switch
                   id="promoted-switch"
                   checked={isPromoted}
-                  onCheckedChange={(checked: boolean) => {
-                    console.log('Promoted switch changed:', checked);
-                    setIsPromoted(checked);
-                  }}
+                  onCheckedChange={setIsPromoted}
                 />
               </div>
             </div>
