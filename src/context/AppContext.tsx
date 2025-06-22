@@ -22,6 +22,7 @@ interface AppContextType {
 
   // Events
   createEvent: (eventData: Partial<Event>) => void;
+  updateEvent: (eventId: string, eventData: Partial<Event>) => void;
   updateEventRSVP: (eventId: string, status: 'going' | 'maybe' | 'not-going') => void;
 
   // Expenses
@@ -94,6 +95,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
 
     setEvents(prev => [...prev, newEvent]);
+  };
+
+  const updateEvent = (eventId: string, eventData: Partial<Event>) => {
+    if (!currentUser) return;
+
+    setEvents(prev => 
+      prev.map(event => 
+        event.id === eventId ? { ...event, ...eventData } : event
+      )
+    );
   };
 
   const updateEventRSVP = (eventId: string, status: 'going' | 'maybe' | 'not-going') => {
@@ -237,6 +248,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     sendMessage,
     markMessageAsRead,
     createEvent,
+    updateEvent,
     updateEventRSVP,
     addExpense,
     updatePaymentStatus,

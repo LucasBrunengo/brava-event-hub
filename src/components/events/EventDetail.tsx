@@ -14,6 +14,7 @@ import { EventMap } from './EventMap';
 import { PhotoGallery } from './PhotoGallery';
 import { UserProfile } from '../profile/UserProfile';
 import { QuickPay } from './QuickPay';
+import { EditEventForm } from './EditEventForm';
 
 interface EventDetailProps {
   event: Event;
@@ -24,6 +25,7 @@ interface EventDetailProps {
 export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare }) => {
   const { currentUser, events } = useApp();
   const [showUserProfile, setShowUserProfile] = useState<UserProfileType | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const currentUserAttendee = event.attendees.find(a => a.userId === currentUser?.id);
   const [displayRsvpStatus, setDisplayRsvpStatus] = useState(currentUserAttendee?.status || null);
@@ -34,6 +36,14 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
 
   const handleRSVP = (status: 'going' | 'maybe' | 'not-going') => {
     setDisplayRsvpStatus(status);
+  };
+
+  const handleEditEvent = () => {
+    setIsEditing(true);
+  };
+
+  const handleEventUpdated = () => {
+    setIsEditing(false);
   };
 
   const handleOrganizerClick = () => {
@@ -86,6 +96,16 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
     );
   }
 
+  if (isEditing) {
+    return (
+      <EditEventForm 
+        event={event}
+        onBack={() => setIsEditing(false)}
+        onEventUpdated={handleEventUpdated}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Back Button */}
@@ -104,7 +124,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
       <div className="flex items-center justify-center gap-2">
         {currentUser?.id === event.organizerId && (
           <>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={handleEditEvent}>
               <Edit className="w-4 h-4 mr-2" />
               Edit Event
             </Button>
