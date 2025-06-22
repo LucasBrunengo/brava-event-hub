@@ -146,33 +146,21 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) =>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 border rounded-lg">
               <div className="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
-                  <path d="M8.34,21.92,6.42,12.83a2,2,0,0,1,1.92-2.58H15.66a2,2,0,0,1,1.92,2.58l-1.92,9.09a1.5,1.5,0,0,1-1.42,1.08H9.76A1.5,1.5,0,0,1,8.34,21.92Z"></path>
-                  <path d="M15.42,10.25a2,2,0,0,0-2-1.75,2.46,2.46,0,0,0-2.5,2.25,2.46,2.46,0,0,0,2.5,2.25,2,2,0,0,0,2-1.75" style={{fill: "black"}}></path>
-                  <path d="M12,4.5A2.5,2.5,0,0,0,9.5,2,4,4,0,0,0,8.5,4.5"></path>
-                </svg>
+                <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="Apple Pay" className="h-8 w-12 object-contain"/>
                 <span className="font-medium">Apple Pay</span>
               </div>
               <Badge variant="outline">Connected</Badge>
             </div>
             <div className="flex items-center justify-between p-3 border rounded-lg">
               <div className="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
-                  <path d="M8.34,21.92,6.42,12.83a2,2,0,0,1,1.92-2.58H15.66a2,2,0,0,1,1.92,2.58l-1.92,9.09a1.5,1.5,0,0,1-1.42,1.08H9.76A1.5,1.5,0,0,1,8.34,21.92Z"></path>
-                  <path d="M15.42,10.25a2,2,0,0,0-2-1.75,2.46,2.46,0,0,0-2.5,2.25,2.46,2.46,0,0,0,2.5,2.25,2,2,0,0,0,2-1.75"></path>
-                  <path d="M12,4.5A2.5,2.5,0,0,0,9.5,2,4,4,0,0,0,8.5,4.5"></path>
-                </svg>
+                <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="PayPal" className="h-8 w-12 object-contain"/>
                 <span className="font-medium">PayPal</span>
               </div>
               <Button variant="outline" size="sm">Connect</Button>
             </div>
             <div className="flex items-center justify-between p-3 border rounded-lg">
               <div className="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
-                  <path d="M8.34,21.92,6.42,12.83a2,2,0,0,1,1.92-2.58H15.66a2,2,0,0,1,1.92,2.58l-1.92,9.09a1.5,1.5,0,0,1-1.42,1.08H9.76A1.5,1.5,0,0,1,8.34,21.92Z"></path>
-                  <path d="M15.42,10.25a2,2,0,0,0-2-1.75,2.46,2.46,0,0,0-2.5,2.25,2.46,2.46,0,0,0,2.5,2.25,2,2,0,0,0,2-1.75"></path>
-                  <path d="M12,4.5A2.5,2.5,0,0,0,9.5,2,4,4,0,0,0,8.5,4.5"></path>
-                </svg>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/2560px-Google_Pay_Logo.svg.png" alt="Google Pay" className="h-8 w-12 object-contain"/>
                 <span className="font-medium">Google Pay</span>
               </div>
               <Button variant="outline" size="sm">Connect</Button>

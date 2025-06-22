@@ -10,6 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Event } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { Plus } from 'lucide-react';
+import { QuickPay } from './QuickPay';
 
 interface ExpenseSectionProps {
   event: Event;
@@ -249,43 +250,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
         </div>
       )}
 
-      {/* Payment Methods */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Quick Pay</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-3">
-            <Button variant="outline" className="h-12 flex flex-col items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 mb-1">
-                <path d="M8.34,21.92,6.42,12.83a2,2,0,0,1,1.92-2.58H15.66a2,2,0,0,1,1.92,2.58l-1.92,9.09a1.5,1.5,0,0,1-1.42,1.08H9.76A1.5,1.5,0,0,1,8.34,21.92Z"></path>
-                <path d="M15.42,10.25a2,2,0,0,0-2-1.75,2.46,2.46,0,0,0-2.5,2.25,2.46,2.46,0,0,0,2.5,2.25,2,2,0,0,0,2-1.75" style={{fill: "black"}}></path>
-                <path d="M12,4.5A2.5,2.5,0,0,0,9.5,2,4,4,0,0,0,8.5,4.5"></path>
-              </svg>
-              <div className="text-xs">Apple Pay</div>
-            </Button>
-            <Button variant="outline" className="h-12 flex flex-col items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 mb-1">
-                <path d="M8.34,21.92,6.42,12.83a2,2,0,0,1,1.92-2.58H15.66a2,2,0,0,1,1.92,2.58l-1.92,9.09a1.5,1.5,0,0,1-1.42,1.08H9.76A1.5,1.5,0,0,1,8.34,21.92Z"></path>
-                <path d="M15.42,10.25a2,2,0,0,0-2-1.75,2.46,2.46,0,0,0-2.5,2.25,2.46,2.46,0,0,0,2.5,2.25,2,2,0,0,0,2-1.75"></path>
-                <path d="M12,4.5A2.5,2.5,0,0,0,9.5,2,4,4,0,0,0,8.5,4.5"></path>
-              </svg>
-              <div className="text-xs">PayPal</div>
-            </Button>
-            <Button variant="outline" className="h-12 flex flex-col items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 mb-1">
-                <path d="M8.34,21.92,6.42,12.83a2,2,0,0,1,1.92-2.58H15.66a2,2,0,0,1,1.92,2.58l-1.92,9.09a1.5,1.5,0,0,1-1.42,1.08H9.76A1.5,1.5,0,0,1,8.34,21.92Z"></path>
-                <path d="M15.42,10.25a2,2,0,0,0-2-1.75,2.46,2.46,0,0,0-2.5,2.25,2.46,2.46,0,0,0,2.5,2.25,2,2,0,0,0,2-1.75"></path>
-                <path d="M12,4.5A2.5,2.5,0,0,0,9.5,2,4,4,0,0,0,8.5,4.5"></path>
-              </svg>
-              <div className="text-xs">Google Pay</div>
-            </Button>
-          </div>
-          <p className="text-xs text-muted-foreground text-center mt-2">
-            Demo mode - payments are simulated
-          </p>
-        </CardContent>
-      </Card>
+      <QuickPay />
     </div>
   );
 };
