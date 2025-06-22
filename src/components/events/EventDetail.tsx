@@ -361,6 +361,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
              photos={event.photos || []} 
              attendees={event.attendees.map(a => a.user)}
              eventId={event.id}
+             portalContainer={portalContainer}
            />
            <EventMap location={event.location} />
         </TabsContent>

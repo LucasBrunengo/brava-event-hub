@@ -39,7 +39,15 @@ export const mockEvents: Event[] = [
     ticketPrice: 50.00,
     ticketUrl: '#',
     photos: [
-      { id: 'p1-1', url: 'https://youbarcelona.com/uploads/images/c/pacha%20barcelona%20terraza%2012/400x300.webp?v=63787259999', uploadedBy: '1', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p1-1', url: 'https://youbarcelona.com/uploads/images/c/pacha%20barcelona%20terraza%2012/400x300.webp?v=63787259999', uploadedBy: '1', taggedUsers: ['2'], uploadedAt: new Date().toISOString(), 
+        reactions: [
+          { id: 'r1', userId: '2', emoji: '🔥', createdAt: new Date().toISOString() },
+          { id: 'r2', userId: '3', emoji: '🤩', createdAt: new Date().toISOString() },
+        ], 
+        comments: [
+          { id: 'pc1', userId: '2', user: mockUsers[1], message: 'Amazing night!', createdAt: new Date().toISOString() },
+        ] 
+      },
       { id: 'p1-2', url: 'https://ultimatetravelexperience.com/wp-content/uploads/2022/11/2-7.jpg', uploadedBy: '2', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
       { id: 'p1-3', url: 'https://www.terrazeo.com/wp-content/uploads/2018/07/Pacha-Barcelona.jpg', uploadedBy: '3', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
     ],
@@ -70,7 +78,13 @@ export const mockEvents: Event[] = [
     isPublic: false,
     photos: [
       { id: 'p2-1', url: 'https://bcnbeachvolleyacademy.com/wp-content/uploads/2022/07/club-volley-playa2023-B.jpg', uploadedBy: '1', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
-      { id: 'p2-2', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREXMh7bVDVF1MPHqGCLByDrjwvd0fEUT1SDQ&s', uploadedBy: '4', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
+      { id: 'p2-2', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREXMh7bVDVF1MPHqGCLByDrjwvd0fEUT1SDQ&s', uploadedBy: '4', taggedUsers: [], uploadedAt: new Date().toISOString(), 
+        reactions: [
+          { id: 'r3', userId: '4', emoji: '🏐', createdAt: new Date().toISOString() },
+          { id: 'r4', userId: '5', emoji: '❤️', createdAt: new Date().toISOString() },
+        ], 
+        comments: [] 
+      }
     ],
     comments: [
       { id: 'c2', eventId: '2', userId: '4', user: mockUsers[3], message: "Sounds like a perfect afternoon. I'm in! 🏐", createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString() },
