@@ -178,25 +178,30 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
       <div className="flex-1 p-4 overflow-y-auto space-y-4">
         {selectedChat ? (
-          conversations[selectedChat]?.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}
-            >
-              <div className={`max-w-[80%] ${message.senderId === currentUserId ? 'order-2' : 'order-1'}`}>
-                {renderMessageContent(message)}
-                <span className="text-xs text-muted-foreground mt-1 block">
-                  {formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })}
-                </span>
+          conversations[selectedChat]?.map((message) => {
+            const sender = getOtherUser(message.senderId);
+            if (!sender) return null; // Defend against missing sender
+
+            return (
+              <div
+                key={message.id}
+                className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className={`max-w-[80%] ${message.senderId === currentUserId ? 'order-2' : 'order-1'}`}>
+                  {renderMessageContent(message)}
+                  <span className="text-xs text-muted-foreground mt-1 block">
+                    {formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })}
+                  </span>
+                </div>
+                {message.senderId !== currentUserId && (
+                  <Avatar className="w-6 h-6 ml-2 order-1">
+                    <AvatarImage src={sender.avatar} />
+                    <AvatarFallback className="text-xs">{sender.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                )}
               </div>
-              {message.senderId !== currentUserId && (
-                <Avatar className="w-6 h-6 ml-2 order-1">
-                  <AvatarImage src={message.sender.avatar} />
-                  <AvatarFallback className="text-xs">{message.sender.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-              )}
-            </div>
-          ))
+            );
+          })
         ) : (
           <>
             {Object.entries(conversations).map(([userId, userMessages]) => {

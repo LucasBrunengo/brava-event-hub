@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  overflow: hidden;
+}
+
 /* Brava Design System - Purple/Blue gradient branding */
 
 @layer base {
@@ -87,7 +91,6 @@
       #7209b7 100%);
     background-attachment: fixed;
     @apply text-foreground min-h-screen;
-    overflow: hidden;
   }
 
   /* Hide scrollbars completely for phone simulation */

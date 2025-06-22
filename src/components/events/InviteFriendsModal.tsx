@@ -84,7 +84,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogPortal container={container}>
         <DialogOverlay />
-        <DialogContent className="absolute bottom-0 left-0 right-0 h-[90%] w-full flex flex-col rounded-t-2xl border-t bg-white p-0 animate-slide-in-from-bottom">
+        <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[450px] max-h-[85vh] flex flex-col rounded-2xl border bg-white p-0">
           <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
             <DialogTitle className="flex items-center gap-2">
               <Users className="w-5 h-5" />
