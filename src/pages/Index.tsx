@@ -17,12 +17,13 @@ const Index = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   console.log('Index component rendered - isAuthenticated:', isAuthenticated);
+  console.log('WelcomeScreen component:', WelcomeScreen);
 
   if (!isAuthenticated) {
     console.log('Rendering WelcomeScreen');
     return (
-      <div className="phone-frame">
-        <div className="phone-screen">
+      <div className="min-h-screen w-full bg-gray-50">
+        <div className="max-w-md mx-auto bg-white min-h-screen">
           <WelcomeScreen />
         </div>
       </div>
@@ -71,9 +72,9 @@ const Index = () => {
   };
 
   return (
-    <div className="phone-frame">
-      <div className="phone-screen">
-        <div className="flex flex-col h-full relative z-10">
+    <div className="min-h-screen w-full bg-gray-50">
+      <div className="max-w-md mx-auto bg-white min-h-screen">
+        <div className="flex flex-col h-screen relative z-10">
           <div className="flex-1 overflow-y-auto pb-20">
             <div className="p-4">
               {currentView === 'dashboard' && (
