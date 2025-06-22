@@ -181,12 +181,15 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
             {localPhotos.map((photo, index) => (
-              <div key={photo.id} className="relative group cursor-pointer">
+              <div 
+                key={photo.id} 
+                className="relative group cursor-pointer"
+                onClick={() => handlePhotoClick(photo, index)}
+              >
                 <img
                   src={photo.url}
                   alt="Event photo"
                   className="aspect-square object-cover rounded-lg transition-transform group-hover:scale-105"
-                  onClick={() => handlePhotoClick(photo, index)}
                   onError={handleImageError}
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all rounded-lg" />
