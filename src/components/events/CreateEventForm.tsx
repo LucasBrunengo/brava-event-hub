@@ -97,11 +97,16 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                 <Globe className={`w-5 h-5 ${isPublic ? 'text-blue-500' : 'text-muted-foreground'}`} />
                 <Label htmlFor="privacy-switch">Public</Label>
               </div>
-              <Switch
-                id="privacy-switch"
-                checked={isPublic}
-                onCheckedChange={(checked) => setIsPublic(checked)}
-              />
+              <div className="relative">
+                <Switch
+                  id="privacy-switch"
+                  checked={isPublic}
+                  onCheckedChange={(checked: boolean) => {
+                    console.log('Switch changed:', checked);
+                    setIsPublic(checked);
+                  }}
+                />
+              </div>
               <div className="flex items-center space-x-2">
                 <Lock className={`w-5 h-5 ${!isPublic ? 'text-blue-500' : 'text-muted-foreground'}`} />
                 <Label htmlFor="privacy-switch">Private</Label>

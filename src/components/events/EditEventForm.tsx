@@ -97,22 +97,32 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({ event, onBack, onE
                 <Globe className="w-5 h-5" />
                 Public Event
               </Label>
-              <Switch
-                id="privacy-switch"
-                checked={isPublic}
-                onCheckedChange={(checked) => setIsPublic(checked)}
-              />
+              <div className="relative">
+                <Switch
+                  id="privacy-switch"
+                  checked={isPublic}
+                  onCheckedChange={(checked: boolean) => {
+                    console.log('Privacy switch changed:', checked);
+                    setIsPublic(checked);
+                  }}
+                />
+              </div>
             </div>
             <div className="flex items-center justify-between p-4 border rounded-md">
               <Label htmlFor="expense-switch" className="flex items-center gap-2 cursor-pointer">
                 <Users className="w-5 h-5" />
                 Enable Expense Splitting
               </Label>
-              <Switch
-                id="expense-switch"
-                checked={hasExpenseSplitting}
-                onCheckedChange={(checked) => setHasExpenseSplitting(checked)}
-              />
+              <div className="relative">
+                <Switch
+                  id="expense-switch"
+                  checked={hasExpenseSplitting}
+                  onCheckedChange={(checked: boolean) => {
+                    console.log('Expense switch changed:', checked);
+                    setHasExpenseSplitting(checked);
+                  }}
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -130,11 +140,16 @@ export const EditEventForm: React.FC<EditEventFormProps> = ({ event, onBack, onE
                 <Users className="w-5 h-5" />
                 Promote Event
               </Label>
-              <Switch
-                id="promoted-switch"
-                checked={isPromoted}
-                onCheckedChange={(checked) => setIsPromoted(checked)}
-              />
+              <div className="relative">
+                <Switch
+                  id="promoted-switch"
+                  checked={isPromoted}
+                  onCheckedChange={(checked: boolean) => {
+                    console.log('Promoted switch changed:', checked);
+                    setIsPromoted(checked);
+                  }}
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
