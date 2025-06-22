@@ -9,14 +9,15 @@ const particleVariants: Variants = {
     scale: 0,
   },
   visible: (i: number) => ({
-    opacity: [0, 1, 0.8, 0],
-    x: (Math.random() - 0.5) * 400,
-    y: (Math.random() - 0.5) * 400,
+    opacity: [0, 1, 1, 0],
+    x: (Math.random() - 0.5) * 500,
+    y: (Math.random() - 0.5) * 500,
     scale: [0, Math.random() * 2 + 0.5, Math.random() * 1.5 + 0.3, 0],
+    rotate: Math.random() * 360,
     transition: {
-      delay: i * 0.03,
-      duration: 2,
-      ease: "easeOut",
+      delay: i * 0.02,
+      duration: 1.5 + Math.random() * 1,
+      ease: "circOut",
     },
   }),
   exit: {
@@ -43,9 +44,9 @@ export const LoadingScreen = ({ onLoadingComplete }: LoadingScreenProps) => {
         rotate: [0, 15, -15, 15, -15, 0],
         transition: { duration: 2, ease: "easeInOut" }
       });
-      await logoControls.start({ scale: 2, opacity: 0, transition: { duration: 0.8 } });
+      await logoControls.start({ scale: 3, opacity: 0, transition: { duration: 0.8, ease: "circIn" } });
       await controls.start('visible');
-      await controls.start('exit');
+      await new Promise(resolve => setTimeout(resolve, 2000));
       onLoadingComplete();
     };
     sequence();
@@ -70,15 +71,15 @@ export const LoadingScreen = ({ onLoadingComplete }: LoadingScreenProps) => {
   };
 
   return (
-    <div className="absolute inset-0 bg-background z-50 flex items-center justify-center overflow-hidden rounded-[2rem]">
-      <motion.div animate={logoControls}>
-        <img src="/brava-logo.png" alt="Brava Logo" className="w-24 h-24" />
+    <div className="absolute inset-0 bg-gray-900 z-50 flex items-center justify-center overflow-hidden rounded-[2rem]">
+      <motion.div animate={logoControls} className="z-10">
+        <img src="/brava-logo.png" alt="Brava Logo" className="w-24 h-24 drop-shadow-lg" />
       </motion.div>
-      <div className="absolute inset-0 overflow-hidden rounded-[2rem]">
-        {[...Array(80)].map((_, i) => (
+      <div className="absolute inset-0">
+        {[...Array(100)].map((_, i) => (
           <motion.div
             key={i}
-            className={`${getParticleSize(i)} ${getParticleColor(i)} rounded-full absolute`}
+            className={`${getParticleSize(i)} ${getParticleColor(i)} rounded-full absolute top-1/2 left-1/2`}
             variants={particleVariants}
             initial="hidden"
             animate={controls}

@@ -60,9 +60,11 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
     setSelectedFriends([]);
   };
 
+  if (!isOpen) return null;
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="absolute bottom-0 left-0 right-0 w-full h-[80vh] flex flex-col mx-0 p-0 max-w-none rounded-t-xl">
+      <DialogContent className="absolute bottom-0 left-0 right-0 w-full h-auto max-h-[85vh] flex flex-col mx-0 p-0 max-w-none rounded-t-2xl border-0">
         <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
           <DialogTitle className="flex items-center gap-2">
             <Share2 className="w-5 h-5" />

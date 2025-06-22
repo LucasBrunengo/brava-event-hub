@@ -1,321 +1,103 @@
 import { User, Event, Expense, Comment, EventPhoto } from '@/types';
 
 export const mockUsers: User[] = [
-  {
-    id: '1',
-    name: 'Alice Johnson',
-    email: 'alice.johnson@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-    phone: '+34666555444'
-  },
-  {
-    id: '2',
-    name: 'Bob Smith',
-    email: 'bob.smith@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=2',
-    phone: '+34666555333'
-  },
-  {
-    id: '3',
-    name: 'Charlie Brown',
-    email: 'charlie.brown@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=3',
-    phone: '+34666555222'
-  },
-  {
-    id: '4',
-    name: 'Diana Miller',
-    email: 'diana.miller@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=4',
-    phone: '+34666555111'
-  },
-  {
-    id: '5',
-    name: 'Eva White',
-    email: 'eva.white@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=5',
-    phone: '+34666555000'
-  },
-  {
-    id: '6',
-    name: 'Frank Garcia',
-    email: 'frank.garcia@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=6',
-    phone: '+34666444999'
-  },
-  {
-    id: '7',
-    name: 'Grace Lee',
-    email: 'grace.lee@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=7',
-    phone: '+34666444888'
-  },
-  {
-    id: '8',
-    name: 'Henry Wilson',
-    email: 'henry.wilson@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=8',
-    phone: '+34666444777'
-  },
-  {
-    id: '9',
-    name: 'Iris Chen',
-    email: 'iris.chen@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=9',
-    phone: '+34666444666'
-  },
-  {
-    id: '10',
-    name: 'Jack Davis',
-    email: 'jack.davis@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=10',
-    phone: '+34666444555'
-  },
-  {
-    id: '11',
-    name: 'Kate Rodriguez',
-    email: 'kate.rodriguez@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=11',
-    phone: '+34666444444'
-  },
-  {
-    id: '12',
-    name: 'Liam Taylor',
-    email: 'liam.taylor@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=12',
-    phone: '+34666444333'
-  },
-  {
-    id: '13',
-    name: 'Maya Patel',
-    email: 'maya.patel@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=13',
-    phone: '+34666444222'
-  },
-  {
-    id: '14',
-    name: 'Noah Anderson',
-    email: 'noah.anderson@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=14',
-    phone: '+34666444111'
-  },
-  {
-    id: '15',
-    name: 'Olivia Martin',
-    email: 'olivia.martin@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=15',
-    phone: '+34666444000'
-  },
-  {
-    id: '16',
-    name: 'Paul Thompson',
-    email: 'paul.thompson@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=16',
-    phone: '+34666333999'
-  },
-  {
-    id: '17',
-    name: 'Quinn Walker',
-    email: 'quinn.walker@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=17',
-    phone: '+34666333888'
-  },
-  {
-    id: '18',
-    name: 'Rachel Green',
-    email: 'rachel.green@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=18',
-    phone: '+34666333777'
-  },
-  {
-    id: '19',
-    name: 'Sam Johnson',
-    email: 'sam.johnson@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=19',
-    phone: '+34666333666'
-  },
-  {
-    id: '20',
-    name: 'Tina Lopez',
-    email: 'tina.lopez@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=20',
-    phone: '+34666333555'
-  },
-  {
-    id: '21',
-    name: 'Victor Brown',
-    email: 'victor.brown@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=21',
-    phone: '+34666333444'
-  },
-  {
-    id: '22',
-    name: 'Wendy Clark',
-    email: 'wendy.clark@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=22',
-    phone: '+34666333333'
-  },
-  {
-    id: '23',
-    name: 'Xavier Kim',
-    email: 'xavier.kim@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=23',
-    phone: '+34666333222'
-  },
-  {
-    id: '24',
-    name: 'Yara Singh',
-    email: 'yara.singh@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=24',
-    phone: '+34666333111'
-  },
-  {
-    id: '25',
-    name: 'Zoe Williams',
-    email: 'zoe.williams@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=25',
-    phone: '+34666333000'
-  },
+  { id: '1', name: 'Javier García', email: 'javier.garcia@example.com', avatar: 'https://i.pravatar.cc/150?img=1', phone: '+34666555444' },
+  { id: '2', name: 'Maria Rodriguez', email: 'maria.rodriguez@example.com', avatar: 'https://i.pravatar.cc/150?img=2', phone: '+34666555333' },
+  { id: '3', name: 'Carlos Martinez', email: 'carlos.martinez@example.com', avatar: 'https://i.pravatar.cc/150?img=3', phone: '+34666555222' },
+  { id: '4', name: 'Sofia Lopez', email: 'sofia.lopez@example.com', avatar: 'https://i.pravatar.cc/150?img=4', phone: '+34666555111' },
+  { id: '5', name: 'Luis Hernandez', email: 'luis.hernandez@example.com', avatar: 'https://i.pravatar.cc/150?img=5', phone: '+34666555000' },
+  { id: '6', name: 'Ana Perez', email: 'ana.perez@example.com', avatar: 'https://i.pravatar.cc/150?img=6', phone: '+34666444999' },
+  { id: '7', name: 'David Gomez', email: 'david.gomez@example.com', avatar: 'https://i.pravatar.cc/150?img=7', phone: '+34666444888' },
+  { id: '8', name: 'Laura Diaz', email: 'laura.diaz@example.com', avatar: 'https://i.pravatar.cc/150?img=8', phone: '+34666444777' },
+  { id: '9', name: 'Pablo Moreno', email: 'pablo.moreno@example.com', avatar: 'https://i.pravatar.cc/150?img=9', phone: '+34666444666' },
+  { id: '10', name: 'Elena Jimenez', email: 'elena.jimenez@example.com', avatar: 'https://i.pravatar.cc/150?img=10', phone: '+34666444555' },
+  { id: '11', name: 'Adrian Romero', email: 'adrian.romero@example.com', avatar: 'https://i.pravatar.cc/150?img=11', phone: '+34666444444' },
+  { id: '12', name: 'Raquel Navarro', email: 'raquel.navarro@example.com', avatar: 'https://i.pravatar.cc/150?img=12', phone: '+34666444333' }
 ];
 
-// Export the current user (Alice Johnson)
-export const mockCurrentUser: User = mockUsers[0];
+export const mockCurrentUser: User = mockUsers[0]; // Javier García is the current user
 
 export const mockEvents: Event[] = [
+  // --- PRIVATE EVENTS ORGANIZED BY CURRENT USER (Javier) ---
   {
     id: '1',
-    name: 'Bling Bling Club Night',
-    description: 'Exclusive night out at the hottest club in Barcelona! VIP tables, bottle service, and the best electronic music. Dress to impress!',
-    date: '2024-02-15',
-    time: '11:00 PM',
-    location: 'Bling Bling Club, Eixample',
+    name: 'Pachá VIP Night',
+    description: 'VIP tables at Pachá Barcelona. Let\'s celebrate the weekend in style!',
+    date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 3 days from now
+    time: '11:30 PM',
+    location: 'Pachá Barcelona, Port Olímpic',
     organizerId: '1',
     organizer: mockUsers[0],
     attendees: [
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-01T10:00:00Z', ticketStatus: 'purchased' },
       { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-02T11:00:00Z', ticketStatus: 'purchased' },
       { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-03T12:00:00Z', ticketStatus: 'pending' },
-      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-01-04T13:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'not-going', joinedAt: '2024-01-05T14:00:00Z' }
     ],
     createdAt: '2024-01-01T10:00:00Z',
     hasExpenseSplitting: true,
     isPublic: false,
-    ticketPrice: 35.00,
-    photos: [
-      {
-        id: '1',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '1',
-        uploadedAt: '2024-01-10T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['2', '3']
-      }
-    ],
-    comments: [
-      { id: 'c1', eventId: '1', userId: '2', user: mockUsers[1], message: "Can't wait! I'll bring some friends.", createdAt: '2024-02-12T10:00:00Z' },
-      { id: 'c2', eventId: '1', userId: '3', user: mockUsers[2], message: "What's the dress code?", createdAt: '2024-02-12T11:00:00Z' }
-    ]
+    ticketPrice: 50.00,
   },
   {
     id: '2',
-    name: 'FC Barcelona vs Real Madrid',
-    description: 'El Clásico! The biggest football match of the season. Let\'s watch it together at a sports bar with great atmosphere and drinks.',
-    date: '2024-02-20',
-    time: '9:00 PM',
-    location: 'Sports Bar Central, Gràcia',
-    organizerId: '2',
-    organizer: mockUsers[1],
-    attendees: [
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-15T10:00:00Z' },
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-16T11:00:00Z' },
-      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-17T12:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-01-18T13:00:00Z' },
-      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-01-19T14:00:00Z' }
-    ],
-    createdAt: '2024-01-15T10:00:00Z',
-    hasExpenseSplitting: true,
-    isPublic: false,
-    photos: [
-      {
-        id: '2',
-        url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '2',
-        uploadedAt: '2024-01-20T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['1', '3']
-      }
-    ],
-    comments: [
-      { id: 'c3', eventId: '2', userId: '3', user: mockUsers[2], message: "Visca Barça! 🔵🔴", createdAt: '2024-02-18T14:00:00Z' },
-    ]
-  },
-  {
-    id: '3',
-    name: 'Beach Day at Barceloneta',
-    description: 'Perfect day for the beach! We\'ll bring volleyball, music, and snacks. Join us for a fun day in the sun!',
-    date: '2024-02-25',
-    time: '12:00 PM',
-    location: 'Barceloneta Beach',
+    name: 'Beach Volleyball & Sunset',
+    description: 'Let\'s play some volleyball at Bogatell beach and then watch the sunset with some drinks.',
+    date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 5 days from now
+    time: '4:00 PM',
+    location: 'Bogatell Beach, Poblenou',
     organizerId: '1',
     organizer: mockUsers[0],
     attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-15T10:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-16T11:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-01-17T12:00:00Z' },
+    ],
+    createdAt: '2024-01-15T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: false,
+  },
+
+  // --- PRIVATE EVENTS ORGANIZED BY OTHERS ---
+  {
+    id: '3',
+    name: 'Barça vs Atlético Watch Party',
+    description: 'El Partidazo! Watching the Barça game at a cool sports bar in Gràcia. Big screen, good beer, and great company.',
+    date: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 8 days from now
+    time: '9:00 PM',
+    location: 'Belushi\'s, Eixample',
+    organizerId: '2',
+    organizer: mockUsers[1],
+    attendees: [
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-20T10:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-21T11:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-01-22T12:00:00Z' },
-      { userId: '7', user: mockUsers[6], status: 'maybe', joinedAt: '2024-01-23T13:00:00Z' }
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-21T11:00:00Z' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-22T12:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-01-23T13:00:00Z' },
     ],
     createdAt: '2024-01-20T10:00:00Z',
     hasExpenseSplitting: true,
     isPublic: false,
-    photos: [
-      {
-        id: '3',
-        url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '1',
-        uploadedAt: '2024-01-25T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['4', '5']
-      }
-    ],
-    comments: [
-      { id: 'c4', eventId: '3', userId: '4', user: mockUsers[3], message: "I'll bring the volleyball! 🏐", createdAt: '2024-02-22T10:00:00Z' },
-    ]
   },
   {
     id: '4',
-    name: 'Razzmatazz Night Out',
-    description: 'The most iconic club in Barcelona! Join us for an unforgettable night of electronic music and dancing.',
-    date: '2024-03-01',
-    time: '11:30 PM',
-    location: 'Razzmatazz Club',
-    organizerId: '3',
-    organizer: mockUsers[2],
+    name: 'Sutton Club Night',
+    description: 'Another big club night, this time at Sutton. Let\'s check out the scene there.',
+    date: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 12 days from now
+    time: '11:00 PM',
+    location: 'Sutton Club, Eixample',
+    organizerId: '4',
+    organizer: mockUsers[3],
     attendees: [
-      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-25T10:00:00Z', ticketStatus: 'purchased' },
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-26T11:00:00Z', ticketStatus: 'purchased' },
-      { userId: '2', user: mockUsers[1], status: 'maybe', joinedAt: '2024-01-27T12:00:00Z' },
-      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-01-28T13:00:00Z', ticketStatus: 'pending' }
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-02-05T10:00:00Z', ticketStatus: 'purchased' },
+      { userId: '1', user: mockUsers[0], status: 'maybe', joinedAt: '2024-02-06T11:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-02-07T12:00:00Z', ticketStatus: 'purchased' }
     ],
-    createdAt: '2024-01-25T10:00:00Z',
-    hasExpenseSplitting: false,
+    createdAt: '2024-02-05T10:00:00Z',
+    hasExpenseSplitting: true,
     isPublic: false,
     ticketPrice: 25.00,
-    photos: [
-      {
-        id: '4',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '3',
-        uploadedAt: '2024-01-30T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['1', '8']
-      }
-    ]
   },
+
+  // --- PUBLIC EVENTS ---
   {
     id: '5',
     name: 'Primavera Sound Festival',
@@ -390,147 +172,22 @@ export const mockEvents: Event[] = [
   },
   {
     id: '7',
-    name: 'Sunset Yoga on the Beach',
-    description: 'Relax and rejuvenate with a peaceful yoga session as the sun sets over the Mediterranean. All levels welcome.',
-    date: '2024-02-28',
-    time: '7:30 PM',
-    location: 'Nova Icaria Beach',
-    organizerId: '5',
-    organizer: mockUsers[4],
-    attendees: [
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-28T10:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-01-29T11:00:00Z' }
-    ],
-    createdAt: '2024-01-28T10:00:00Z',
+    name: 'Brunch in the Park',
+    description: 'An open-air electronic music festival in the beautiful Jardins de Joan Brossa. Great music, food trucks, and a relaxed vibe.',
+    date: '2024-07-21',
+    time: '1:00 PM',
+    location: 'Jardins de Joan Brossa, Montjuïc',
+    organizerId: '10',
+    organizer: mockUsers[9],
+    attendees: [],
+    createdAt: '2024-05-15T10:00:00Z',
     hasExpenseSplitting: false,
     isPublic: true,
-    ticketPrice: 12.00,
-    photos: [
-      {
-        id: '7',
-        url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '5',
-        uploadedAt: '2024-02-01T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['1']
-      }
-    ]
-  },
-  {
-    id: '8',
-    name: 'Duki Concert - Palau Sant Jordi',
-    description: 'The Argentine trap superstar is coming to Barcelona! Don\'t miss this incredible show with special guests.',
-    date: '2024-03-15',
-    time: '9:00 PM',
-    location: 'Palau Sant Jordi',
-    organizerId: '1',
-    organizer: mockUsers[0],
-    attendees: [
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-30T10:00:00Z', ticketStatus: 'purchased' },
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-31T11:00:00Z', ticketStatus: 'purchased' },
-      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-02-01T12:00:00Z', ticketStatus: 'pending' },
-      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-02-02T13:00:00Z' }
-    ],
-    createdAt: '2024-01-30T10:00:00Z',
-    hasExpenseSplitting: false,
-    isPublic: false,
-    ticketPrice: 65.00,
-    ticketUrl: 'https://www.ticketmaster.es',
-    photos: [
-      {
-        id: '8',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '1',
-        uploadedAt: '2024-02-05T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['2', '3']
-      }
-    ]
-  },
-  {
-    id: '9',
-    name: 'Razzmatazz Club Night',
-    description: 'The most iconic club in Barcelona! Join us for an unforgettable night of electronic music and dancing.',
-    date: '2024-03-08',
-    time: '11:00 PM',
-    location: 'Razzmatazz Club',
-    organizerId: '4',
-    organizer: mockUsers[3],
-    attendees: [
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-02-05T10:00:00Z' },
-      { userId: '1', user: mockUsers[0], status: 'maybe', joinedAt: '2024-02-06T11:00:00Z' },
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-02-07T12:00:00Z' }
-    ],
-    createdAt: '2024-02-05T10:00:00Z',
-    hasExpenseSplitting: false,
-    isPublic: true,
-    ticketPrice: 20.00,
-    ticketUrl: 'https://www.razzmatazz.com',
-    photos: [
-      {
-        id: '9',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '4',
-        uploadedAt: '2024-02-10T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['1', '2']
-      }
-    ]
-  },
-  {
-    id: '10',
-    name: 'Fever Mystery Dinner',
-    description: 'An immersive mystery dinner experience! Solve a thrilling case while enjoying a gourmet meal in a secret location.',
-    date: '2024-03-22',
-    time: '8:00 PM',
-    location: 'Secret Location (revealed 24h before)',
-    organizerId: '5',
-    organizer: mockUsers[4],
-    attendees: [
-      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-02-15T10:00:00Z' },
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-02-16T11:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-02-17T12:00:00Z' }
-    ],
-    createdAt: '2024-02-15T10:00:00Z',
-    hasExpenseSplitting: false,
-    isPublic: true,
+    isPromoted: true,
     ticketPrice: 45.00,
-    ticketUrl: 'https://feverup.com',
-    photos: [
-      {
-        id: '11',
-        url: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '5',
-        uploadedAt: '2024-02-20T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['1']
-      }
-    ]
-  },
-  {
-    id: '11',
-    name: 'Private Party at Sutton Club',
-    description: 'Exclusive access to a private party at one of Barcelona\'s top clubs. Great music, great people, and an unforgettable night.',
-    date: '2024-04-05',
-    time: '11:30 PM',
-    location: 'Sutton Club, Barcelona',
-    organizerId: '1',
-    organizer: mockUsers[0],
-    attendees: [
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-03-10T10:00:00Z', ticketStatus: 'purchased' },
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-03-10T11:00:00Z', ticketStatus: 'purchased' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-03-11T12:00:00Z', ticketStatus: 'pending' },
-      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-03-12T13:00:00Z' }
-    ],
-    createdAt: '2024-03-10T10:00:00Z',
-    hasExpenseSplitting: false,
-    isPublic: false,
-    ticketPrice: 30.00,
-    photos: []
+    discountPercentage: 10,
+    ticketUrl: 'https://barcelona.brunch-in.com/',
+    totalAttendees: 15000
   }
 ];
 

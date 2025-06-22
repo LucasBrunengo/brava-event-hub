@@ -39,7 +39,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateEvent, onEventClic
         <div className="absolute inset-0 h-40 brava-gradient rounded-lg opacity-90" />
         <div className="relative z-10 p-4 text-white text-center">
           <div className="flex items-center justify-center gap-3 mb-3">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
               <img src="/brava-logo.png" alt="Brava Logo" className="w-8 h-8" />
             </div>
             <div className="text-left">
