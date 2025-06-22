@@ -230,7 +230,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                       </Avatar>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
-                          <h4 className="font-semibold text-sm">{user.name}</h4>
+                          <h4 className="font-semibold text-sm">{user.name || 'Unknown User'}</h4>
                           {unreadCount > 0 && (
                             <Badge className="bg-green-500 text-white text-xs">
                               {unreadCount}
