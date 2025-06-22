@@ -74,7 +74,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
   return (
     <>
       <Dialog open={true} onOpenChange={onClose}>
-        <DialogContent className="max-w-full w-full h-[80vh] flex flex-col mx-0 p-0">
+        <DialogContent className="absolute bottom-0 w-full h-[80vh] flex flex-col mx-0 p-0">
           <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
             <DialogTitle className="flex items-center gap-2">
               <Bell className="w-5 h-5" />

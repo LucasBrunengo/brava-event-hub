@@ -62,7 +62,7 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-full w-full h-[80vh] flex flex-col mx-0 p-0">
+      <DialogContent className="absolute bottom-0 w-full h-[80vh] flex flex-col mx-0 p-0">
         <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
           <DialogTitle className="flex items-center gap-2">
             <Share2 className="w-5 h-5" />

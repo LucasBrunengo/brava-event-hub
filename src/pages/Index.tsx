@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
 import { WelcomeScreen } from '@/components/auth/WelcomeScreen';
 import { Dashboard } from '@/components/dashboard/Dashboard';
@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Bell, MessageCircle, Crown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Event } from '@/types';
+import { LoadingScreen } from '@/components/layout/LoadingScreen';
 
 type View = 'dashboard' | 'create' | 'profile' | 'event-detail' | 'past-event-detail';
 
@@ -26,6 +27,16 @@ const Index = () => {
   const [showChat, setShowChat] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 3000); // 3-second loading screen
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   console.log('Index component rendered - isAuthenticated:', isAuthenticated);
   console.log('WelcomeScreen component:', WelcomeScreen);

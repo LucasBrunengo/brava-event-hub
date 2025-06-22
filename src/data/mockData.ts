@@ -220,6 +220,10 @@ export const mockEvents: Event[] = [
         comments: [],
         taggedUsers: ['1', '4']
       }
+    ],
+    comments: [
+      { id: 'c1', eventId: '1', userId: '2', user: mockUsers[1], message: "Can't wait! I'll bring some drinks.", createdAt: '2024-02-12T10:00:00Z' },
+      { id: 'c2', eventId: '1', userId: '3', user: mockUsers[2], message: "Sounds fun! What's the plan for music?", createdAt: '2024-02-12T11:00:00Z' }
     ]
   },
   {
@@ -254,7 +258,11 @@ export const mockEvents: Event[] = [
         comments: [],
         taggedUsers: ['2', '3']
       }
-    ]
+    ],
+    comments: [
+      { id: 'c3', eventId: '2', userId: '3', user: mockUsers[2], message: "The lineup this year is insane!", createdAt: '2024-05-20T14:00:00Z' },
+    ],
+    totalAttendees: 220000
   },
   {
     id: '3',

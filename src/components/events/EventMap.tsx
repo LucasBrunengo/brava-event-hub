@@ -1,20 +1,27 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, Navigation } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 
 interface EventMapProps {
   location: string;
-  address?: string;
 }
 
-export const EventMap: React.FC<EventMapProps> = ({ location, address }) => {
-  // Generate a simple map using OpenStreetMap tiles
-  const getMapUrl = (location: string) => {
-    // Encode the location for the URL
-    const encodedLocation = encodeURIComponent(location);
-    // Use OpenStreetMap with a simple tile server
-    return `https://tile.openstreetmap.org/13/4096/2724.png`;
-  };
+const locationCoordinates: Record<string, { lat: number; lon: number; zoom: number }> = {
+  'Barceloneta Beach': { lat: 41.3784, lon: 2.1883, zoom: 15 },
+  'Parc del Fòrum': { lat: 41.4125, lon: 2.2200, zoom: 16 },
+  'Gothic Quarter, Barcelona': { lat: 41.3825, lon: 2.1764, zoom: 16 },
+  'Sutton Club, Barcelona': { lat: 41.3960, lon: 2.1485, zoom: 17 },
+  'Nova Icaria Beach': { lat: 41.3934, lon: 2.2023, zoom: 16 },
+  'Palau Sant Jordi': { lat: 41.3639, lon: 2.1528, zoom: 16 },
+  'Razzmatazz Club': { lat: 41.4036, lon: 2.1913, zoom: 17 },
+  'Fira Barcelona': { lat: 41.3738, lon: 2.1498, zoom: 15 },
+  'Secret Location (revealed 24h before)': { lat: 41.3874, lon: 2.1686, zoom: 14 } // Centered on Barcelona
+};
+
+export const EventMap: React.FC<EventMapProps> = ({ location }) => {
+  const coords = locationCoordinates[location] || locationCoordinates['Secret Location (revealed 24h before)'];
+  const bbox = `${coords.lon - 0.01},${coords.lat - 0.01},${coords.lon + 0.01},${coords.lat + 0.01}`;
+  const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${coords.lat},${coords.lon}`;
 
   return (
     <Card>
@@ -24,60 +31,17 @@ export const EventMap: React.FC<EventMapProps> = ({ location, address }) => {
           Location
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Map Placeholder */}
-        <div className="relative w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <MapPin className="w-12 h-12 text-blue-500 mx-auto mb-2" />
-              <p className="font-medium text-gray-700">{location}</p>
-              {address && (
-                <p className="text-sm text-gray-600 mt-1">{address}</p>
-              )}
-            </div>
-          </div>
-          
-          {/* Map Grid Pattern */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="grid grid-cols-8 grid-rows-6 h-full">
-              {Array.from({ length: 48 }).map((_, i) => (
-                <div key={i} className="border border-gray-300"></div>
-              ))}
-            </div>
-          </div>
-          
-          {/* Location Pin */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow-lg flex items-center justify-center">
-              <div className="w-2 h-2 bg-white rounded-full"></div>
-            </div>
-            <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-red-500 mx-auto mt-1"></div>
-          </div>
+      <CardContent>
+        <div className="w-full h-64 rounded-lg overflow-hidden border">
+          <iframe
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            scrolling="no"
+            src={mapUrl}
+          ></iframe>
         </div>
-
-        {/* Location Details */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gray-500" />
-            <span className="font-medium">{location}</span>
-          </div>
-          {address && (
-            <div className="flex items-center gap-2">
-              <Navigation className="w-4 h-4 text-gray-500" />
-              <span className="text-sm text-gray-600">{address}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-2">
-          <button className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors">
-            Get Directions
-          </button>
-          <button className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-            Share Location
-          </button>
-        </div>
+        <p className="text-center mt-2 text-muted-foreground">{location}</p>
       </CardContent>
     </Card>
   );

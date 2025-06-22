@@ -19,6 +19,7 @@ export interface Event {
   organizerId: string;
   organizer: User;
   attendees: EventAttendee[];
+  totalAttendees?: number;
   expenses?: Expense[];
   photos?: EventPhoto[];
   createdAt: string;
@@ -28,6 +29,7 @@ export interface Event {
   ticketPrice?: number;
   isPromoted?: boolean;
   discountPercentage?: number;
+  comments?: Comment[];
 }
 
 export interface EventPhoto {

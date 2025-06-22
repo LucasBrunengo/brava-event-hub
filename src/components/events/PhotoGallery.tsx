@@ -222,7 +222,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
 
       {/* Enhanced Photo Detail Modal */}
       <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
-        <DialogContent className="fixed inset-0 w-full h-full max-w-none max-h-none p-0 bg-black/95 border-0 rounded-none">
+        <DialogContent className="absolute bottom-0 w-full h-full max-w-none max-h-none p-0 bg-black/95 border-0 rounded-none">
           {selectedPhoto && (
             <div className="flex flex-col h-full">
               <DialogHeader className="flex flex-row items-center justify-between p-4 bg-black/50 text-white">
@@ -366,7 +366,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
       {/* Full-screen expanded photo view */}
       {isPhotoExpanded && selectedPhoto && (
         <div 
-          className="fixed inset-0 bg-black/90 z-[9999] flex items-center justify-center animate-fade-in"
+          className="absolute inset-0 bg-black/90 z-[9999] flex items-center justify-center animate-fade-in"
           onClick={() => setIsPhotoExpanded(false)}
         >
           <img

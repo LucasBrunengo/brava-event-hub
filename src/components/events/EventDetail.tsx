@@ -251,51 +251,68 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {event.attendees.map((attendee) => (
-              <div key={attendee.userId} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src={attendee.user.avatar} />
-                    <AvatarFallback>
-                      {attendee.user.name.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <p className="font-semibold">{attendee.user.name}</p>
-                      {!event.isPublic && attendee.ticketStatus && (
-                        <Badge 
-                          variant={
-                            attendee.ticketStatus === 'purchased' ? 'default' :
-                            attendee.ticketStatus === 'pending' ? 'secondary' :
-                            'outline'
-                          }
-                          className={
-                            attendee.ticketStatus === 'purchased' ? 'bg-green-500 text-white' : ''
-                          }
-                        >
-                          {attendee.ticketStatus === 'purchased' && <Ticket className="w-3 h-3 mr-1" />}
-                          {attendee.ticketStatus.charAt(0).toUpperCase() + attendee.ticketStatus.slice(1)}
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Responded: {formatDistanceToNow(new Date(attendee.joinedAt), { addSuffix: true })}
-                    </p>
-                  </div>
+            {event.isPublic && event.totalAttendees && (
+              <div className="flex items-center">
+                <div className="flex -space-x-2 overflow-hidden">
+                  {event.attendees.slice(0, 5).map(attendee => (
+                    <Avatar key={attendee.userId} className="inline-block h-8 w-8 rounded-full ring-2 ring-white">
+                      <AvatarImage src={attendee.user.avatar} />
+                      <AvatarFallback>{attendee.user.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                  ))}
                 </div>
-                <Badge 
-                  className={
-                    attendee.status === 'going' ? 'bg-green-100 text-green-800' :
-                    attendee.status === 'maybe' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }
-                >
-                  {attendee.status === 'going' ? 'Going' : 
-                   attendee.status === 'maybe' ? 'Maybe' : 'Not Going'}
-                </Badge>
+                <p className="ml-3 text-sm font-medium text-muted-foreground">
+                  +{event.totalAttendees.toLocaleString()} others are going
+                </p>
               </div>
-            ))}
+            )}
+            {!event.isPublic && (
+              event.attendees.map((attendee) => (
+                <div key={attendee.userId} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src={attendee.user.avatar} />
+                      <AvatarFallback>
+                        {attendee.user.name.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold">{attendee.user.name}</p>
+                        {!event.isPublic && attendee.ticketStatus && (
+                          <Badge 
+                            variant={
+                              attendee.ticketStatus === 'purchased' ? 'default' :
+                              attendee.ticketStatus === 'pending' ? 'secondary' :
+                              'outline'
+                            }
+                            className={
+                              attendee.ticketStatus === 'purchased' ? 'bg-green-500 text-white' : ''
+                            }
+                          >
+                            {attendee.ticketStatus === 'purchased' && <Ticket className="w-3 h-3 mr-1" />}
+                            {attendee.ticketStatus.charAt(0).toUpperCase() + attendee.ticketStatus.slice(1)}
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Responded: {formatDistanceToNow(new Date(attendee.joinedAt), { addSuffix: true })}
+                      </p>
+                    </div>
+                  </div>
+                  <Badge 
+                    className={
+                      attendee.status === 'going' ? 'bg-green-100 text-green-800' :
+                      attendee.status === 'maybe' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }
+                  >
+                    {attendee.status === 'going' ? 'Going' : 
+                     attendee.status === 'maybe' ? 'Maybe' : 'Not Going'}
+                  </Badge>
+                </div>
+              ))
+            )}
           </div>
         </CardContent>
       </Card>
@@ -320,7 +337,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
         </TabsList>
 
         <TabsContent value="comments">
-          <CommentSection eventId={event.id} />
+          <CommentSection eventId={event.id} initialComments={event.comments || []} />
         </TabsContent>
 
         {!event.isPublic && event.hasExpenseSplitting && (

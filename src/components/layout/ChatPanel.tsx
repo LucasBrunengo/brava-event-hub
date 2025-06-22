@@ -147,7 +147,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="max-w-full w-full h-[80vh] flex flex-col mx-0 p-0">
+      <DialogContent className="absolute bottom-0 w-full h-[80vh] flex flex-col mx-0 p-0">
         {!selectedChat ? (
           // Conversations List
           <>
