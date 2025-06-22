@@ -40,55 +40,40 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({ isOpen, onClose, con
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogPortal container={container}>
-        <DialogOverlay />
-        <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[450px] max-h-[85vh] flex flex-col rounded-2xl border bg-white p-0">
-          <DialogHeader className="p-4 border-b">
-            <DialogTitle className="text-center text-lg font-bold">Unlock Brava Premium+</DialogTitle>
+        <DialogOverlay className="bg-black/60" />
+        <DialogContent className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-h-[90%] flex flex-col rounded-2xl border bg-white p-0 shadow-2xl">
+          <DialogHeader className="p-4 border-b flex flex-row justify-between items-center">
+            <DialogTitle className="text-center text-lg font-bold flex-1">Unlock Brava Premium+</DialogTitle>
+            <Button variant="ghost" size="icon" onClick={onClose} className="h-6 w-6">
+              <X className="h-4 w-4" />
+            </Button>
           </DialogHeader>
-
-          <div className="flex-1 p-6 overflow-y-auto">
-            <div className="space-y-6">
-              <div className="text-center">
-                <h2 className="text-2xl font-bold mb-2">Unlock Premium Features</h2>
-                <p className="text-muted-foreground">
-                  Get exclusive access to advanced event management tools and premium features.
-                </p>
-              </div>
-
-              <div className="grid gap-4">
-                {benefits.map((benefit, index) => (
-                  <Card key={index} className="border-l-4 border-l-purple-500">
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          {benefit.icon}
-                        </div>
-                        <div>
-                          <h3 className="font-semibold mb-1">{benefit.title}</h3>
-                          <p className="text-sm text-muted-foreground">{benefit.description}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              <div className="text-center space-y-4">
-                <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-lg">
-                  <p className="text-2xl font-bold text-purple-600">€9.99</p>
-                  <p className="text-sm text-muted-foreground">per month</p>
-                </div>
-                
-                <Button className="w-full brava-gradient text-white font-semibold py-3">
-                  <Crown className="w-4 h-4 mr-2" />
-                  Upgrade to Premium
-                </Button>
-                
-                <p className="text-xs text-muted-foreground">
-                  Cancel anytime. 7-day free trial included.
-                </p>
-              </div>
+          <div className="p-6 overflow-y-auto">
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-bold">Unlock Premium Features</h3>
+              <p className="text-muted-foreground mt-2">Get exclusive access to advanced event management tools and premium features.</p>
             </div>
+            <div className="space-y-4">
+              {benefits.map((benefit, index) => (
+                <Card key={index} className="flex items-center p-4">
+                  <div className="mr-4 text-primary">{benefit.icon}</div>
+                  <div>
+                    <h4 className="font-semibold">{benefit.title}</h4>
+                    <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                  </div>
+                </Card>
+              ))}
+            </div>
+            <Card className="mt-6 bg-muted/50 p-6 text-center">
+              <p className="text-3xl font-bold text-primary">€9.99</p>
+              <p className="text-muted-foreground">per month</p>
+            </Card>
+          </div>
+          <div className="p-4 border-t">
+            <Button className="w-full brava-gradient">
+              <Crown className="w-4 h-4 mr-2" />
+              Upgrade to Premium
+            </Button>
           </div>
         </DialogContent>
       </DialogPortal>

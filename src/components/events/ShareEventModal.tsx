@@ -71,8 +71,8 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogPortal container={container}>
-        <DialogOverlay />
-        <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[450px] max-h-[85vh] flex flex-col rounded-2xl border bg-white p-0">
+        <DialogOverlay className="bg-black/60" />
+        <DialogContent className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-h-[90%] flex flex-col rounded-2xl border bg-white p-0 shadow-2xl">
           <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
             <DialogTitle className="flex items-center gap-2">
               <Share2 className="w-5 h-5" />
