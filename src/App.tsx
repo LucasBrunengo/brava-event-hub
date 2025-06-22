@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,20 +8,16 @@ import { AppProvider } from "./context/AppContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PhoneFrame from "./components/layout/PhoneFrame";
-import LoadingScreen from "./components/layout/LoadingScreen";
+import { LoadingScreen } from "./components/layout/LoadingScreen";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2500); // Show loading screen for 2.5 seconds
-
-    return () => clearTimeout(timer);
-  }, []);
+  const handleLoadingComplete = () => {
+    setLoading(false);
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -30,7 +26,7 @@ const App = () => {
         <Sonner />
         <PhoneFrame>
           {loading ? (
-            <LoadingScreen />
+            <LoadingScreen onLoadingComplete={handleLoadingComplete} />
           ) : (
             <BrowserRouter>
               <AppProvider>

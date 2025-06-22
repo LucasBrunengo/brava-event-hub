@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Heart, MessageCircle, Tag, Send, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { EventPhoto, User } from '@/types';
+import { EventPhoto, User, PhotoReaction } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -22,18 +22,104 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [newComment, setNewComment] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('');
+  const [localPhotos, setLocalPhotos] = useState<EventPhoto[]>(photos);
 
   const commonEmojis = ['❤️', '😍', '🔥', '👏', '😂', '🤩', '💯', '✨'];
 
   const handleReaction = (photoId: string, emoji: string) => {
-    // In a real app, this would update the backend
-    console.log(`User ${currentUser?.id} reacted with ${emoji} to photo ${photoId}`);
+    if (!currentUser) return;
+    
+    setLocalPhotos(prevPhotos => 
+      prevPhotos.map(photo => {
+        if (photo.id === photoId) {
+          // Check if user already reacted with this emoji
+          const existingReaction = photo.reactions.find(r => r.userId === currentUser.id && r.emoji === emoji);
+          
+          if (existingReaction) {
+            // Remove reaction if already exists
+            return {
+              ...photo,
+              reactions: photo.reactions.filter(r => r.id !== existingReaction.id)
+            };
+          } else {
+            // Add new reaction
+            const newReaction: PhotoReaction = {
+              id: `reaction-${Date.now()}`,
+              userId: currentUser.id,
+              emoji,
+              createdAt: new Date().toISOString()
+            };
+            return {
+              ...photo,
+              reactions: [...photo.reactions, newReaction]
+            };
+          }
+        }
+        return photo;
+      })
+    );
+
+    // Update selected photo if it's the one being reacted to
+    if (selectedPhoto && selectedPhoto.id === photoId) {
+      setSelectedPhoto(prev => {
+        if (!prev) return prev;
+        const existingReaction = prev.reactions.find(r => r.userId === currentUser.id && r.emoji === emoji);
+        
+        if (existingReaction) {
+          return {
+            ...prev,
+            reactions: prev.reactions.filter(r => r.id !== existingReaction.id)
+          };
+        } else {
+          const newReaction: PhotoReaction = {
+            id: `reaction-${Date.now()}`,
+            userId: currentUser.id,
+            emoji,
+            createdAt: new Date().toISOString()
+          };
+          return {
+            ...prev,
+            reactions: [...prev.reactions, newReaction]
+          };
+        }
+      });
+    }
   };
 
   const handleComment = (photoId: string) => {
-    if (!newComment.trim()) return;
-    // In a real app, this would update the backend
-    console.log(`User ${currentUser?.id} commented "${newComment}" on photo ${photoId}`);
+    if (!newComment.trim() || !currentUser) return;
+    
+    const newCommentObj = {
+      id: `comment-${Date.now()}`,
+      userId: currentUser.id,
+      user: currentUser,
+      message: newComment.trim(),
+      createdAt: new Date().toISOString()
+    };
+
+    setLocalPhotos(prevPhotos => 
+      prevPhotos.map(photo => {
+        if (photo.id === photoId) {
+          return {
+            ...photo,
+            comments: [...photo.comments, newCommentObj]
+          };
+        }
+        return photo;
+      })
+    );
+
+    // Update selected photo if it's the one being commented on
+    if (selectedPhoto && selectedPhoto.id === photoId) {
+      setSelectedPhoto(prev => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          comments: [...prev.comments, newCommentObj]
+        };
+      });
+    }
+
     setNewComment('');
   };
 
@@ -46,15 +132,15 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
     if (selectedPhotoIndex > 0) {
       const newIndex = selectedPhotoIndex - 1;
       setSelectedPhotoIndex(newIndex);
-      setSelectedPhoto(photos[newIndex]);
+      setSelectedPhoto(localPhotos[newIndex]);
     }
   };
 
   const handleNextPhoto = () => {
-    if (selectedPhotoIndex < photos.length - 1) {
+    if (selectedPhotoIndex < localPhotos.length - 1) {
       const newIndex = selectedPhotoIndex + 1;
       setSelectedPhotoIndex(newIndex);
-      setSelectedPhoto(photos[newIndex]);
+      setSelectedPhoto(localPhotos[newIndex]);
     }
   };
 
@@ -63,7 +149,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
     event.currentTarget.src = 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&crop=center';
   };
 
-  if (!photos || photos.length === 0) {
+  if (!localPhotos || localPhotos.length === 0) {
     return (
       <Card>
         <CardContent className="p-6 text-center">
@@ -87,7 +173,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
-            {photos.map((photo, index) => (
+            {localPhotos.map((photo, index) => (
               <div key={photo.id} className="relative group cursor-pointer">
                 <img
                   src={photo.url}
@@ -135,7 +221,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
             <>
               <DialogHeader className="flex flex-row items-center justify-between">
                 <DialogTitle className="flex items-center gap-2">
-                  <span>Photo {selectedPhotoIndex + 1} of {photos.length}</span>
+                  <span>Photo {selectedPhotoIndex + 1} of {localPhotos.length}</span>
                   {selectedPhoto.taggedUsers.length > 0 && (
                     <Badge variant="outline">
                       <Tag className="w-3 h-3 mr-1" />
@@ -159,7 +245,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                   />
                   
                   {/* Navigation Arrows */}
-                  {photos.length > 1 && (
+                  {localPhotos.length > 1 && (
                     <>
                       {selectedPhotoIndex > 0 && (
                         <Button
@@ -171,7 +257,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                           <ChevronLeft className="w-4 h-4" />
                         </Button>
                       )}
-                      {selectedPhotoIndex < photos.length - 1 && (
+                      {selectedPhotoIndex < localPhotos.length - 1 && (
                         <Button
                           variant="ghost"
                           size="sm"
@@ -191,17 +277,22 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                   <div className="mb-4">
                     <h4 className="font-semibold mb-2">Reactions</h4>
                     <div className="flex gap-2 flex-wrap">
-                      {commonEmojis.map((emoji) => (
-                        <Button
-                          key={emoji}
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleReaction(selectedPhoto.id, emoji)}
-                          className="text-lg p-2 h-auto"
-                        >
-                          {emoji}
-                        </Button>
-                      ))}
+                      {commonEmojis.map((emoji) => {
+                        const hasReacted = selectedPhoto.reactions.some(
+                          r => r.userId === currentUser?.id && r.emoji === emoji
+                        );
+                        return (
+                          <Button
+                            key={emoji}
+                            variant={hasReacted ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => handleReaction(selectedPhoto.id, emoji)}
+                            className={`text-lg p-2 h-auto ${hasReacted ? 'bg-blue-500 text-white' : ''}`}
+                          >
+                            {emoji}
+                          </Button>
+                        );
+                      })}
                     </div>
                     
                     {/* Current Reactions */}

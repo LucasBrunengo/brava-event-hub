@@ -452,6 +452,7 @@ export const mockEvents: Event[] = [
     hasExpenseSplitting: true,
     isPublic: true,
     isPromoted: true,
+    ticketPrice: 45,
     discountPercentage: 15,
     photos: [
       {
@@ -511,6 +512,7 @@ export const mockEvents: Event[] = [
     hasExpenseSplitting: false,
     isPublic: true,
     isPromoted: true,
+    ticketPrice: 25,
     discountPercentage: 20,
   },
   {
@@ -548,6 +550,7 @@ export const mockEvents: Event[] = [
     createdAt: '2024-03-01T10:00:00Z',
     hasExpenseSplitting: false,
     isPublic: true,
+    ticketPrice: 15,
   },
 ];
 

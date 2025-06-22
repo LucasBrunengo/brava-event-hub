@@ -80,11 +80,11 @@
 
   body {
     background: linear-gradient(135deg, 
-      #0a0a1f 0%, 
-      #1a1a3a 25%, 
-      #2a2a4a 50%, 
-      #1e2a5e 75%, 
-      #4338ca 100%);
+      #1a1a2e 0%, 
+      #16213e 25%, 
+      #0f3460 50%, 
+      #533483 75%, 
+      #7209b7 100%);
     background-attachment: fixed;
     @apply text-foreground min-h-screen;
     overflow: hidden;

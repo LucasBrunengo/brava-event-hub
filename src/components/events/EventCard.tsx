@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -120,6 +119,11 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
             {event.isPublic && event.isPromoted && (
               <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs">
                 Promoted
+              </Badge>
+            )}
+            {event.isPublic && event.ticketPrice && (
+              <Badge variant="outline" className="text-xs">
+                💳 Pay Online
               </Badge>
             )}
           </div>
