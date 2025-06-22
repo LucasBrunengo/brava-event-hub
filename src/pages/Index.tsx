@@ -18,7 +18,7 @@ const Index = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   console.log('Index component rendered - isAuthenticated:', isAuthenticated);
-  console.log('WelcomeScreen component:', WelcomeScreen);
+  console.log('Current view:', currentView);
 
   if (!isAuthenticated) {
     console.log('Rendering WelcomeScreen');
@@ -78,6 +78,10 @@ const Index = () => {
         <div className="flex flex-col h-full relative z-10">
           <div className="flex-1 overflow-y-auto pb-20">
             <div className="p-4">
+              <div className="mb-4 p-2 bg-blue-100 rounded text-sm text-blue-800">
+                Debug: View = {currentView}, Auth = {isAuthenticated ? 'true' : 'false'}
+              </div>
+              
               {currentView === 'dashboard' && (
                 <Dashboard 
                   onCreateEvent={handleCreateEvent}
