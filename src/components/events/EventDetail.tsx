@@ -72,12 +72,12 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   const getStatusButtonClass = (status: 'going' | 'maybe' | 'not-going') => {
     if (currentStatus === status) {
       switch (status) {
-        case 'going': return 'bg-green-500 text-white hover:bg-green-600';
-        case 'maybe': return 'bg-yellow-500 text-white hover:bg-yellow-600';
-        case 'not-going': return 'bg-red-500 text-white hover:bg-red-600';
+        case 'going': return 'bg-green-500 text-white hover:bg-green-600 border-green-500 shadow-lg';
+        case 'maybe': return 'bg-yellow-500 text-white hover:bg-yellow-600 border-yellow-500 shadow-lg';
+        case 'not-going': return 'bg-red-500 text-white hover:bg-red-600 border-red-500 shadow-lg';
       }
     }
-    return 'bg-muted hover:bg-muted/80';
+    return 'bg-muted hover:bg-muted/80 border border-gray-300';
   };
 
   const getDiscountedPrice = () => {
@@ -215,28 +215,28 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
           <CardTitle className="text-lg">Your Response</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-3">
             <Button
               onClick={() => handleRSVP('going')}
               disabled={isUpdatingRSVP}
-              className={getStatusButtonClass('going')}
-              size="sm"
+              className={`${getStatusButtonClass('going')} h-12 font-semibold transition-all duration-200`}
+              size="lg"
             >
               Going ({goingCount})
             </Button>
             <Button
               onClick={() => handleRSVP('maybe')}
               disabled={isUpdatingRSVP}
-              className={getStatusButtonClass('maybe')}
-              size="sm"
+              className={`${getStatusButtonClass('maybe')} h-12 font-semibold transition-all duration-200`}
+              size="lg"
             >
               Maybe ({maybeCount})
             </Button>
             <Button
               onClick={() => handleRSVP('not-going')}
               disabled={isUpdatingRSVP}
-              className={getStatusButtonClass('not-going')}
-              size="sm"
+              className={`${getStatusButtonClass('not-going')} h-12 font-semibold transition-all duration-200`}
+              size="lg"
             >
               Can't Go ({notGoingCount})
             </Button>

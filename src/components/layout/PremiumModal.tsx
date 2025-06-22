@@ -40,7 +40,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({ isOpen, onClose }) =
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="absolute bottom-0 w-full h-[80vh] flex flex-col mx-0 p-0">
+      <DialogContent className="absolute bottom-0 left-0 right-0 w-full h-[80vh] flex flex-col mx-0 p-0 max-w-none rounded-t-xl">
         <DialogHeader className="flex flex-row items-center justify-between p-4 border-b bg-gradient-to-r from-purple-600 to-blue-600 text-white">
           <DialogTitle className="flex items-center gap-2">
             <Crown className="w-6 h-6" />

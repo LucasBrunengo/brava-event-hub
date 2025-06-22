@@ -184,46 +184,38 @@ export const mockCurrentUser: User = mockUsers[0];
 export const mockEvents: Event[] = [
   {
     id: '1',
-    name: 'Beach BBQ Party',
-    description: 'Join us for an amazing beach BBQ with music, games, and great food! Perfect for meeting new people and enjoying the Barcelona sunset.',
+    name: 'Bling Bling Club Night',
+    description: 'Exclusive night out at the hottest club in Barcelona! VIP tables, bottle service, and the best electronic music. Dress to impress!',
     date: '2024-02-15',
-    time: '7:00 PM',
-    location: 'Barceloneta Beach',
+    time: '11:00 PM',
+    location: 'Bling Bling Club, Eixample',
     organizerId: '1',
     organizer: mockUsers[0],
     attendees: [
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-01T10:00:00Z' },
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-02T11:00:00Z' },
-      { userId: '3', user: mockUsers[2], status: 'maybe', joinedAt: '2024-01-03T12:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-04T13:00:00Z' },
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-01T10:00:00Z', ticketStatus: 'purchased' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-02T11:00:00Z', ticketStatus: 'purchased' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-03T12:00:00Z', ticketStatus: 'pending' },
+      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-01-04T13:00:00Z' },
       { userId: '5', user: mockUsers[4], status: 'not-going', joinedAt: '2024-01-05T14:00:00Z' }
     ],
     createdAt: '2024-01-01T10:00:00Z',
     hasExpenseSplitting: true,
     isPublic: false,
+    ticketPrice: 35.00,
     photos: [
       {
         id: '1',
-        url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&crop=center',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
         uploadedAt: '2024-01-10T10:00:00Z',
         reactions: [],
         comments: [],
         taggedUsers: ['2', '3']
-      },
-      {
-        id: '2',
-        url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '2',
-        uploadedAt: '2024-01-11T11:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['1', '4']
       }
     ],
     comments: [
-      { id: 'c1', eventId: '1', userId: '2', user: mockUsers[1], message: "Can't wait! I'll bring some drinks.", createdAt: '2024-02-12T10:00:00Z' },
-      { id: 'c2', eventId: '1', userId: '3', user: mockUsers[2], message: "Sounds fun! What's the plan for music?", createdAt: '2024-02-12T11:00:00Z' }
+      { id: 'c1', eventId: '1', userId: '2', user: mockUsers[1], message: "Can't wait! I'll bring some friends.", createdAt: '2024-02-12T10:00:00Z' },
+      { id: 'c2', eventId: '1', userId: '3', user: mockUsers[2], message: "What's the dress code?", createdAt: '2024-02-12T11:00:00Z' }
     ]
   },
   {
@@ -266,6 +258,40 @@ export const mockEvents: Event[] = [
   },
   {
     id: '3',
+    name: 'Sónar Festival',
+    description: 'The world\'s most advanced music, creativity and technology festival. Experience cutting-edge electronic music and digital art.',
+    date: '2024-06-13',
+    time: '2:00 PM',
+    location: 'Fira Barcelona',
+    organizerId: '2',
+    organizer: mockUsers[1],
+    attendees: [
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-02-10T10:00:00Z' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-02-11T11:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-02-12T12:00:00Z' }
+    ],
+    createdAt: '2024-02-10T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: true,
+    isPromoted: true,
+    ticketPrice: 120.00,
+    discountPercentage: 10,
+    ticketUrl: 'https://www.sonar.es',
+    photos: [
+      {
+        id: '10',
+        url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '2',
+        uploadedAt: '2024-02-15T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['3']
+      }
+    ],
+    totalAttendees: 85000
+  },
+  {
+    id: '4',
     name: 'Board Game Night',
     description: 'A fun evening of board games, snacks, and good company! We\'ll have a variety of games for all skill levels.',
     date: '2024-02-10',
@@ -294,7 +320,7 @@ export const mockEvents: Event[] = [
     ]
   },
   {
-    id: '4',
+    id: '5',
     name: 'Tapas Tour - Gothic Quarter',
     description: 'Explore the best tapas bars in the Gothic Quarter! We\'ll visit 4 different places and try traditional Spanish dishes.',
     date: '2024-02-20',
@@ -324,7 +350,7 @@ export const mockEvents: Event[] = [
     ]
   },
   {
-    id: '5',
+    id: '6',
     name: 'Salsa Night at El Born',
     description: 'Dance the night away with the best salsa music in Barcelona! All levels welcome, we\'ll have beginner lessons too.',
     date: '2024-02-25',
@@ -354,7 +380,7 @@ export const mockEvents: Event[] = [
     ]
   },
   {
-    id: '6',
+    id: '7',
     name: 'Sunset Yoga on the Beach',
     description: 'Relax and rejuvenate with a peaceful yoga session as the sun sets over the Mediterranean. All levels welcome.',
     date: '2024-02-28',
@@ -383,7 +409,7 @@ export const mockEvents: Event[] = [
     ]
   },
   {
-    id: '7',
+    id: '8',
     name: 'Duki Concert - Palau Sant Jordi',
     description: 'The Argentine trap superstar is coming to Barcelona! Don\'t miss this incredible show with special guests.',
     date: '2024-03-15',
@@ -415,7 +441,7 @@ export const mockEvents: Event[] = [
     ]
   },
   {
-    id: '8',
+    id: '9',
     name: 'Razzmatazz Club Night',
     description: 'The most iconic club in Barcelona! Join us for an unforgettable night of electronic music and dancing.',
     date: '2024-03-08',
@@ -442,39 +468,6 @@ export const mockEvents: Event[] = [
         reactions: [],
         comments: [],
         taggedUsers: ['1', '2']
-      }
-    ]
-  },
-  {
-    id: '9',
-    name: 'Sónar Festival',
-    description: 'The world\'s most advanced music, creativity and technology festival. Experience cutting-edge electronic music and digital art.',
-    date: '2024-06-13',
-    time: '2:00 PM',
-    location: 'Fira Barcelona',
-    organizerId: '2',
-    organizer: mockUsers[1],
-    attendees: [
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-02-10T10:00:00Z' },
-      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-02-11T11:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-02-12T12:00:00Z' }
-    ],
-    createdAt: '2024-02-10T10:00:00Z',
-    hasExpenseSplitting: false,
-    isPublic: true,
-    isPromoted: true,
-    ticketPrice: 120.00,
-    discountPercentage: 10,
-    ticketUrl: 'https://www.sonar.es',
-    photos: [
-      {
-        id: '10',
-        url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '2',
-        uploadedAt: '2024-02-15T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['3']
       }
     ]
   },
