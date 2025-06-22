@@ -117,7 +117,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event, portalCon
               </DialogTrigger>
               <DialogPortal container={portalContainer}>
                 <DialogOverlay className="absolute inset-0 bg-black/30" />
-                <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+                <DialogContent className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
                   <DialogHeader>
                     <DialogTitle>Add New Expense</DialogTitle>
                   </DialogHeader>
