@@ -59,7 +59,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({ isOpen, onClose, con
           </DialogHeader>
           <div className="p-6 overflow-y-auto">
             <div className="text-center mb-6">
-              <h3 className="text-xl font-bold">✨ Premium Features</h3>
+              <h3 className="text-xl font-bold">Premium Features</h3>
             </div>
             <div className="space-y-4">
               {features.map((feature, index) => (
@@ -74,26 +74,26 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({ isOpen, onClose, con
             </div>
             
             <div className="text-center my-6">
-              <h3 className="text-xl font-bold">💰 Pricing</h3>
+              <h3 className="text-xl font-bold">Pricing</h3>
               <p className="text-muted-foreground mt-2">$4.99/month or $49.99/year (Save 17%)</p>
             </div>
 
             <Card className="mt-4 bg-muted/50 p-4 text-center">
-              <h4 className="font-bold">🎯 Smart Savings</h4>
+              <h4 className="font-bold">Smart Savings</h4>
               <p className="text-sm text-muted-foreground mt-1">
                 Organize regularly? Save money through reduced payment fees + get exclusive perks!
               </p>
             </Card>
           </div>
           <div className="p-4 border-t space-y-2">
-            <Button className="w-full bg-green-500 hover:bg-green-600 text-white">
+            <Button className="w-full brava-gradient text-white">
               Start 7-Day Free Trial
             </Button>
             <div className="grid grid-cols-2 gap-2">
-              <Button className="w-full brava-gradient">
+              <Button variant="outline" className="w-full text-xs">
                 Choose Monthly - $4.99
               </Button>
-              <Button className="w-full brava-gradient">
+              <Button variant="outline" className="w-full text-xs">
                 Choose Yearly - $49.99
               </Button>
             </div>
