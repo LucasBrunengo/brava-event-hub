@@ -157,7 +157,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               <Button variant="ghost" size="sm" onClick={() => setSelectedChat(null)}>
                 <ArrowLeft className="w-4 h-4" />
               </Button>
-              {getOtherUser(selectedChat).name}
+              {getOtherUser(selectedChat)?.name || 'Chat'}
             </DialogTitle>
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="w-4 h-4" />
@@ -201,6 +201,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
           <>
             {Object.entries(conversations).map(([userId, userMessages]) => {
               const user = getOtherUser(userId);
+              if (!user) return null; // Safely skip rendering if user not found
+
               const lastMessage = userMessages[userMessages.length - 1];
               const unreadCount = userMessages.filter(m => !m.isRead && m.senderId !== currentUserId).length;
 
@@ -214,7 +216,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                     <div className="flex items-center gap-3">
                       <Avatar className="w-10 h-10">
                         <AvatarImage src={user.avatar} />
-                        <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                        <AvatarFallback>{user.name?.charAt(0) || '?'}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">

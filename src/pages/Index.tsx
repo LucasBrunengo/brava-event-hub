@@ -138,7 +138,7 @@ const Index = () => {
 
   return (
     <PhoneFrame>
-      <div ref={portalContainerRef} className="flex flex-col h-full bg-white relative">
+      <div ref={portalContainerRef} className="flex flex-col h-full bg-white relative w-full max-w-[400px] mx-auto">
         {/* App Header */}
         <div className="flex-shrink-0 flex items-center justify-between p-4 bg-white border-b border-gray-200 z-10">
           <div className="flex items-center gap-2">
