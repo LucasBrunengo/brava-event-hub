@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { User, Event, Expense, Comment } from '@/types';
 import { mockCurrentUser, mockEvents, mockExpenses, mockComments, mockPublicEvents } from '@/data/mockData';
@@ -29,12 +30,14 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [currentUser, setCurrentUser] = useState<User | null>(mockCurrentUser);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [events, setEvents] = useState<Event[]>(mockEvents);
   const [publicEvents] = useState<Event[]>(mockPublicEvents);
   const [expenses, setExpenses] = useState<Expense[]>(mockExpenses);
   const [comments, setComments] = useState<Comment[]>(mockComments);
+
+  console.log('AppProvider rendered - isAuthenticated:', isAuthenticated, 'currentUser:', currentUser);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     console.log('Logging in with:', email, password);

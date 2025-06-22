@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { WelcomeScreen } from '@/components/auth/WelcomeScreen';
@@ -17,7 +16,10 @@ const Index = () => {
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
+  console.log('Index component rendered - isAuthenticated:', isAuthenticated);
+
   if (!isAuthenticated) {
+    console.log('Rendering WelcomeScreen');
     return (
       <div className="phone-frame">
         <div className="phone-screen">
@@ -26,6 +28,8 @@ const Index = () => {
       </div>
     );
   }
+
+  console.log('Rendering authenticated content, currentView:', currentView);
 
   const handleEventClick = (event: Event) => {
     setSelectedEvent(event);
