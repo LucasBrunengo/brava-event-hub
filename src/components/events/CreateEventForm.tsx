@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +7,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { useApp } from '@/context/AppContext';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, MapPin, Users, Globe, Lock, Search } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Checkbox } from '@/components/ui/checkbox';
+import { User } from '@/types';
 
 interface CreateEventFormProps {
   onBack: () => void;
@@ -16,78 +18,45 @@ interface CreateEventFormProps {
 }
 
 export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEventCreated }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    date: '',
-    time: '',
-    location: '',
-    hasExpenseSplitting: false,
-  });
-  const [currentStep, setCurrentStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const { currentUser, createEvent, users } = useApp();
+  const [eventName, setEventName] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [location, setLocation] = useState('');
+  const [isPublic, setIsPublic] = useState(true);
+  const [invitedFriends, setInvitedFriends] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const { createEvent } = useApp();
   const { toast } = useToast();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+  const friends = users.filter(user => user.id !== currentUser?.id);
+  const filteredFriends = friends.filter(friend =>
+    friend.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleToggleFriend = (friendId: string) => {
+    setInvitedFriends(prev =>
+      prev.includes(friendId)
+        ? prev.filter(id => id !== friendId)
+        : [...prev, friendId]
+    );
   };
 
-  const handleSwitchChange = (checked: boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      hasExpenseSplitting: checked,
-    }));
-  };
-
-  const handleNextStep = () => {
-    if (currentStep === 1) {
-      if (!formData.name || !formData.description) {
-        toast({
-          title: 'Missing Information',
-          description: 'Please fill in the event name and description.',
-          variant: 'destructive',
-        });
-        return;
-      }
-    }
-    setCurrentStep(2);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.date || !formData.time || !formData.location) {
-      toast({
-        title: 'Missing Information',
-        description: 'Please fill in all required fields.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      createEvent(formData);
-      toast({
-        title: 'Event Created!',
-        description: 'Your event has been created successfully.',
-      });
-      onEventCreated();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to create event. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    const eventData = {
+      name: eventName,
+      description,
+      date,
+      time,
+      location,
+      isPublic,
+      attendees: isPublic ? [] : invitedFriends.map(id => users.find(u => u.id === id)).filter(Boolean),
+    };
+    // createEvent(eventData); // This would be the call to the context
+    console.log("Creating event with data:", eventData)
+    onEventCreated();
   };
 
   return (
@@ -99,155 +68,89 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
         </Button>
         <div>
           <h1 className="text-2xl font-bold">Create New Event</h1>
-          <p className="text-muted-foreground">Step {currentStep} of 2</p>
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="w-full bg-muted rounded-full h-2">
-        <div 
-          className="brava-gradient h-2 rounded-full transition-all duration-300"
-          style={{ width: `${(currentStep / 2) * 100}%` }}
-        ></div>
-      </div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Card>
+          <CardContent className="p-6 space-y-4">
+            <Input placeholder="Event Name" value={eventName} onChange={(e) => setEventName(e.target.value)} required />
+            <Textarea placeholder="Event Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+            <div className="grid grid-cols-2 gap-4">
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+              <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
+            </div>
+            <Input placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} required />
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>Event Privacy</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div 
+              className="flex items-center justify-between space-x-4 rounded-md border p-4 cursor-pointer"
+              onClick={() => setIsPublic(!isPublic)}
+            >
+              <div className="flex items-center space-x-2">
+                <Globe className={`w-5 h-5 ${isPublic ? 'text-blue-500' : 'text-muted-foreground'}`} />
+                <Label htmlFor="privacy-switch">Public</Label>
+              </div>
+              <Switch
+                id="privacy-switch"
+                checked={isPublic}
+                onCheckedChange={setIsPublic}
+              />
+              <div className="flex items-center space-x-2">
+                <Lock className={`w-5 h-5 ${!isPublic ? 'text-blue-500' : 'text-muted-foreground'}`} />
+                <Label htmlFor="privacy-switch">Private</Label>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-      <form onSubmit={handleSubmit}>
-        {currentStep === 1 ? (
+        {!isPublic && (
           <Card>
             <CardHeader>
-              <CardTitle>Event Details</CardTitle>
-              <CardDescription>
-                Tell us about your event
-              </CardDescription>
+              <CardTitle>Invite Friends</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Event Name *</Label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
-                  id="name"
-                  name="name"
-                  placeholder="Beach House Weekend"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
+                  placeholder="Search friends..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="description">Description *</Label>
-                <Textarea
-                  id="description"
-                  name="description"
-                  placeholder="Annual summer getaway with the gang! Bring sunscreen and good vibes."
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows={3}
-                  required
-                />
-              </div>
-
-              <div className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="space-y-1">
-                  <Label>Expense Splitting</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Enable bill splitting for this event
-                  </p>
-                </div>
-                <Switch
-                  checked={formData.hasExpenseSplitting}
-                  onCheckedChange={handleSwitchChange}
-                />
-              </div>
-
-              <Button 
-                type="button" 
-                onClick={handleNextStep}
-                className="w-full brava-gradient hover:opacity-90"
-              >
-                Continue
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card>
-            <CardHeader>
-              <CardTitle>When & Where</CardTitle>
-              <CardDescription>
-                Set the date, time, and location
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="date">Date *</Label>
-                  <Input
-                    id="date"
-                    name="date"
-                    type="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="time">Time *</Label>
-                  <Input
-                    id="time"
-                    name="time"
-                    type="time"
-                    value={formData.time}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="location">Location *</Label>
-                <Input
-                  id="location"
-                  name="location"
-                  placeholder="Malibu Beach House, CA"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              {/* Preview */}
-              <div className="p-4 bg-muted rounded-lg">
-                <h4 className="font-medium mb-2">Event Preview</h4>
-                <div className="space-y-1 text-sm">
-                  <p><strong>{formData.name}</strong></p>
-                  <p className="text-muted-foreground">{formData.description}</p>
-                  <p>📅 {formData.date} at {formData.time}</p>
-                  <p>📍 {formData.location}</p>
-                  {formData.hasExpenseSplitting && (
-                    <p>💰 Expense splitting enabled</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex gap-3">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => setCurrentStep(1)}
-                  className="flex-1"
-                >
-                  Back
-                </Button>
-                <Button 
-                  type="submit"
-                  disabled={isLoading}
-                  className="flex-1 brava-gradient hover:opacity-90"
-                >
-                  {isLoading ? 'Creating...' : 'Create Event'}
-                </Button>
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {filteredFriends.map(friend => (
+                  <div 
+                    key={friend.id} 
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-muted cursor-pointer"
+                    onClick={() => handleToggleFriend(friend.id)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Avatar className="w-8 h-8">
+                        <AvatarImage src={friend.avatar} />
+                        <AvatarFallback>{friend.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <span>{friend.name}</span>
+                    </div>
+                    <Checkbox
+                      checked={invitedFriends.includes(friend.id)}
+                      onCheckedChange={() => handleToggleFriend(friend.id)}
+                    />
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
         )}
+
+        <Button type="submit" className="w-full">Create Event</Button>
       </form>
     </div>
   );

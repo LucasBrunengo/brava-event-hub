@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft, Calendar, MapPin, User, MessageSquare, ExternalLink, Ticket, Euro, Edit, Share2, Heart, MessageCircle } from 'lucide-react';
 import { Event, UserProfile as UserProfileType } from '@/types';
 import { useApp } from '@/context/AppContext';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { ExpenseSection } from './ExpenseSection';
 import { CommentSection } from './CommentSection';
 import { EventMap } from './EventMap';
@@ -183,11 +183,6 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
                   💰 Expense splitting enabled
                 </Badge>
               )}
-              {event.isPublic && event.isPromoted && (
-                <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                  Promoted Event
-                </Badge>
-              )}
             </div>
 
             {event.ticketUrl && (
@@ -266,44 +261,27 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <button 
-                        onClick={() => {
-                          const sharedEvents = events.filter(e => 
-                            e.attendees.some(a => a.userId === currentUser?.id && a.status === 'going') &&
-                            e.attendees.some(a => a.userId === attendee.userId && a.status === 'going')
-                          );
-
-                          const userProfile: UserProfileType = {
-                            user: attendee.user,
-                            mutualFriends: Math.floor(Math.random() * 15) + 1,
-                            sharedEvents,
-                            sharedPhotos: [],
-                            friendship: {
-                              id: 'friendship-1',
-                              userId1: currentUser?.id || '',
-                              userId2: attendee.userId,
-                              status: 'accepted',
-                              createdAt: new Date().toISOString(),
-                              sharedEvents: sharedEvents.map(e => e.id)
-                            }
-                          };
-
-                          setShowUserProfile(userProfile);
-                        }}
-                        className="text-primary hover:underline font-medium"
-                      >
-                        {attendee.user.name}
-                      </button>
-                      {event.organizerId === attendee.userId && (
-                        <Badge variant="outline" className="text-xs">Organizer</Badge>
+                    <div className="flex items-center justify-between">
+                      <p className="font-semibold">{attendee.user.name}</p>
+                      {!event.isPublic && attendee.ticketStatus && (
+                        <Badge 
+                          variant={
+                            attendee.ticketStatus === 'purchased' ? 'default' :
+                            attendee.ticketStatus === 'pending' ? 'secondary' :
+                            'outline'
+                          }
+                          className={
+                            attendee.ticketStatus === 'purchased' ? 'bg-green-500 text-white' : ''
+                          }
+                        >
+                          {attendee.ticketStatus === 'purchased' && <Ticket className="w-3 h-3 mr-1" />}
+                          {attendee.ticketStatus.charAt(0).toUpperCase() + attendee.ticketStatus.slice(1)}
+                        </Badge>
                       )}
                     </div>
-                    {attendee.hasPurchasedTicket !== undefined && (
-                      <div className="text-xs text-muted-foreground">
-                        {attendee.hasPurchasedTicket ? '🎫 Ticket purchased' : '⏳ Ticket pending'}
-                      </div>
-                    )}
+                    <p className="text-sm text-muted-foreground">
+                      Responded: {formatDistanceToNow(new Date(attendee.joinedAt), { addSuffix: true })}
+                    </p>
                   </div>
                 </div>
                 <Badge 

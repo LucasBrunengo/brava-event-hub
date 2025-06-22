@@ -500,6 +500,27 @@ export const mockEvents: Event[] = [
         taggedUsers: ['1']
       }
     ]
+  },
+  {
+    id: '11',
+    name: 'Private Party at Sutton Club',
+    description: 'Exclusive access to a private party at one of Barcelona\'s top clubs. Great music, great people, and an unforgettable night.',
+    date: '2024-04-05',
+    time: '11:30 PM',
+    location: 'Sutton Club, Barcelona',
+    organizerId: '1',
+    organizer: mockUsers[0],
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-03-10T10:00:00Z', ticketStatus: 'purchased' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-03-10T11:00:00Z', ticketStatus: 'purchased' },
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-03-11T12:00:00Z', ticketStatus: 'pending' },
+      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-03-12T13:00:00Z' }
+    ],
+    createdAt: '2024-03-10T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: false,
+    ticketPrice: 30.00,
+    photos: []
   }
 ];
 

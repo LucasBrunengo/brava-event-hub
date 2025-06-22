@@ -62,7 +62,7 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-full w-full max-h-[80vh] overflow-hidden mx-0 p-0">
+      <DialogContent className="max-w-full w-full h-[80vh] flex flex-col mx-0 p-0">
         <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
           <DialogTitle className="flex items-center gap-2">
             <Share2 className="w-5 h-5" />
@@ -73,7 +73,7 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
           </Button>
         </DialogHeader>
 
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col flex-1 overflow-hidden">
           {/* Event Preview */}
           <div className="p-4 border-b bg-gray-50">
             <Card>
@@ -171,28 +171,26 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
             </div>
           </div>
 
-          {/* Custom Message */}
+          {/* Custom Message and Share Button */}
           <div className="p-4 border-t">
             <div className="space-y-3">
-              <label className="text-sm font-medium">Custom Message</label>
-              <Input
-                placeholder="Add a personal message..."
-                value={customMessage}
-                onChange={(e) => setCustomMessage(e.target.value)}
-              />
+              <div>
+                <label className="text-sm font-medium">Custom Message</label>
+                <Input
+                  placeholder="Add a personal message..."
+                  value={customMessage}
+                  onChange={(e) => setCustomMessage(e.target.value)}
+                />
+              </div>
+              <Button 
+                className="w-full" 
+                onClick={handleShare}
+                disabled={selectedFriends.length === 0}
+              >
+                <Send className="w-4 h-4 mr-2" />
+                Share with {selectedFriends.length} friend{selectedFriends.length !== 1 ? 's' : ''}
+              </Button>
             </div>
-          </div>
-
-          {/* Share Button */}
-          <div className="p-4 border-t">
-            <Button 
-              className="w-full" 
-              onClick={handleShare}
-              disabled={selectedFriends.length === 0}
-            >
-              <Send className="w-4 h-4 mr-2" />
-              Share with {selectedFriends.length} friend{selectedFriends.length !== 1 ? 's' : ''}
-            </Button>
           </div>
         </div>
       </DialogContent>
