@@ -22,31 +22,18 @@ interface EventDetailProps {
 }
 
 export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare }) => {
-  const { currentUser, updateEventRSVP, events } = useApp();
-  const [isUpdatingRSVP, setIsUpdatingRSVP] = useState(false);
+  const { currentUser, events } = useApp();
   const [showUserProfile, setShowUserProfile] = useState<UserProfileType | null>(null);
 
   const currentUserAttendee = event.attendees.find(a => a.userId === currentUser?.id);
-  const currentStatus = currentUserAttendee?.status || null;
+  const [displayRsvpStatus, setDisplayRsvpStatus] = useState(currentUserAttendee?.status || null);
 
   const goingCount = event.attendees.filter(a => a.status === 'going').length;
   const maybeCount = event.attendees.filter(a => a.status === 'maybe').length;
   const notGoingCount = event.attendees.filter(a => a.status === 'not-going').length;
 
-  const handleRSVP = async (status: 'going' | 'maybe' | 'not-going') => {
-    console.log('RSVP clicked:', status, 'currentUser:', currentUser);
-    if (!currentUser) {
-      console.log('No current user found');
-      return;
-    }
-    
-    setIsUpdatingRSVP(true);
-    try {
-      console.log('Updating RSVP for event:', event.id, 'status:', status);
-      updateEventRSVP(event.id, status);
-    } finally {
-      setIsUpdatingRSVP(false);
-    }
+  const handleRSVP = (status: 'going' | 'maybe' | 'not-going') => {
+    setDisplayRsvpStatus(status);
   };
 
   const handleOrganizerClick = () => {
@@ -75,7 +62,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   };
 
   const getStatusButtonClass = (status: 'going' | 'maybe' | 'not-going') => {
-    if (currentStatus === status) {
+    if (displayRsvpStatus === status) {
       switch (status) {
         case 'going': return 'bg-green-500 text-white hover:bg-green-600 border-green-500 shadow-lg';
         case 'maybe': return 'bg-yellow-500 text-white hover:bg-yellow-600 border-yellow-500 shadow-lg';
@@ -220,7 +207,6 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
           <div className="grid grid-cols-3 gap-3">
             <Button
               onClick={() => handleRSVP('going')}
-              disabled={isUpdatingRSVP}
               className={`${getStatusButtonClass('going')} h-12 font-semibold transition-all duration-200`}
               size="lg"
             >
@@ -228,7 +214,6 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
             </Button>
             <Button
               onClick={() => handleRSVP('maybe')}
-              disabled={isUpdatingRSVP}
               className={`${getStatusButtonClass('maybe')} h-12 font-semibold transition-all duration-200`}
               size="lg"
             >
@@ -236,7 +221,6 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
             </Button>
             <Button
               onClick={() => handleRSVP('not-going')}
-              disabled={isUpdatingRSVP}
               className={`${getStatusButtonClass('not-going')} h-12 font-semibold transition-all duration-200`}
               size="lg"
             >
