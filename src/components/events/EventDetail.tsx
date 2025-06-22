@@ -358,26 +358,25 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
       />
 
       {/* Comments and Expenses */}
-      <Tabs defaultValue="comments" className="space-y-4">
-        <TabsList className={`grid w-full ${!event.isPublic && event.hasExpenseSplitting ? 'grid-cols-2' : 'grid-cols-1'}`}>
-          <TabsTrigger value="comments">
-            <MessageSquare className="w-4 h-4 mr-2" />
-            Comments
-          </TabsTrigger>
-          {!event.isPublic && event.hasExpenseSplitting && (
-            <TabsTrigger value="expenses">💰 Expenses</TabsTrigger>
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          {event.hasExpenseSplitting && (
+            <TabsTrigger value="expenses">Expenses</TabsTrigger>
           )}
+          <TabsTrigger value="comments">Comments</TabsTrigger>
         </TabsList>
-
+        <TabsContent value="overview">
+           <PhotoGallery photos={event.photos || []} />
+        </TabsContent>
+        {event.hasExpenseSplitting && (
+          <TabsContent value="expenses">
+            <ExpenseSection event={event} portalContainer={portalContainer} />
+          </TabsContent>
+        )}
         <TabsContent value="comments">
           <CommentSection eventId={event.id} />
         </TabsContent>
-
-        {!event.isPublic && event.hasExpenseSplitting && (
-          <TabsContent value="expenses">
-            <ExpenseSection event={event} />
-          </TabsContent>
-        )}
       </Tabs>
     </div>
   );

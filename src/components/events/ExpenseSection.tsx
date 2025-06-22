@@ -11,12 +11,14 @@ import { Event } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { Plus } from 'lucide-react';
 import { QuickPay } from './QuickPay';
+import { DialogPortal } from '@radix-ui/react-dialog';
 
 interface ExpenseSectionProps {
   event: Event;
+  portalContainer?: HTMLElement | null;
 }
 
-export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
+export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event, portalContainer }) => {
   const { expenses, currentUser, addExpense, updatePaymentStatus } = useApp();
   const [isAddingExpense, setIsAddingExpense] = useState(false);
   const [newExpense, setNewExpense] = useState({
@@ -100,68 +102,70 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
                   Add Expense
                 </Button>
               </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Add New Expense</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="expense-name">Expense Name</Label>
-                    <Input
-                      id="expense-name"
-                      placeholder="Groceries, Gas, etc."
-                      value={newExpense.name}
-                      onChange={(e) => setNewExpense(prev => ({ ...prev, name: e.target.value }))}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="expense-amount">Total Amount (€)</Label>
-                    <Input
-                      id="expense-amount"
-                      type="number"
-                      step="0.01"
-                      placeholder="100.00"
-                      value={newExpense.amount}
-                      onChange={(e) => setNewExpense(prev => ({ ...prev, amount: e.target.value }))}
-                    />
-                  </div>
-                  <div>
-                    <Label>Split Between ({newExpense.splitBetween.length} people)</Label>
-                    {newExpense.amount && newExpense.splitBetween.length > 0 && (
-                      <p className="text-sm text-muted-foreground mb-2">
-                        €{(parseFloat(newExpense.amount) / newExpense.splitBetween.length).toFixed(2)} per person
-                      </p>
-                    )}
-                    <div className="space-y-2 mt-2 max-h-40 overflow-y-auto">
-                      {goingAttendees.map((attendee) => (
-                        <div key={attendee.userId} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={attendee.userId}
-                            checked={newExpense.splitBetween.includes(attendee.userId)}
-                            onCheckedChange={(checked) => handleSplitToggle(attendee.userId, checked as boolean)}
-                          />
-                          <Label htmlFor={attendee.userId} className="flex items-center gap-2 flex-1">
-                            <Avatar className="w-6 h-6">
-                              <AvatarImage src={attendee.user.avatar} />
-                              <AvatarFallback className="text-xs">
-                                {attendee.user.name.charAt(0).toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            {attendee.user.name}
-                          </Label>
-                        </div>
-                      ))}
+              <DialogPortal container={portalContainer}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add New Expense</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="expense-name">Expense Name</Label>
+                      <Input
+                        id="expense-name"
+                        placeholder="Groceries, Gas, etc."
+                        value={newExpense.name}
+                        onChange={(e) => setNewExpense(prev => ({ ...prev, name: e.target.value }))}
+                      />
                     </div>
+                    <div>
+                      <Label htmlFor="expense-amount">Total Amount (€)</Label>
+                      <Input
+                        id="expense-amount"
+                        type="number"
+                        step="0.01"
+                        placeholder="100.00"
+                        value={newExpense.amount}
+                        onChange={(e) => setNewExpense(prev => ({ ...prev, amount: e.target.value }))}
+                      />
+                    </div>
+                    <div>
+                      <Label>Split Between ({newExpense.splitBetween.length} people)</Label>
+                      {newExpense.amount && newExpense.splitBetween.length > 0 && (
+                        <p className="text-sm text-muted-foreground mb-2">
+                          €{(parseFloat(newExpense.amount) / newExpense.splitBetween.length).toFixed(2)} per person
+                        </p>
+                      )}
+                      <div className="space-y-2 mt-2 max-h-40 overflow-y-auto">
+                        {goingAttendees.map((attendee) => (
+                          <div key={attendee.userId} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={attendee.userId}
+                              checked={newExpense.splitBetween.includes(attendee.userId)}
+                              onCheckedChange={(checked) => handleSplitToggle(attendee.userId, checked as boolean)}
+                            />
+                            <Label htmlFor={attendee.userId} className="flex items-center gap-2 flex-1">
+                              <Avatar className="w-6 h-6">
+                                <AvatarImage src={attendee.user.avatar} />
+                                <AvatarFallback className="text-xs">
+                                  {attendee.user.name.charAt(0).toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              {attendee.user.name}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={handleAddExpense} 
+                      className="w-full brava-gradient"
+                      disabled={!newExpense.name || !newExpense.amount || newExpense.splitBetween.length === 0}
+                    >
+                      Add Expense
+                    </Button>
                   </div>
-                  <Button 
-                    onClick={handleAddExpense} 
-                    className="w-full brava-gradient"
-                    disabled={!newExpense.name || !newExpense.amount || newExpense.splitBetween.length === 0}
-                  >
-                    Add Expense
-                  </Button>
-                </div>
-              </DialogContent>
+                </DialogContent>
+              </DialogPortal>
             </Dialog>
           </div>
         </CardHeader>
