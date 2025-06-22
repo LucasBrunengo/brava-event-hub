@@ -147,7 +147,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="max-w-full w-full max-h-[80vh] overflow-hidden mx-0 p-0">
+      <DialogContent className="max-w-full w-full h-[80vh] flex flex-col mx-0 p-0">
         {!selectedChat ? (
           // Conversations List
           <>
@@ -161,7 +161,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               </Button>
             </DialogHeader>
 
-            <div className="space-y-1 max-h-96 overflow-y-auto px-4 pb-4">
+            <div className="flex-1 overflow-y-auto space-y-1 p-4">
               {Object.entries(conversations).map(([userId, userMessages]) => {
                 const user = getOtherUser(userId);
                 const lastMessage = userMessages[userMessages.length - 1];
@@ -221,7 +221,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               </Button>
             </DialogHeader>
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-96">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {conversations[selectedChat]?.map((message) => (
                 <div
                   key={message.id}

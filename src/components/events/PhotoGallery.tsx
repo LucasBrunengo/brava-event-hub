@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Heart, MessageCircle, Tag, Send, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { EventPhoto, User, PhotoReaction } from '@/types';
+import { EventPhoto, User, PhotoReaction, PhotoComment } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -23,6 +23,12 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
   const [newComment, setNewComment] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('');
   const [localPhotos, setLocalPhotos] = useState<EventPhoto[]>(photos);
+  const [isPhotoExpanded, setIsPhotoExpanded] = useState(false);
+
+  useEffect(() => {
+    // Update local photos if the prop changes
+    setLocalPhotos(photos);
+  }, [photos]);
 
   const commonEmojis = ['❤️', '😍', '🔥', '👏', '😂', '🤩', '💯', '✨'];
 
@@ -218,7 +224,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
       <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
         <DialogContent className="fixed inset-0 w-full h-full max-w-none max-h-none p-0 bg-black/95 border-0 rounded-none">
           {selectedPhoto && (
-            <>
+            <div className="flex flex-col h-full">
               <DialogHeader className="flex flex-row items-center justify-between p-4 bg-black/50 text-white">
                 <DialogTitle className="flex items-center gap-2 text-white">
                   <span>Photo {selectedPhotoIndex + 1} of {localPhotos.length}</span>
@@ -234,139 +240,151 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                 </Button>
               </DialogHeader>
               
-              <div className="flex flex-col h-full">
-                {/* Photo Section */}
-                <div className="flex-1 relative flex items-center justify-center p-4">
-                  <img
-                    src={selectedPhoto.url}
-                    alt="Event photo"
-                    className="photo-modal-img max-w-full max-h-full object-contain rounded-lg cursor-pointer hover:scale-105 transition-transform"
-                    onError={handleImageError}
-                    onClick={(e) => {
-                      // Toggle full screen view
-                      const img = e.currentTarget;
-                      if (img.classList.contains('scale-150')) {
-                        img.classList.remove('scale-150');
-                      } else {
-                        img.classList.add('scale-150');
-                      }
-                    }}
-                  />
+              <div className="flex-1 relative flex items-center justify-center p-4">
+                <img
+                  src={selectedPhoto.url}
+                  alt="Event photo"
+                  className="max-w-full max-h-full object-contain rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                  onError={handleImageError}
+                  onClick={() => setIsPhotoExpanded(true)}
+                />
+                
+                {/* Navigation Arrows */}
+                {localPhotos.length > 1 && (
+                  <>
+                    {selectedPhotoIndex > 0 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
+                        onClick={handlePreviousPhoto}
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </Button>
+                    )}
+                    {selectedPhotoIndex < localPhotos.length - 1 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
+                        onClick={handleNextPhoto}
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Comments and Reactions Section */}
+              <div className="p-4 bg-white border-t border-gray-200">
+                {/* Reactions */}
+                <div className="mb-4">
+                  <h4 className="font-semibold mb-2">Reactions</h4>
+                  <div className="flex gap-2 flex-wrap">
+                    {commonEmojis.map((emoji) => {
+                      const hasReacted = selectedPhoto.reactions.some(
+                        r => r.userId === currentUser?.id && r.emoji === emoji
+                      );
+                      return (
+                        <Button
+                          key={emoji}
+                          variant={hasReacted ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => handleReaction(selectedPhoto.id, emoji)}
+                          className={`text-lg p-2 h-auto ${hasReacted ? 'bg-blue-500 text-white' : ''}`}
+                        >
+                          {emoji}
+                        </Button>
+                      );
+                    })}
+                  </div>
                   
-                  {/* Navigation Arrows */}
-                  {localPhotos.length > 1 && (
-                    <>
-                      {selectedPhotoIndex > 0 && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
-                          onClick={handlePreviousPhoto}
-                        >
-                          <ChevronLeft className="w-4 h-4" />
-                        </Button>
-                      )}
-                      {selectedPhotoIndex < localPhotos.length - 1 && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
-                          onClick={handleNextPhoto}
-                        >
-                          <ChevronRight className="w-4 h-4" />
-                        </Button>
-                      )}
-                    </>
+                  {/* Current Reactions */}
+                  {selectedPhoto.reactions.length > 0 && (
+                    <div className="mt-3">
+                      <h5 className="text-sm font-medium mb-2">Current Reactions</h5>
+                      <div className="flex gap-2 flex-wrap">
+                        {selectedPhoto.reactions.map((reaction) => (
+                          <Badge key={reaction.id} variant="outline" className="text-sm">
+                            {reaction.emoji} {attendees.find(u => u.id === reaction.userId)?.name}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
 
-                {/* Comments and Reactions Section */}
-                <div className="p-4 bg-white border-t border-gray-200">
-                  {/* Reactions */}
-                  <div className="mb-4">
-                    <h4 className="font-semibold mb-2">Reactions</h4>
-                    <div className="flex gap-2 flex-wrap">
-                      {commonEmojis.map((emoji) => {
-                        const hasReacted = selectedPhoto.reactions.some(
-                          r => r.userId === currentUser?.id && r.emoji === emoji
-                        );
-                        return (
-                          <Button
-                            key={emoji}
-                            variant={hasReacted ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => handleReaction(selectedPhoto.id, emoji)}
-                            className={`text-lg p-2 h-auto ${hasReacted ? 'bg-blue-500 text-white' : ''}`}
-                          >
-                            {emoji}
-                          </Button>
-                        );
-                      })}
-                    </div>
-                    
-                    {/* Current Reactions */}
-                    {selectedPhoto.reactions.length > 0 && (
-                      <div className="mt-3">
-                        <h5 className="text-sm font-medium mb-2">Current Reactions</h5>
-                        <div className="flex gap-2 flex-wrap">
-                          {selectedPhoto.reactions.map((reaction) => (
-                            <Badge key={reaction.id} variant="outline" className="text-sm">
-                              {reaction.emoji} {attendees.find(u => u.id === reaction.userId)?.name}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Comments */}
-                  <div className="flex-1 flex flex-col">
-                    <h4 className="font-semibold mb-2">Comments</h4>
-                    <div className="space-y-2 max-h-32 overflow-y-auto">
-                      {selectedPhoto.comments.map((comment) => (
-                        <div key={comment.id} className="flex gap-2 p-2 bg-muted rounded">
-                          <Avatar className="w-6 h-6">
-                            <AvatarImage src={comment.user.avatar} />
-                            <AvatarFallback className="text-xs">
-                              {comment.user.name.charAt(0).toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <div className="text-sm">
-                              <span className="font-semibold">{comment.user.name}</span>
-                              <span className="ml-2">{comment.message}</span>
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
-                            </div>
+                {/* Comments */}
+                <div className="flex-1 flex flex-col">
+                  <h4 className="font-semibold mb-2">Comments</h4>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {selectedPhoto.comments.map((comment) => (
+                      <div key={comment.id} className="flex gap-2 p-2 bg-muted rounded">
+                        <Avatar className="w-6 h-6">
+                          <AvatarImage src={comment.user.avatar} />
+                          <AvatarFallback className="text-xs">
+                            {comment.user.name.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="text-sm">
+                            <span className="font-semibold">{comment.user.name}</span>
+                            <span className="ml-2">{comment.message}</span>
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
+                  </div>
 
-                    {/* Add Comment */}
-                    <div className="flex gap-2 mt-4">
-                      <Input
-                        placeholder="Add a comment..."
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleComment(selectedPhoto.id)}
-                      />
-                      <Button 
-                        size="sm" 
-                        onClick={() => handleComment(selectedPhoto.id)}
-                        disabled={!newComment.trim()}
-                      >
-                        <Send className="w-4 h-4" />
-                      </Button>
-                    </div>
+                  {/* Add Comment */}
+                  <div className="flex gap-2 mt-4">
+                    <Input
+                      placeholder="Add a comment..."
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleComment(selectedPhoto.id)}
+                    />
+                    <Button 
+                      size="sm" 
+                      onClick={() => handleComment(selectedPhoto.id)}
+                      disabled={!newComment.trim()}
+                    >
+                      <Send className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
               </div>
-            </>
+            </div>
           )}
         </DialogContent>
       </Dialog>
+      
+      {/* Full-screen expanded photo view */}
+      {isPhotoExpanded && selectedPhoto && (
+        <div 
+          className="fixed inset-0 bg-black/90 z-[9999] flex items-center justify-center animate-fade-in"
+          onClick={() => setIsPhotoExpanded(false)}
+        >
+          <img
+            src={selectedPhoto.url}
+            alt="Expanded event photo"
+            className="max-w-[95vw] max-h-[95vh] object-contain"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image itself
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4 text-white hover:bg-white/20 h-10 w-10"
+            onClick={() => setIsPhotoExpanded(false)}
+          >
+            <X className="w-6 h-6" />
+          </Button>
+        </div>
+      )}
     </>
   );
 };

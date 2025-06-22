@@ -61,102 +61,27 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete 
   );
 
   return (
-    <AnimatePresence>
-      {loadingPhase !== 'complete' && (
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center z-50 rounded-3xl overflow-hidden"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {/* Fireworks */}
-          {showFireworks && (
-            <div className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden">
-              <FireworkBurst x={20} y={30} delay={0} />
-              <FireworkBurst x={80} y={40} delay={0.2} />
-              <FireworkBurst x={50} y={70} delay={0.4} />
-              <FireworkBurst x={10} y={80} delay={0.6} />
-              <FireworkBurst x={90} y={20} delay={0.8} />
-              <FireworkBurst x={60} y={10} delay={1.0} />
-            </div>
-          )}
+    <div className="absolute inset-0 bg-background z-50 flex items-center justify-center overflow-hidden">
+      <motion.div
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 0, transition: { delay: 2.5, duration: 0.5 } }}
+        className="absolute inset-0 bg-background z-20"
+      />
+      
+      <motion.div 
+        className="z-10"
+        initial={{ scale: 1 }}
+        animate={{ scale: 0.8 }}
+        transition={{ duration: 1, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+      >
+        <img src="/brava-logo.png" alt="Brava Logo" className="w-24 h-24" />
+      </motion.div>
 
-          {/* Logo */}
-          <motion.div
-            className="relative z-10"
-            animate={
-              loadingPhase === 'loading' 
-                ? {
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0],
-                  }
-                : loadingPhase === 'exploding'
-                ? {
-                    scale: [1, 0.5, 0.1],
-                    rotate: [0, 360],
-                  }
-                : loadingPhase === 'expanding'
-                ? {
-                    scale: [0.1, 5],
-                    opacity: [1, 0],
-                  }
-                : {}
-            }
-            transition={
-              loadingPhase === 'loading'
-                ? {
-                    scale: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-                    rotate: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-                  }
-                : loadingPhase === 'exploding'
-                ? {
-                    scale: { duration: 1.5, ease: "easeInOut" },
-                    rotate: { duration: 1.5, ease: "easeInOut" },
-                  }
-                : loadingPhase === 'expanding'
-                ? {
-                    scale: { duration: 1, ease: "easeInOut" },
-                    opacity: { duration: 1, ease: "easeInOut" },
-                  }
-                : {}
-            }
-          >
-            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl">
-              <motion.div
-                className="text-4xl font-bold text-blue-600"
-                animate={
-                  loadingPhase === 'loading'
-                    ? {
-                        scale: [1, 1.2, 1],
-                      }
-                    : {}
-                }
-                transition={
-                  loadingPhase === 'loading'
-                    ? {
-                        scale: { duration: 1, repeat: Infinity, ease: "easeInOut" },
-                      }
-                    : {}
-                }
-              >
-                B
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Loading Text */}
-          {loadingPhase === 'loading' && (
-            <motion.div
-              className="absolute bottom-1/4 text-white text-lg font-medium"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-            >
-              Loading...
-            </motion.div>
-          )}
-        </motion.div>
-      )}
-    </AnimatePresence>
+      <motion.div
+        className="absolute w-full h-full bg-white z-30"
+        initial={{ scale: 0, borderRadius: '100%' }}
+        animate={{ scale: 4, borderRadius: '0%', transition: { delay: 2, duration: 0.7, ease: 'easeOut' } }}
+      />
+    </div>
   );
 }; 

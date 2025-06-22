@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ArrowLeft, Calendar, MapPin, User, Camera, Users } from 'lucide-react';
 import { Event } from '@/types';
 import { format } from 'date-fns';
-import { BarcelonaMap } from './BarcelonaMap';
+import { EventMap } from './EventMap';
 
 interface PastEventDetailProps {
   event: Event;
@@ -67,7 +66,7 @@ export const PastEventDetail: React.FC<PastEventDetailProps> = ({ event, onBack 
       </Card>
 
       {/* Map */}
-      <BarcelonaMap location={event.location} eventName={event.name} />
+      <EventMap location={event.location} />
 
       {/* Who Went */}
       <Card>

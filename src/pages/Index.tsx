@@ -120,9 +120,7 @@ const Index = () => {
           {/* Header with premium, notifications and chat */}
           <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">B</span>
-              </div>
+              <img src="/brava-logo.png" alt="Brava Logo" className="w-8 h-8" />
               <span className="font-semibold text-lg">Brava</span>
             </div>
             

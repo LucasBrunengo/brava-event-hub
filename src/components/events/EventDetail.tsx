@@ -10,7 +10,7 @@ import { useApp } from '@/context/AppContext';
 import { format } from 'date-fns';
 import { ExpenseSection } from './ExpenseSection';
 import { CommentSection } from './CommentSection';
-import { BarcelonaMap } from './BarcelonaMap';
+import { EventMap } from './EventMap';
 import { PhotoGallery } from './PhotoGallery';
 import { UserProfile } from '../profile/UserProfile';
 import { QuickPay } from './QuickPay';
@@ -212,7 +212,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
       </Card>
 
       {/* Map */}
-      <BarcelonaMap location={event.location} eventName={event.name} />
+      <EventMap location={event.location} />
 
       {/* RSVP Section */}
       <Card>
