@@ -71,19 +71,10 @@ export const LoadingScreen = ({ onLoadingComplete }: LoadingScreenProps) => {
   };
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-white">
-      <div className="relative">
-        {/* Logo */}
-        <div className="relative z-10">
-          <img 
-            src="/brava-logo.png" 
-            alt="Brava" 
-            className="w-24 h-24 object-contain"
-          />
-        </div>
-
+    <div className="absolute inset-0 flex flex-col items-center justify-center h-full w-full bg-white">
+      <div className="relative flex flex-col items-center justify-center h-full w-full">
         {/* Animated particles */}
-        <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 pointer-events-none">
           {[...Array(100)].map((_, i) => (
             <motion.div
               key={i}
@@ -95,10 +86,20 @@ export const LoadingScreen = ({ onLoadingComplete }: LoadingScreenProps) => {
             />
           ))}
         </div>
-
+        {/* Logo */}
+        <motion.div 
+          className="relative z-10 flex flex-col items-center"
+          animate={logoControls}
+        >
+          <img 
+            src="/brava-logo.png" 
+            alt="Brava" 
+            className="w-24 h-24 object-contain"
+          />
+        </motion.div>
         {/* Loading text */}
         <motion.div
-          className="mt-8 text-center"
+          className="text-center mt-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
