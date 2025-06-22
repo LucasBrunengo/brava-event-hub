@@ -1,4 +1,3 @@
-
 export interface User {
   id: string;
   name: string;
@@ -108,4 +107,30 @@ export interface UserProfile {
   sharedEvents: Event[];
   sharedPhotos: EventPhoto[];
   friendship?: Friendship;
+}
+
+export interface Notification {
+  id: string;
+  type: 'event_invite' | 'event_update' | 'payment_request' | 'message' | 'reminder';
+  title: string;
+  message: string;
+  userId: string;
+  relatedEventId?: string;
+  relatedUserId?: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface Message {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  sender: User;
+  type: 'text' | 'event_invite' | 'payment_request';
+  content: string;
+  eventId?: string;
+  amount?: number;
+  paymentMethods?: string[];
+  isRead: boolean;
+  createdAt: string;
 }

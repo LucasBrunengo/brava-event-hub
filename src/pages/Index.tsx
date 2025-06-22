@@ -7,17 +7,21 @@ import { EventDetail } from '@/components/events/EventDetail';
 import { ProfilePage } from '@/components/profile/ProfilePage';
 import { PastEventDetail } from '@/components/events/PastEventDetail';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { Event } from '@/types';
+import { NotificationsPanel } from '@/components/layout/NotificationsPanel';
+import { ChatPanel } from '@/components/layout/ChatPanel';
 import { Button } from '@/components/ui/button';
 import { Bell, MessageCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Event } from '@/types';
 
 type View = 'dashboard' | 'create' | 'profile' | 'event-detail' | 'past-event-detail';
 
 const Index = () => {
-  const { isAuthenticated } = useApp();
+  const { isAuthenticated, notifications, messages, markNotificationAsRead, sendMessage, markMessageAsRead, events, users } = useApp();
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   console.log('Index component rendered - isAuthenticated:', isAuthenticated);
   console.log('WelcomeScreen component:', WelcomeScreen);
@@ -74,6 +78,30 @@ const Index = () => {
     return 'events';
   };
 
+  const handleNotificationClick = (notification: any) => {
+    if (notification.relatedEventId) {
+      const event = events.find(e => e.id === notification.relatedEventId);
+      if (event) {
+        handleEventClick(event);
+      }
+    }
+  };
+
+  const handleChatEventClick = (eventId: string) => {
+    const event = events.find(e => e.id === eventId);
+    if (event) {
+      handleEventClick(event);
+    }
+  };
+
+  const handlePaymentRequest = (amount: number, paymentMethods: string[]) => {
+    // Handle payment request - in a real app this would open payment flow
+    console.log('Payment request:', amount, paymentMethods);
+  };
+
+  const unreadNotifications = notifications.filter(n => !n.isRead).length;
+  const unreadMessages = messages.filter(m => !m.isRead && m.senderId !== '1').length;
+
   return (
     <div className="w-full bg-gray-50 h-full">
       <div className="w-full bg-white h-full">
@@ -88,17 +116,21 @@ const Index = () => {
             </div>
             
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" className="relative">
+              <Button variant="ghost" size="sm" className="relative" onClick={() => setShowNotifications(true)}>
                 <Bell className="w-5 h-5" />
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
-                  3
-                </Badge>
+                {unreadNotifications > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                    {unreadNotifications}
+                  </Badge>
+                )}
               </Button>
-              <Button variant="ghost" size="sm" className="relative">
+              <Button variant="ghost" size="sm" className="relative" onClick={() => setShowChat(true)}>
                 <MessageCircle className="w-5 h-5" />
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-green-500">
-                  1
-                </Badge>
+                {unreadMessages > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-green-500">
+                    {unreadMessages}
+                  </Badge>
+                )}
               </Button>
             </div>
           </div>
@@ -143,6 +175,32 @@ const Index = () => {
             activeTab={getActiveTab()}
             onTabChange={handleTabChange}
           />
+
+          {/* Notifications Panel */}
+          {showNotifications && (
+            <NotificationsPanel
+              notifications={notifications}
+              events={events}
+              users={users}
+              onNotificationClick={handleNotificationClick}
+              onMarkAsRead={markNotificationAsRead}
+              onClose={() => setShowNotifications(false)}
+            />
+          )}
+
+          {/* Chat Panel */}
+          {showChat && (
+            <ChatPanel
+              messages={messages}
+              events={events}
+              users={users}
+              currentUserId="1"
+              onSendMessage={sendMessage}
+              onEventClick={handleChatEventClick}
+              onPaymentRequest={handlePaymentRequest}
+              onClose={() => setShowChat(false)}
+            />
+          )}
         </div>
       </div>
     </div>

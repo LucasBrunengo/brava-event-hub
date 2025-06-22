@@ -216,7 +216,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
 
       {/* Enhanced Photo Detail Modal */}
       <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
-        <DialogContent className="max-w-full max-h-full w-full h-full p-0 bg-black/95 border-0 rounded-none">
+        <DialogContent className="fixed inset-0 w-full h-full max-w-none max-h-none p-0 bg-black/95 border-0 rounded-none">
           {selectedPhoto && (
             <>
               <DialogHeader className="flex flex-row items-center justify-between p-4 bg-black/50 text-white">
@@ -240,8 +240,15 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                   <img
                     src={selectedPhoto.url}
                     alt="Event photo"
-                    className="max-w-full max-h-full object-contain rounded-lg"
+                    className="max-w-full max-h-full object-contain rounded-lg cursor-pointer hover:scale-105 transition-transform"
                     onError={handleImageError}
+                    onClick={() => {
+                      // Toggle full screen view
+                      const img = document.querySelector('.photo-modal-img') as HTMLElement;
+                      if (img) {
+                        img.classList.toggle('scale-150');
+                      }
+                    }}
                   />
                   
                   {/* Navigation Arrows */}

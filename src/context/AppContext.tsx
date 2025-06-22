@@ -1,29 +1,34 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { User, Event, Expense, Comment } from '@/types';
-import { mockCurrentUser, mockEvents, mockExpenses, mockComments, mockPublicEvents } from '@/data/mockData';
+import { User, Event, Expense, Comment, Notification, Message } from '@/types';
+import { mockUsers, mockEvents, mockExpenses, mockComments, mockCurrentUser, mockNotifications, mockMessages } from '@/data/mockData';
 
 interface AppContextType {
   // Authentication
   isAuthenticated: boolean;
   currentUser: User | null;
+  events: Event[];
+  publicEvents: Event[];
+  expenses: Expense[];
+  comments: Comment[];
+  notifications: Notification[];
+  messages: Message[];
+  users: User[];
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  markNotificationAsRead: (notificationId: string) => void;
+  sendMessage: (receiverId: string, content: string, type?: 'text' | 'event_invite' | 'payment_request', eventId?: string, amount?: number, paymentMethods?: string[]) => void;
+  markMessageAsRead: (messageId: string) => void;
 
   // Events
-  events: Event[];
-  publicEvents: Event[];
   createEvent: (eventData: Partial<Event>) => void;
   updateEventRSVP: (eventId: string, status: 'going' | 'maybe' | 'not-going') => void;
 
   // Expenses
-  expenses: Expense[];
   addExpense: (expenseData: { eventId: string; name: string; amount: number; splitBetween: string[] }) => void;
   updatePaymentStatus: (paymentId: string, status: 'paid' | 'pending' | 'overdue') => void;
 
   // Comments
-  comments: Comment[];
   addComment: (eventId: string, message: string) => void;
 }
 
@@ -33,9 +38,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [events, setEvents] = useState<Event[]>(mockEvents);
-  const [publicEvents] = useState<Event[]>(mockPublicEvents);
+  const [publicEvents] = useState<Event[]>(mockEvents.filter(event => event.isPublic));
   const [expenses, setExpenses] = useState<Expense[]>(mockExpenses);
   const [comments, setComments] = useState<Comment[]>(mockComments);
+  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+  const [messages, setMessages] = useState<Message[]>(mockMessages);
+  const [users, setUsers] = useState<User[]>(mockUsers);
 
   console.log('AppProvider rendered - isAuthenticated:', isAuthenticated, 'currentUser:', currentUser);
 
@@ -65,127 +73,170 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const createEvent = (eventData: Partial<Event>) => {
     if (!currentUser) return;
-
+    
     const newEvent: Event = {
-      id: Date.now().toString(),
+      id: `event-${Date.now()}`,
       name: eventData.name || '',
       description: eventData.description || '',
-      date: eventData.date || '',
-      time: eventData.time || '',
+      date: eventData.date || new Date().toISOString().split('T')[0],
+      time: eventData.time || '7:00 PM',
       location: eventData.location || '',
       organizerId: currentUser.id,
       organizer: currentUser,
-      hasExpenseSplitting: eventData.hasExpenseSplitting || false,
+      attendees: [{ userId: currentUser.id, user: currentUser, status: 'going', joinedAt: new Date().toISOString() }],
       createdAt: new Date().toISOString(),
-      attendees: [
-        {
-          userId: currentUser.id,
-          user: currentUser,
-          status: 'going',
-          joinedAt: new Date().toISOString(),
-        },
-      ],
+      hasExpenseSplitting: eventData.hasExpenseSplitting || false,
+      isPublic: eventData.isPublic || false,
+      isPromoted: eventData.isPromoted || false,
+      ticketPrice: eventData.ticketPrice,
+      discountPercentage: eventData.discountPercentage,
+      photos: eventData.photos || [],
     };
 
-    setEvents(prev => [newEvent, ...prev]);
+    setEvents(prev => [...prev, newEvent]);
   };
 
   const updateEventRSVP = (eventId: string, status: 'going' | 'maybe' | 'not-going') => {
     if (!currentUser) return;
 
-    setEvents(prev => prev.map(event => {
-      if (event.id !== eventId) return event;
-
-      const existingAttendee = event.attendees.find(a => a.userId === currentUser.id);
-      
-      if (existingAttendee) {
-        return {
-          ...event,
-          attendees: event.attendees.map(a =>
-            a.userId === currentUser.id ? { ...a, status } : a
-          ),
-        };
-      } else {
-        return {
-          ...event,
-          attendees: [
-            ...event.attendees,
-            {
-              userId: currentUser.id,
-              user: currentUser,
-              status,
-              joinedAt: new Date().toISOString(),
-            },
-          ],
-        };
-      }
-    }));
+    setEvents(prev => 
+      prev.map(event => {
+        if (event.id === eventId) {
+          const existingAttendee = event.attendees.find(a => a.userId === currentUser.id);
+          if (existingAttendee) {
+            return {
+              ...event,
+              attendees: event.attendees.map(a => 
+                a.userId === currentUser.id 
+                  ? { ...a, status }
+                  : a
+              )
+            };
+          } else {
+            return {
+              ...event,
+              attendees: [...event.attendees, { userId: currentUser.id, user: currentUser, status, joinedAt: new Date().toISOString() }]
+            };
+          }
+        }
+        return event;
+      })
+    );
   };
 
   const addExpense = (expenseData: { eventId: string; name: string; amount: number; splitBetween: string[] }) => {
     if (!currentUser) return;
 
     const newExpense: Expense = {
-      id: Date.now().toString(),
+      id: `expense-${Date.now()}`,
       eventId: expenseData.eventId,
       name: expenseData.name,
       amount: expenseData.amount,
       paidBy: currentUser.id,
       splitBetween: expenseData.splitBetween,
+      payments: expenseData.splitBetween
+        .filter(userId => userId !== currentUser.id)
+        .map(userId => ({
+          id: `payment-${Date.now()}-${userId}`,
+          expenseId: `expense-${Date.now()}`,
+          userId,
+          amount: expenseData.amount / expenseData.splitBetween.length,
+          status: 'pending' as const
+        })),
       createdAt: new Date().toISOString(),
-      payments: expenseData.splitBetween.map(userId => ({
-        id: `${Date.now()}-${userId}`,
-        expenseId: Date.now().toString(),
-        userId,
-        amount: expenseData.amount / expenseData.splitBetween.length,
-        status: userId === currentUser.id ? 'paid' : 'pending' as const,
-        paidAt: userId === currentUser.id ? new Date().toISOString() : undefined,
-      })),
     };
 
     setExpenses(prev => [...prev, newExpense]);
   };
 
   const updatePaymentStatus = (paymentId: string, status: 'paid' | 'pending' | 'overdue') => {
-    setExpenses(prev => prev.map(expense => ({
-      ...expense,
-      payments: expense.payments.map(payment =>
-        payment.id === paymentId
-          ? { ...payment, status, paidAt: status === 'paid' ? new Date().toISOString() : undefined }
-          : payment
-      ),
-    })));
+    setExpenses(prev => 
+      prev.map(expense => ({
+        ...expense,
+        payments: expense.payments.map(payment => 
+          payment.id === paymentId 
+            ? { ...payment, status: status === 'paid' ? 'paid' : status }
+            : payment
+        )
+      }))
+    );
   };
 
   const addComment = (eventId: string, message: string) => {
     if (!currentUser) return;
 
     const newComment: Comment = {
-      id: Date.now().toString(),
+      id: `comment-${Date.now()}`,
       eventId,
       userId: currentUser.id,
       user: currentUser,
       message,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
     };
 
     setComments(prev => [...prev, newComment]);
   };
 
+  const markNotificationAsRead = (notificationId: string) => {
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === notificationId 
+          ? { ...notification, isRead: true }
+          : notification
+      )
+    );
+  };
+
+  const sendMessage = (receiverId: string, content: string, type: 'text' | 'event_invite' | 'payment_request' = 'text', eventId?: string, amount?: number, paymentMethods?: string[]) => {
+    if (!currentUser) return;
+
+    const newMessage: Message = {
+      id: `msg-${Date.now()}`,
+      senderId: currentUser.id,
+      receiverId,
+      sender: currentUser,
+      type,
+      content,
+      eventId,
+      amount,
+      paymentMethods,
+      isRead: false,
+      createdAt: new Date().toISOString()
+    };
+
+    setMessages(prev => [...prev, newMessage]);
+  };
+
+  const markMessageAsRead = (messageId: string) => {
+    setMessages(prev => 
+      prev.map(message => 
+        message.id === messageId 
+          ? { ...message, isRead: true }
+          : message
+      )
+    );
+  };
+
   const value: AppContextType = {
     isAuthenticated,
     currentUser,
+    events,
+    publicEvents,
+    expenses,
+    comments,
+    notifications,
+    messages,
+    users,
     login,
     register,
     logout,
-    events,
-    publicEvents,
+    markNotificationAsRead,
+    sendMessage,
+    markMessageAsRead,
     createEvent,
     updateEventRSVP,
-    expenses,
     addExpense,
     updatePaymentStatus,
-    comments,
     addComment,
   };
 

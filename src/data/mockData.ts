@@ -606,127 +606,184 @@ export const mockComments: Comment[] = [
     eventId: '1',
     userId: '2',
     user: mockUsers[1],
-    message: 'Can\'t wait for this! The beach BBQ sounds amazing!',
-    createdAt: '2024-01-03T10:00:00Z',
+    message: 'Can\'t wait for the BBQ! I\'ll bring the drinks.',
+    createdAt: '2024-01-02T10:00:00Z'
   },
   {
     id: '2',
     eventId: '1',
     userId: '3',
     user: mockUsers[2],
-    message: 'What should I bring? Any dietary restrictions to consider?',
-    createdAt: '2024-01-03T11:00:00Z',
+    message: 'I\'ll bring some snacks too!',
+    createdAt: '2024-01-02T11:00:00Z'
   },
   {
     id: '3',
-    eventId: '1',
-    userId: '5',
-    user: mockUsers[4],
-    message: 'I can bring some vegetarian options and drinks!',
-    createdAt: '2024-01-03T12:00:00Z',
+    eventId: '2',
+    userId: '4',
+    user: mockUsers[3],
+    message: 'This is going to be amazing!',
+    createdAt: '2024-01-03T10:00:00Z'
+  }
+];
+
+// Mock Notifications
+export interface Notification {
+  id: string;
+  type: 'event_invite' | 'event_update' | 'payment_request' | 'message' | 'reminder';
+  title: string;
+  message: string;
+  userId: string;
+  relatedEventId?: string;
+  relatedUserId?: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export const mockNotifications: Notification[] = [
+  {
+    id: '1',
+    type: 'event_invite',
+    title: 'New Event Invitation',
+    message: 'Bob invited you to "Salsa Night" on September 5th',
+    userId: '1',
+    relatedEventId: '5',
+    relatedUserId: '2',
+    isRead: false,
+    createdAt: '2024-01-15T10:00:00Z'
+  },
+  {
+    id: '2',
+    type: 'payment_request',
+    title: 'Payment Request',
+    message: 'Charlie requested €25 for "Tapas Tour" expenses',
+    userId: '1',
+    relatedEventId: '4',
+    relatedUserId: '3',
+    isRead: false,
+    createdAt: '2024-01-14T15:30:00Z'
+  },
+  {
+    id: '3',
+    type: 'event_update',
+    title: 'Event Updated',
+    message: 'The "Beach BBQ Party" time has been changed to 7:00 PM',
+    userId: '1',
+    relatedEventId: '1',
+    isRead: true,
+    createdAt: '2024-01-13T09:15:00Z'
   },
   {
     id: '4',
-    eventId: '1',
-    userId: '6',
-    user: mockUsers[5],
-    message: 'Perfect timing for sunset! 🌅',
-    createdAt: '2024-01-03T13:00:00Z',
+    type: 'reminder',
+    title: 'Event Reminder',
+    message: 'Your "Sunset Yoga" event starts in 2 hours',
+    userId: '1',
+    relatedEventId: '6',
+    isRead: false,
+    createdAt: '2024-01-12T16:00:00Z'
   },
   {
     id: '5',
-    eventId: '2',
+    type: 'message',
+    title: 'New Message',
+    message: 'Diana sent you a message about the upcoming event',
     userId: '1',
-    user: mockUsers[0],
-    message: 'This lineup is incredible! Can\'t believe we got tickets!',
-    createdAt: '2024-01-16T10:00:00Z',
+    relatedUserId: '4',
+    isRead: false,
+    createdAt: '2024-01-11T14:20:00Z'
+  }
+];
+
+// Mock Messages
+export interface Message {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  sender: User;
+  type: 'text' | 'event_invite' | 'payment_request';
+  content: string;
+  eventId?: string;
+  amount?: number;
+  paymentMethods?: string[];
+  isRead: boolean;
+  createdAt: string;
+}
+
+export const mockMessages: Message[] = [
+  {
+    id: '1',
+    senderId: '2',
+    receiverId: '1',
+    sender: mockUsers[1],
+    type: 'event_invite',
+    content: 'Hey! I\'m organizing a Salsa Night next week. Want to join? It\'s going to be amazing! 🕺💃',
+    eventId: '5',
+    isRead: false,
+    createdAt: '2024-01-15T10:00:00Z'
+  },
+  {
+    id: '2',
+    senderId: '1',
+    receiverId: '2',
+    sender: mockUsers[0],
+    type: 'text',
+    content: 'Sounds great! I\'d love to join. What time does it start?',
+    isRead: true,
+    createdAt: '2024-01-15T10:05:00Z'
+  },
+  {
+    id: '3',
+    senderId: '2',
+    receiverId: '1',
+    sender: mockUsers[1],
+    type: 'text',
+    content: 'It starts at 10 PM at El Born. Here\'s the event link:',
+    eventId: '5',
+    isRead: true,
+    createdAt: '2024-01-15T10:10:00Z'
+  },
+  {
+    id: '4',
+    senderId: '3',
+    receiverId: '1',
+    sender: mockUsers[2],
+    type: 'payment_request',
+    content: 'Hey Alice! I owe you €25 from the Tapas Tour last week. Can you send me your payment details?',
+    amount: 25,
+    paymentMethods: ['Apple Pay', 'Google Pay', 'PayPal'],
+    isRead: false,
+    createdAt: '2024-01-14T15:30:00Z'
+  },
+  {
+    id: '5',
+    senderId: '4',
+    receiverId: '1',
+    sender: mockUsers[3],
+    type: 'text',
+    content: 'What should we do for the weekend? I was thinking we could organize something fun!',
+    isRead: false,
+    createdAt: '2024-01-13T14:00:00Z'
   },
   {
     id: '6',
-    eventId: '2',
-    userId: '9',
-    user: mockUsers[8],
-    message: 'Who else is excited for the headliner? 🎵',
-    createdAt: '2024-01-16T11:00:00Z',
+    senderId: '1',
+    receiverId: '4',
+    sender: mockUsers[0],
+    type: 'text',
+    content: 'Great idea! How about a beach day or maybe a movie night?',
+    isRead: true,
+    createdAt: '2024-01-13T14:15:00Z'
   },
   {
     id: '7',
-    eventId: '2',
-    userId: '11',
-    user: mockUsers[10],
-    message: 'Let\'s meet up before the show starts!',
-    createdAt: '2024-01-16T12:00:00Z',
-  },
-  {
-    id: '8',
-    eventId: '3',
-    userId: '1',
-    user: mockUsers[0],
-    message: 'What games should we play? I\'ll bring Monopoly and Scrabble!',
-    createdAt: '2024-01-06T10:00:00Z',
-  },
-  {
-    id: '9',
-    eventId: '3',
-    userId: '4',
-    user: mockUsers[3],
-    message: 'I have Cards Against Humanity and Codenames!',
-    createdAt: '2024-01-06T11:00:00Z',
-  },
-  {
-    id: '10',
-    eventId: '4',
-    userId: '2',
-    user: mockUsers[1],
-    message: 'The Gothic Quarter has the best tapas bars! Great choice!',
-    createdAt: '2024-02-02T10:00:00Z',
-  },
-  {
-    id: '11',
-    eventId: '4',
-    userId: '7',
-    user: mockUsers[6],
-    message: 'I know a hidden gem with amazing patatas bravas!',
-    createdAt: '2024-02-02T11:00:00Z',
-  },
-  {
-    id: '12',
-    eventId: '4',
-    userId: '10',
-    user: mockUsers[9],
-    message: 'Should we make reservations or just walk in?',
-    createdAt: '2024-02-02T12:00:00Z',
-  },
-  {
-    id: '13',
-    eventId: '5',
-    userId: '4',
-    user: mockUsers[3],
-    message: 'I\'ve been practicing my salsa moves! Ready to dance! 💃',
-    createdAt: '2024-02-16T10:00:00Z',
-  },
-  {
-    id: '14',
-    eventId: '5',
-    userId: '8',
-    user: mockUsers[7],
-    message: 'El Born has such a great nightlife scene!',
-    createdAt: '2024-02-16T11:00:00Z',
-  },
-  {
-    id: '15',
+    senderId: '5',
+    receiverId: '1',
+    sender: mockUsers[4],
+    type: 'event_invite',
+    content: 'I\'m planning a sunset yoga session this weekend. Perfect for relaxation! 🧘‍♀️',
     eventId: '6',
-    userId: '5',
-    user: mockUsers[4],
-    message: 'Sunset yoga on the beach sounds so peaceful 🧘‍♀️',
-    createdAt: '2024-03-02T10:00:00Z',
-  },
-  {
-    id: '16',
-    eventId: '6',
-    userId: '7',
-    user: mockUsers[6],
-    message: 'Should I bring my own yoga mat or will they provide them?',
-    createdAt: '2024-03-02T11:00:00Z',
-  },
+    isRead: true,
+    createdAt: '2024-01-12T11:00:00Z'
+  }
 ];
