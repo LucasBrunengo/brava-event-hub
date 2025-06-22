@@ -64,7 +64,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete 
     <AnimatePresence>
       {loadingPhase !== 'complete' && (
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center z-50 rounded-3xl"
+          className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center z-50 rounded-3xl overflow-hidden"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
@@ -97,7 +97,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete 
                   }
                 : loadingPhase === 'expanding'
                 ? {
-                    scale: [0.1, 20],
+                    scale: [0.1, 5],
                     opacity: [1, 0],
                   }
                 : {}

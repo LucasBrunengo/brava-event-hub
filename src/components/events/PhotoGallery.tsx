@@ -216,7 +216,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
 
       {/* Enhanced Photo Detail Modal */}
       <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
-        <DialogContent className="max-w-full max-h-full w-full h-full p-0 bg-black/95">
+        <DialogContent className="max-w-full max-h-full w-full h-full p-0 bg-black/95 border-0 rounded-none">
           {selectedPhoto && (
             <>
               <DialogHeader className="flex flex-row items-center justify-between p-4 bg-black/50 text-white">
@@ -236,11 +236,11 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
               
               <div className="flex flex-col h-full">
                 {/* Photo Section */}
-                <div className="flex-1 relative flex items-center justify-center">
+                <div className="flex-1 relative flex items-center justify-center p-4">
                   <img
                     src={selectedPhoto.url}
                     alt="Event photo"
-                    className="max-w-full max-h-full object-contain"
+                    className="max-w-full max-h-full object-contain rounded-lg"
                     onError={handleImageError}
                   />
                   
@@ -272,7 +272,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                 </div>
 
                 {/* Comments and Reactions Section */}
-                <div className="p-4 bg-white">
+                <div className="p-4 bg-white border-t border-gray-200">
                   {/* Reactions */}
                   <div className="mb-4">
                     <h4 className="font-semibold mb-2">Reactions</h4>
