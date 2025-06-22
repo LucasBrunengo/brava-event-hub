@@ -213,7 +213,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               const user = getOtherUser(userId);
               if (!user) return null; // Safely skip rendering if user not found
 
-              const lastMessage = userMessages[userMessages.length - 1];
+              const lastMessage = userMessages.length > 0 ? userMessages[userMessages.length - 1] : null;
               const unreadCount = userMessages.filter(m => !m.isRead && m.senderId !== currentUserId).length;
 
               return (
@@ -237,12 +237,18 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                             </Badge>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground truncate">
-                          {lastMessage.content}
-                        </p>
-                        <span className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(lastMessage.createdAt), { addSuffix: true })}
-                        </span>
+                        {lastMessage ? (
+                          <>
+                            <p className="text-sm text-muted-foreground truncate">
+                              {lastMessage.content}
+                            </p>
+                            <span className="text-xs text-muted-foreground">
+                              {formatDistanceToNow(new Date(lastMessage.createdAt), { addSuffix: true })}
+                            </span>
+                          </>
+                        ) : (
+                          <p className="text-sm text-muted-foreground italic">No messages yet.</p>
+                        )}
                       </div>
                     </div>
                   </CardContent>
