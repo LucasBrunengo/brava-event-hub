@@ -1,7 +1,7 @@
 import { User, Event, Expense, Comment, EventPhoto, Notification, Message } from '@/types';
 
 export const mockUsers: User[] = [
-  { id: '1', name: 'Lucas Brunengo', email: 'lucas.brunengo@example.com', avatar: 'https://i.pravatar.cc/150?img=1', phone: '+34666555444' },
+  { id: '1', name: 'Lucas Brunengo', email: 'lucas.brunengo@example.com', avatar: 'https://i.pinimg.com/474x/5f/ca/d2/5fcad25423c7b93be33f86ca91c9e4c0.jpg', phone: '+34666555444' },
   { id: '2', name: 'Maria Rodriguez', email: 'maria.rodriguez@example.com', avatar: 'https://i.pravatar.cc/150?img=2', phone: '+34666555333' },
   { id: '3', name: 'Carlos Martinez', email: 'carlos.martinez@example.com', avatar: 'https://i.pravatar.cc/150?img=3', phone: '+34666555222' },
   { id: '4', name: 'Sofia Lopez', email: 'sofia.lopez@example.com', avatar: 'https://i.pravatar.cc/150?img=4', phone: '+34666555111' },
