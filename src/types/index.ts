@@ -30,6 +30,7 @@ export interface Event {
   isPromoted?: boolean;
   discountPercentage?: number;
   comments?: Comment[];
+  isPast?: boolean;
 }
 
 export interface EventPhoto {
