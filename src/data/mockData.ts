@@ -38,6 +38,11 @@ export const mockEvents: Event[] = [
     isPublic: false,
     ticketPrice: 50.00,
     ticketUrl: '#',
+    photos: [
+      { id: 'p1-1', url: 'https://youbarcelona.com/uploads/images/c/pacha%20barcelona%20terraza%2012/400x300.webp?v=63787259999', uploadedBy: '1', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p1-2', url: 'https://ultimatetravelexperience.com/wp-content/uploads/2022/11/2-7.jpg', uploadedBy: '2', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p1-3', url: 'https://www.terrazeo.com/wp-content/uploads/2018/07/Pacha-Barcelona.jpg', uploadedBy: '3', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
+    ],
     comments: [
       { id: 'c1', eventId: '1', userId: '2', user: mockUsers[1], message: "Let's go! Pachá is always a vibe. Ready for some good music.", createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c1b', eventId: '1', userId: '3', user: mockUsers[2], message: "So in! What's the dress code? Smart casual?", createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() },
@@ -63,6 +68,10 @@ export const mockEvents: Event[] = [
     createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
     hasExpenseSplitting: false,
     isPublic: false,
+    photos: [
+      { id: 'p2-1', url: 'https://bcnbeachvolleyacademy.com/wp-content/uploads/2022/07/club-volley-playa2023-B.jpg', uploadedBy: '1', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p2-2', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREXMh7bVDVF1MPHqGCLByDrjwvd0fEUT1SDQ&s', uploadedBy: '4', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
+    ],
     comments: [
       { id: 'c2', eventId: '2', userId: '4', user: mockUsers[3], message: "Sounds like a perfect afternoon. I'm in! 🏐", createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c2b', eventId: '2', userId: '5', user: mockUsers[4], message: "I'm a maybe, depends on work. But I'll try my best to join for the sunset!", createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString() },
@@ -91,6 +100,10 @@ export const mockEvents: Event[] = [
     createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
     hasExpenseSplitting: true,
     isPublic: false,
+    photos: [
+      { id: 'p3-1', url: 'https://groundhopperguides.com/wp-content/uploads/2021/10/image_50443777-scaled-800x600.jpg', uploadedBy: '2', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p3-2', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS2O2QbGugiRtaXO_Jv8Pv9Pn4ZaYSGjcy2HYp7OY_TWq5AmP8qA7HgdTTlLDIMLxgBS4&usqp=CAU', uploadedBy: '3', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
+    ],
     comments: [
       { id: 'c3', eventId: '3', userId: '3', user: mockUsers[2], message: "Força Barça! This is a huge game. The atmosphere will be electric.", createdAt: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c3b', eventId: '3', userId: '1', user: mockUsers[0], message: "I'm so there! What time should we meet to get good seats?", createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString() },
@@ -118,6 +131,11 @@ export const mockEvents: Event[] = [
     isPublic: false,
     ticketPrice: 25.00,
     ticketUrl: '#',
+    photos: [
+      { id: 'p4-1', url: 'https://youbarcelona.com/uploads/images/c/sutton%20barcelona%20sala%201/400x300.webp?v=63787260783', uploadedBy: '4', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p4-2', url: 'https://lh3.googleusercontent.com/proxy/j6MkxRFHZc-oTBCL-kZzVobkFiPrSkedR-gIMdJC7DAb2Rdhh7mh_qZ1elvGb9CmZvCp7yt6pJaf22Mrysbo2QTyo9vkRDC3viLWzLoh_YJRQg', uploadedBy: '5', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p4-3', url: 'https://youbarcelona.com/uploads/images/c/sutton%20barcelona%20sala%202/400x300.webp?v=63787260784', uploadedBy: '1', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
+    ],
     comments: [
       { id: 'c4', eventId: '4', userId: '5', user: mockUsers[4], message: "Yes! Sutton has a great vibe. It's been a while.", createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c4b', eventId: '4', userId: '1', user: mockUsers[0], message: "I'm a maybe for now, will confirm closer to the date.", createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString() },
@@ -152,14 +170,16 @@ export const mockEvents: Event[] = [
     ticketUrl: 'https://www.primaverasound.com',
     photos: [
       {
-        id: '5',
+        id: 'p5-1',
         url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
         uploadedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
         reactions: [],
         comments: [],
         taggedUsers: ['2', '3']
-      }
+      },
+      { id: 'p5-2', url: 'https://www.gl-events.com/sites/default/files/styles/hero_background_image/public/2022-11/PRIMAVERA-SOUND-1500-KLEINEMEDIA.jpg?itok=K82RLsME', uploadedBy: '2', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p5-3', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9PWrz0X--PWA6EIwotks3ISBwN-fBOe2QeA&s', uploadedBy: '3', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
     ],
     comments: [
       { id: 'c5', eventId: '5', userId: '3', user: mockUsers[2], message: "The lineup is fire this year! Can't wait to see Lana Del Rey.", createdAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000).toISOString() },
@@ -193,14 +213,17 @@ export const mockEvents: Event[] = [
     ticketUrl: 'https://www.sonar.es',
     photos: [
       {
-        id: '6',
+        id: 'p6-1',
         url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '2',
         uploadedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
         reactions: [],
         comments: [],
         taggedUsers: ['3']
-      }
+      },
+      { id: 'p6-2', url: 'https://storage.googleapis.com/pro-cms-bucket/Copia_de_057_Sonar_Club_Publico_Ambiente_Adriatique_Nerea_Coll_20240614_6abcaee360/Copia_de_057_Sonar_Club_Publico_Ambiente_Adriatique_Nerea_Coll_20240614_6abcaee360.jpg', uploadedBy: '2', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p6-3', url: 'https://www.eseibusinessschool.com/wp-content/uploads/2023/06/sonar.jpg', uploadedBy: '3', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p6-4', url: 'https://www.shbarcelona.es/blog/es/wp-content/uploads/2022/05/sonar-festival-barcelona-2022-810x540.jpg', uploadedBy: '5', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
     ],
     comments: [
       { id: 'c6', eventId: '6', userId: '3', user: mockUsers[2], message: "Sónar by Night is where it's at. The visuals are going to be insane.", createdAt: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000).toISOString() },
@@ -228,6 +251,11 @@ export const mockEvents: Event[] = [
     ticketPrice: 45.00,
     discountPercentage: 10,
     ticketUrl: 'https://barcelona.brunch-in.com/',
+    photos: [
+        { id: 'p7-1', url: 'https://www.aspasios.com/assets/themes/www.aspasios.com/img/media/1745419374_Brunch%20Electronik%20The%20Sunday%20electronic%20music%20event%20in%20Barcelona%20%281%29.tmedium.webp', uploadedBy: '10', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+        { id: 'p7-2', url: 'https://www.webarcelona.net/sites/default/files/events/brunch-electronic-barcelona.jpg', uploadedBy: '6', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+        { id: 'p7-3', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5gK_ycDBwIY18FoIIHdHiiHZmskMB7LD6mA&s', uploadedBy: '7', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
+    ],
     comments: [
       { id: 'c7', eventId: '7', userId: '6', user: mockUsers[5], message: "Brunch is the best Sunday plan! The vibe is always so chill.", createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c7b', eventId: '7', userId: '7', user: mockUsers[6], message: "Hope they have those amazing bao buns again.", createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString() },
@@ -257,17 +285,19 @@ export const mockEvents: Event[] = [
     isPublic: true,
     isPast: true,
     hasExpenseSplitting: false,
+    photos: [
+      { id: 'p1', url: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400&h=400&fit=crop&crop=center', uploadedBy: '1', taggedUsers: ['3', '6'], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p2', url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop&crop=center', uploadedBy: '3', taggedUsers: ['1'], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p3', url: 'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=400&h=400&fit=crop&crop=center', uploadedBy: '6', taggedUsers: ['1', '3'], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p8-4', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz2q5k3RseDtItgoxqm0Lz77vDjtHSsE8v9A&s', uploadedBy: '1', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
+      { id: 'p8-5', url: 'https://www.sala-apolo.com/uploads/media/default/0001/02/thumb_1025_default_card.jpeg', uploadedBy: '3', taggedUsers: [], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
+    ],
     comments: [
       { id: 'c8', eventId: '8', userId: '1', user: mockUsers[0], message: "What a show! Duki killed it. The visuals were amazing.", createdAt: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c8b', eventId: '8', userId: '3', user: mockUsers[2], message: "Totally agree. 'Goteo' was insane live. So glad we went.", createdAt: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c8c', eventId: '8', userId: '6', user: mockUsers[5], message: "The energy from the crowd was unreal. Best concert of the year.", createdAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c8d', eventId: '8', userId: '9', user: mockUsers[8], message: "So sad I missed this! Hope he comes back soon.", createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c8e', eventId: '8', userId: '1', user: mockUsers[0], message: "We have to go together next time for sure.", createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString() },
-    ],
-    photos: [
-      { id: 'p1', url: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400&h=400&fit=crop&crop=center', uploadedBy: '1', taggedUsers: ['3', '6'], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
-      { id: 'p2', url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop&crop=center', uploadedBy: '3', taggedUsers: ['1'], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
-      { id: 'p3', url: 'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=400&h=400&fit=crop&crop=center', uploadedBy: '6', taggedUsers: ['1', '3'], uploadedAt: new Date().toISOString(), reactions: [], comments: [] }
     ]
   },
   {
