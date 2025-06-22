@@ -1,4 +1,4 @@
-import { User, Event, Expense, Comment } from '@/types';
+import { User, Event, Expense, Comment, EventPhoto } from '@/types';
 
 export const mockUsers: User[] = [
   {
@@ -199,15 +199,60 @@ export const mockEvents: Event[] = [
       { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-01-05T10:00:00Z' },
       { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-01-06T10:00:00Z' },
       { userId: '7', user: mockUsers[6], status: 'maybe', joinedAt: '2024-01-07T10:00:00Z' },
+      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-01-08T10:00:00Z' },
+      { userId: '9', user: mockUsers[8], status: 'going', joinedAt: '2024-01-09T10:00:00Z' },
+      { userId: '10', user: mockUsers[9], status: 'maybe', joinedAt: '2024-01-10T10:00:00Z' },
+      { userId: '11', user: mockUsers[10], status: 'going', joinedAt: '2024-01-11T10:00:00Z' },
+      { userId: '12', user: mockUsers[11], status: 'going', joinedAt: '2024-01-12T10:00:00Z' },
+      { userId: '13', user: mockUsers[12], status: 'going', joinedAt: '2024-01-13T10:00:00Z' },
+      { userId: '14', user: mockUsers[13], status: 'maybe', joinedAt: '2024-01-14T10:00:00Z' },
+      { userId: '15', user: mockUsers[14], status: 'going', joinedAt: '2024-01-15T10:00:00Z' },
+      { userId: '16', user: mockUsers[15], status: 'going', joinedAt: '2024-01-16T10:00:00Z' },
+      { userId: '17', user: mockUsers[16], status: 'going', joinedAt: '2024-01-17T10:00:00Z' },
+      { userId: '18', user: mockUsers[17], status: 'maybe', joinedAt: '2024-01-18T10:00:00Z' },
+      { userId: '19', user: mockUsers[18], status: 'going', joinedAt: '2024-01-19T10:00:00Z' },
+      { userId: '20', user: mockUsers[19], status: 'going', joinedAt: '2024-01-20T10:00:00Z' },
     ],
     createdAt: '2024-01-01T10:00:00Z',
     hasExpenseSplitting: true,
     isPublic: false,
     photos: [
-      'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1615361200098-85735f739295?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=400&fit=crop'
+      {
+        id: 'photo-1-1',
+        url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=400&fit=crop',
+        uploadedBy: '1',
+        uploadedAt: '2024-01-02T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      },
+      {
+        id: 'photo-1-2',
+        url: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=400&fit=crop',
+        uploadedBy: '2',
+        uploadedAt: '2024-01-02T11:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      },
+      {
+        id: 'photo-1-3',
+        url: 'https://images.unsplash.com/photo-1615361200098-85735f739295?w=400&h=400&fit=crop',
+        uploadedBy: '5',
+        uploadedAt: '2024-01-02T12:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      },
+      {
+        id: 'photo-1-4',
+        url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=400&fit=crop',
+        uploadedBy: '6',
+        uploadedAt: '2024-01-02T13:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      }
     ]
   },
   {
@@ -252,10 +297,42 @@ export const mockEvents: Event[] = [
     ticketUrl: 'https://primaverasound.com/tickets',
     ticketPrice: 280,
     photos: [
-      'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop'
+      {
+        id: 'photo-2-1',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop',
+        uploadedBy: '2',
+        uploadedAt: '2024-01-16T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      },
+      {
+        id: 'photo-2-2',
+        url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop',
+        uploadedBy: '1',
+        uploadedAt: '2024-01-16T11:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      },
+      {
+        id: 'photo-2-3',
+        url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop',
+        uploadedBy: '6',
+        uploadedAt: '2024-01-16T12:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      },
+      {
+        id: 'photo-2-4',
+        url: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop',
+        uploadedBy: '9',
+        uploadedAt: '2024-01-16T13:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      }
     ]
   },
   {
@@ -280,8 +357,24 @@ export const mockEvents: Event[] = [
     hasExpenseSplitting: true,
     isPublic: false,
     photos: [
-      'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&h=400&fit=crop'
+      {
+        id: 'photo-3-1',
+        url: 'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=400&fit=crop',
+        uploadedBy: '3',
+        uploadedAt: '2024-01-06T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      },
+      {
+        id: 'photo-3-2',
+        url: 'https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&h=400&fit=crop',
+        uploadedBy: '1',
+        uploadedAt: '2024-01-06T11:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      }
     ]
   },
   {
@@ -323,8 +416,24 @@ export const mockEvents: Event[] = [
     isPromoted: true,
     discountPercentage: 15,
     photos: [
-      'https://images.unsplash.com/photo-1544148103-0773bf10d330?w=400&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=400&fit=crop'
+      {
+        id: 'photo-4-1',
+        url: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?w=400&h=400&fit=crop',
+        uploadedBy: '1',
+        uploadedAt: '2024-02-02T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      },
+      {
+        id: 'photo-4-2',
+        url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=400&fit=crop',
+        uploadedBy: '2',
+        uploadedAt: '2024-02-02T11:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: []
+      }
     ]
   },
   {
@@ -447,136 +556,5 @@ export const mockExpenses: Expense[] = [
       { id: '7', expenseId: '3', userId: '5', amount: 40, status: 'pending' },
     ],
     createdAt: '2024-02-03T10:00:00Z',
-  },
-];
-
-export const mockComments: Comment[] = [
-  {
-    id: '1',
-    eventId: '1',
-    userId: '2',
-    user: mockUsers[1],
-    message: 'Sounds like a great plan! I\'ll bring the music.',
-    createdAt: '2024-01-03T10:00:00Z',
-  },
-  {
-    id: '2',
-    eventId: '1',
-    userId: '3',
-    user: mockUsers[2],
-    message: 'I might be a bit late, but I\'ll definitely be there!',
-    createdAt: '2024-01-04T10:00:00Z',
-  },
-  {
-    id: '3',
-    eventId: '1',
-    userId: '5',
-    user: mockUsers[4],
-    message: 'Can\'t wait! Should I bring anything specific?',
-    createdAt: '2024-01-05T10:00:00Z',
-  },
-  {
-    id: '4',
-    eventId: '1',
-    userId: '6',
-    user: mockUsers[5],
-    message: 'I\'ll bring some drinks and snacks!',
-    createdAt: '2024-01-06T10:00:00Z',
-  },
-  {
-    id: '5',
-    eventId: '2',
-    userId: '3',
-    user: mockUsers[2],
-    message: 'So excited for Primavera! Who else got their tickets?',
-    createdAt: '2024-01-20T10:00:00Z',
-  },
-  {
-    id: '6',
-    eventId: '2',
-    userId: '6',
-    user: mockUsers[5],
-    message: 'Just got mine! Can\'t wait to see Arctic Monkeys.',
-    createdAt: '2024-01-21T10:00:00Z',
-  },
-  {
-    id: '7',
-    eventId: '2',
-    userId: '9',
-    user: mockUsers[8],
-    message: 'This is going to be epic! My first music festival in Barcelona.',
-    createdAt: '2024-01-22T10:00:00Z',
-  },
-  {
-    id: '8',
-    eventId: '2',
-    userId: '11',
-    user: mockUsers[10],
-    message: 'Already planning our meetup spot. So pumped!',
-    createdAt: '2024-01-23T10:00:00Z',
-  },
-  {
-    id: '9',
-    eventId: '3',
-    userId: '1',
-    user: mockUsers[0],
-    message: 'I\'m looking forward to the game night!',
-    createdAt: '2024-01-07T10:00:00Z',
-  },
-  {
-    id: '10',
-    eventId: '3',
-    userId: '5',
-    user: mockUsers[4],
-    message: 'Should we bring our own games or do you have enough?',
-    createdAt: '2024-01-08T10:00:00Z',
-  },
-  {
-    id: '11',
-    eventId: '4',
-    userId: '2',
-    user: mockUsers[1],
-    message: 'Love the Gothic Quarter! Do you have a route planned?',
-    createdAt: '2024-02-10T10:00:00Z',
-  },
-  {
-    id: '12',
-    eventId: '4',
-    userId: '17',
-    user: mockUsers[16],
-    message: 'Perfect timing! I was just craving some good tapas.',
-    createdAt: '2024-02-11T10:00:00Z',
-  },
-  {
-    id: '13',
-    eventId: '5',
-    userId: '8',
-    user: mockUsers[7],
-    message: 'I\'ve never done salsa before, but I\'m excited to learn!',
-    createdAt: '2024-02-20T10:00:00Z',
-  },
-  {
-    id: '14',
-    eventId: '5',
-    userId: '12',
-    user: mockUsers[11],
-    message: 'El Born has the best salsa scene! This will be amazing.',
-    createdAt: '2024-02-21T10:00:00Z',
-  },
-  {
-    id: '15',
-    eventId: '6',
-    userId: '7',
-    user: mockUsers[6],
-    message: 'Sunset yoga sounds so peaceful. Need to bring my own mat?',
-    createdAt: '2024-03-05T10:00:00Z',
-  },
-  {
-    id: '16',
-    eventId: '6',
-    userId: '15',
-    user: mockUsers[14],
-    message: 'Bogatell Beach is perfect for this! Can\'t wait to unwind.',
-    createdAt: '2024-03-06T10:00:00Z',
   },
 ];

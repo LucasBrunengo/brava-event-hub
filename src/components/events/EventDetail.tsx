@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +20,7 @@ interface EventDetailProps {
 }
 
 export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
-  const { currentUser, updateEventRSVP, users, events } = useApp();
+  const { currentUser, updateEventRSVP, events } = useApp();
   const [isUpdatingRSVP, setIsUpdatingRSVP] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState<UserProfileType | null>(null);
 
