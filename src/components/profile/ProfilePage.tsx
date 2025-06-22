@@ -22,14 +22,43 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) =>
     event.attendees.some(a => a.userId === currentUser.id && a.status === 'going')
   );
 
-  const totalOwedToMe = expenses.reduce((total, expense) => {
+  const whoOwesYou: { [key: string]: { name: string; avatar: string; amount: number } } = {};
+  const youOwe: { [key: string]: { name: string; avatar: string; amount: number } } = {};
+
+  expenses.forEach(expense => {
+    const event = events.find(e => e.id === expense.eventId);
+    if (!event) return;
+    
+    // Case 1: You paid for others
     if (expense.paidBy === currentUser.id) {
-      return total + expense.payments
-        .filter(p => p.userId !== currentUser.id && p.status === 'pending')
-        .reduce((sum, p) => sum + p.amount, 0);
+      expense.payments.forEach(payment => {
+        if (payment.status === 'pending') {
+          const debtor = event.attendees.find(a => a.userId === payment.userId)?.user;
+          if (debtor) {
+            if (!whoOwesYou[debtor.id]) {
+              whoOwesYou[debtor.id] = { name: debtor.name, avatar: debtor.avatar || '', amount: 0 };
+            }
+            whoOwesYou[debtor.id].amount += payment.amount;
+          }
+        }
+      });
     }
-    return total;
-  }, 0);
+
+    // Case 2: Others paid for you
+    const myPayment = expense.payments.find(p => p.userId === currentUser.id);
+    if (myPayment && myPayment.status === 'pending' && expense.paidBy !== currentUser.id) {
+      const creditor = event.attendees.find(a => a.userId === expense.paidBy)?.user;
+      if (creditor) {
+        if (!youOwe[creditor.id]) {
+          youOwe[creditor.id] = { name: creditor.name, avatar: creditor.avatar || '', amount: 0 };
+        }
+        youOwe[creditor.id].amount += myPayment.amount;
+      }
+    }
+  });
+
+  const totalOwedToMe = Object.values(whoOwesYou).reduce((sum, p) => sum + p.amount, 0);
+  const totalYouOwe = Object.values(youOwe).reduce((sum, p) => sum + p.amount, 0);
 
   const recentEvents = [...organizedEvents, ...attendedEvents]
     .filter((event, index, self) => self.findIndex(e => e.id === event.id) === index)
@@ -82,16 +111,66 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) =>
         </Card>
       </div>
 
-      {/* Money Owed To Me */}
+      {/* Financial Summary */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Financial Summary</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center">
-            <p className="text-3xl font-bold text-green-600">${totalOwedToMe.toFixed(2)}</p>
-            <p className="text-sm text-muted-foreground">Friends owe you</p>
+          <div className="grid grid-cols-2 gap-4 text-center">
+            <div>
+              <p className="text-2xl font-bold text-green-600">€{totalOwedToMe.toFixed(2)}</p>
+              <p className="text-sm text-muted-foreground">Owed to you</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-red-600">€{totalYouOwe.toFixed(2)}</p>
+              <p className="text-sm text-muted-foreground">You owe</p>
+            </div>
           </div>
+          
+          {(Object.keys(whoOwesYou).length > 0 || Object.keys(youOwe).length > 0) && (
+            <div className="mt-6 space-y-4">
+              <hr/>
+              {Object.keys(whoOwesYou).length > 0 && (
+                <div>
+                  <h4 className="font-medium mb-2">Who Owes You:</h4>
+                  <div className="space-y-2">
+                    {Object.entries(whoOwesYou).map(([id, data]) => (
+                      <div key={id} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                        <div className="flex items-center gap-2">
+                          <Avatar className="w-8 h-8">
+                            <AvatarImage src={data.avatar} />
+                            <AvatarFallback>{data.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <span>{data.name}</span>
+                        </div>
+                        <span className="font-semibold text-green-600">€{data.amount.toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {Object.keys(youOwe).length > 0 && (
+                <div>
+                  <h4 className="font-medium mb-2">Who You Owe:</h4>
+                  <div className="space-y-2">
+                    {Object.entries(youOwe).map(([id, data]) => (
+                      <div key={id} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                        <div className="flex items-center gap-2">
+                          <Avatar className="w-8 h-8">
+                            <AvatarImage src={data.avatar} />
+                            <AvatarFallback>{data.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <span>{data.name}</span>
+                        </div>
+                        <span className="font-semibold text-red-600">€{data.amount.toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
 
