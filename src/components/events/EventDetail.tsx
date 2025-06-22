@@ -237,9 +237,6 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
         </CardContent>
       </Card>
 
-      {/* Map */}
-      <EventMap location={event.location} />
-
       {/* RSVP Section */}
       <Card>
         <CardHeader>
@@ -349,14 +346,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
           </div>
         </CardContent>
       </Card>
-
-      {/* Photo Gallery */}
-      <PhotoGallery 
-        photos={event.photos || []} 
-        attendees={event.attendees.map(a => a.user)}
-        eventId={event.id}
-      />
-
+      
       {/* Comments and Expenses */}
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
@@ -367,7 +357,12 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
           <TabsTrigger value="comments">Comments</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
-           <PhotoGallery photos={event.photos || []} />
+           <PhotoGallery 
+             photos={event.photos || []} 
+             attendees={event.attendees.map(a => a.user)}
+             eventId={event.id}
+           />
+           <EventMap location={event.location} />
         </TabsContent>
         {event.hasExpenseSplitting && (
           <TabsContent value="expenses">
@@ -380,4 +375,4 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
       </Tabs>
     </div>
   );
-};
+}; 
