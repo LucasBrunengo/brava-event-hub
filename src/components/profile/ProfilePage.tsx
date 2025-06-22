@@ -211,7 +211,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) =>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 border rounded-lg">
               <div className="flex items-center gap-3">
-                <img src="https://i.ibb.co/L0fL0wz/apple-pay-logo.png" alt="Apple Pay" className="h-8 w-12 object-contain"/>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF0s-Zy3zaDYeri6ZW8a5aPPekTUuuhyLOdQ&s" alt="Apple Pay" className="h-8 w-12 object-contain"/>
                 <span className="font-medium">Apple Pay</span>
               </div>
               <Badge variant="outline">Connected</Badge>
