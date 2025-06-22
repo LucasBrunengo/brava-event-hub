@@ -11,7 +11,7 @@ export const QuickPay: React.FC = () => {
       <CardContent>
         <div className="grid grid-cols-3 gap-3">
           <Button variant="outline" className="h-16 flex flex-col items-center justify-center p-2">
-            <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="Apple Pay" className="h-8 object-contain mb-1"/>
+            <img src="https://developer.apple.com/design/human-interface-guidelines/technologies/apple-pay/images/apple-pay-mark_2x.png" alt="Apple Pay" className="h-8 object-contain mb-1"/>
             <div className="text-xs">Apple Pay</div>
           </Button>
           <Button variant="outline" className="h-16 flex flex-col items-center justify-center p-2">

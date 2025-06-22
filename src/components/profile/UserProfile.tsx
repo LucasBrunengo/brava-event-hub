@@ -1,10 +1,9 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Users, Calendar, Camera } from 'lucide-react';
+import { ArrowLeft, Users, Calendar, Camera, UserPlus, Check } from 'lucide-react';
 import { UserProfile as UserProfileType, Event } from '@/types';
 import { format } from 'date-fns';
 
@@ -15,8 +14,16 @@ interface UserProfileProps {
 
 export const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onBack }) => {
   const { user, mutualFriends, sharedEvents, sharedPhotos, friendship } = userProfile;
+  const [friendRequestSent, setFriendRequestSent] = useState(false);
 
   const canViewFullProfile = friendship?.status === 'accepted';
+  const isFriend = friendship?.status === 'accepted';
+  const hasRequestPending = friendship?.status === 'pending';
+
+  const handleAddFriend = () => {
+    setFriendRequestSent(true);
+    // Here you would typically make an API call to send the friend request
+  };
 
   return (
     <div className="space-y-6 animate-slide-up">
@@ -51,11 +58,24 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onBack })
             </>
           ) : (
             <>
-              <p className="text-muted-foreground mb-4">Send a friend request to see full profile</p>
-              <Button className="brava-gradient">
-                <Users className="w-4 h-4 mr-2" />
-                Send Friend Request
-              </Button>
+              <p className="text-muted-foreground mb-4">
+                {hasRequestPending || friendRequestSent 
+                  ? 'Friend request sent' 
+                  : 'Send a friend request to see full profile'
+                }
+              </p>
+              {!isFriend && !hasRequestPending && !friendRequestSent && (
+                <Button className="brava-gradient" onClick={handleAddFriend}>
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Add Friend
+                </Button>
+              )}
+              {(hasRequestPending || friendRequestSent) && (
+                <Button variant="outline" disabled>
+                  <Check className="w-4 h-4 mr-2" />
+                  Request Sent
+                </Button>
+              )}
             </>
           )}
         </CardContent>

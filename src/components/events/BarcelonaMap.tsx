@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -68,9 +67,11 @@ export const BarcelonaMap: React.FC<BarcelonaMapProps> = ({ location, eventName 
             onClick={() => window.open(googleMapsUrl, '_blank')}
             className="flex items-center gap-2"
           >
-            <div className="w-4 h-4 bg-gradient-to-r from-blue-500 to-green-500 rounded-sm flex items-center justify-center text-white text-xs font-bold">
-              G
-            </div>
+            <img 
+              src="https://developers.google.com/static/maps/images/maps_logo_2x.png" 
+              alt="Google Maps" 
+              className="w-4 h-4 object-contain"
+            />
             Google Maps
             <ExternalLink className="w-3 h-3" />
           </Button>
@@ -81,9 +82,11 @@ export const BarcelonaMap: React.FC<BarcelonaMapProps> = ({ location, eventName 
             onClick={() => window.open(appleMapsUrl, '_blank')}
             className="flex items-center gap-2"
           >
-            <div className="w-4 h-4 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-sm flex items-center justify-center text-white text-xs font-bold">
-              🍎
-            </div>
+            <img 
+              src="https://developer.apple.com/design/human-interface-guidelines/technologies/maps/images/maps-app-icon_2x.png" 
+              alt="Apple Maps" 
+              className="w-4 h-4 object-contain"
+            />
             Apple Maps
             <ExternalLink className="w-3 h-3" />
           </Button>

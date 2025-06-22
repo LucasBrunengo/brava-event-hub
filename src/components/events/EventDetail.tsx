@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Calendar, MapPin, User, MessageSquare, ExternalLink, Ticket, Euro } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, User, MessageSquare, ExternalLink, Ticket, Euro, Edit } from 'lucide-react';
 import { Event, UserProfile as UserProfileType } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { format } from 'date-fns';
@@ -13,6 +13,7 @@ import { CommentSection } from './CommentSection';
 import { BarcelonaMap } from './BarcelonaMap';
 import { PhotoGallery } from './PhotoGallery';
 import { UserProfile } from '../profile/UserProfile';
+import { QuickPay } from './QuickPay';
 
 interface EventDetailProps {
   event: Event;
@@ -111,6 +112,12 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
             </button>
           </p>
         </div>
+        {currentUser?.id === event.organizerId && (
+          <Button variant="outline" size="sm">
+            <Edit className="w-4 h-4 mr-2" />
+            Edit Event
+          </Button>
+        )}
       </div>
 
       {/* Event Info */}
@@ -186,6 +193,13 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>
             )}
+
+            {/* Quick Pay for public events with ticket prices */}
+            {event.isPublic && event.ticketPrice && (
+              <div className="mt-4">
+                <QuickPay />
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -246,7 +260,34 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
                   </Avatar>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{attendee.user.name}</span>
+                      <button 
+                        onClick={() => {
+                          const sharedEvents = events.filter(e => 
+                            e.attendees.some(a => a.userId === currentUser?.id && a.status === 'going') &&
+                            e.attendees.some(a => a.userId === attendee.userId && a.status === 'going')
+                          );
+
+                          const userProfile: UserProfileType = {
+                            user: attendee.user,
+                            mutualFriends: Math.floor(Math.random() * 15) + 1,
+                            sharedEvents,
+                            sharedPhotos: [],
+                            friendship: {
+                              id: 'friendship-1',
+                              userId1: currentUser?.id || '',
+                              userId2: attendee.userId,
+                              status: 'accepted',
+                              createdAt: new Date().toISOString(),
+                              sharedEvents: sharedEvents.map(e => e.id)
+                            }
+                          };
+
+                          setShowUserProfile(userProfile);
+                        }}
+                        className="text-primary hover:underline font-medium"
+                      >
+                        {attendee.user.name}
+                      </button>
                       {event.organizerId === attendee.userId && (
                         <Badge variant="outline" className="text-xs">Organizer</Badge>
                       )}

@@ -219,39 +219,54 @@ export const mockEvents: Event[] = [
     photos: [
       {
         id: 'photo-1-1',
-        url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop',
         uploadedBy: '1',
         uploadedAt: '2024-01-02T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: []
+        reactions: [
+          { id: 'r1', userId: '2', emoji: '❤️', createdAt: '2024-01-02T10:30:00Z' },
+          { id: 'r2', userId: '5', emoji: '🔥', createdAt: '2024-01-02T10:35:00Z' }
+        ],
+        comments: [
+          { id: 'c1', userId: '2', user: mockUsers[1], message: 'Amazing food!', createdAt: '2024-01-02T10:30:00Z' }
+        ],
+        taggedUsers: ['1', '2']
       },
       {
         id: 'photo-1-2',
-        url: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop',
         uploadedBy: '2',
         uploadedAt: '2024-01-02T11:00:00Z',
-        reactions: [],
+        reactions: [
+          { id: 'r3', userId: '1', emoji: '😍', createdAt: '2024-01-02T11:05:00Z' },
+          { id: 'r4', userId: '6', emoji: '👏', createdAt: '2024-01-02T11:10:00Z' }
+        ],
         comments: [],
-        taggedUsers: []
+        taggedUsers: ['2', '5']
       },
       {
         id: 'photo-1-3',
-        url: 'https://images.unsplash.com/photo-1615361200098-85735f739295?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1504674900240-9a9049b7d8ce?w=400&h=400&fit=crop',
         uploadedBy: '5',
         uploadedAt: '2024-01-02T12:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: []
+        reactions: [
+          { id: 'r5', userId: '1', emoji: '🔥', createdAt: '2024-01-02T12:10:00Z' },
+          { id: 'r6', userId: '2', emoji: '❤️', createdAt: '2024-01-02T12:15:00Z' }
+        ],
+        comments: [
+          { id: 'c2', userId: '1', user: mockUsers[0], message: 'Perfect sunset!', createdAt: '2024-01-02T12:15:00Z' }
+        ],
+        taggedUsers: ['5', '6']
       },
       {
         id: 'photo-1-4',
         url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=400&fit=crop',
         uploadedBy: '6',
         uploadedAt: '2024-01-02T13:00:00Z',
-        reactions: [],
+        reactions: [
+          { id: 'r7', userId: '1', emoji: '🤩', createdAt: '2024-01-02T13:05:00Z' }
+        ],
         comments: [],
-        taggedUsers: []
+        taggedUsers: ['1', '2', '5', '6']
       }
     ]
   },
@@ -299,39 +314,54 @@ export const mockEvents: Event[] = [
     photos: [
       {
         id: 'photo-2-1',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop',
         uploadedBy: '2',
         uploadedAt: '2024-01-16T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: []
+        reactions: [
+          { id: 'r8', userId: '1', emoji: '🎵', createdAt: '2024-01-16T10:30:00Z' },
+          { id: 'r9', userId: '6', emoji: '🔥', createdAt: '2024-01-16T10:35:00Z' }
+        ],
+        comments: [
+          { id: 'c3', userId: '1', user: mockUsers[0], message: 'Incredible atmosphere!', createdAt: '2024-01-16T10:40:00Z' }
+        ],
+        taggedUsers: ['2', '6']
       },
       {
         id: 'photo-2-2',
-        url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop',
         uploadedBy: '1',
         uploadedAt: '2024-01-16T11:00:00Z',
-        reactions: [],
+        reactions: [
+          { id: 'r10', userId: '2', emoji: '❤️', createdAt: '2024-01-16T11:05:00Z' },
+          { id: 'r11', userId: '9', emoji: '🤩', createdAt: '2024-01-16T11:10:00Z' }
+        ],
         comments: [],
-        taggedUsers: []
+        taggedUsers: ['1', '9']
       },
       {
         id: 'photo-2-3',
-        url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop',
         uploadedBy: '6',
         uploadedAt: '2024-01-16T12:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: []
+        reactions: [
+          { id: 'r12', userId: '1', emoji: '🎉', createdAt: '2024-01-16T12:05:00Z' },
+          { id: 'r13', userId: '2', emoji: '🔥', createdAt: '2024-01-16T12:10:00Z' }
+        ],
+        comments: [
+          { id: 'c4', userId: '2', user: mockUsers[1], message: 'Best festival ever!', createdAt: '2024-01-16T12:15:00Z' }
+        ],
+        taggedUsers: ['6', '11', '13']
       },
       {
         id: 'photo-2-4',
-        url: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop',
         uploadedBy: '9',
         uploadedAt: '2024-01-16T13:00:00Z',
-        reactions: [],
+        reactions: [
+          { id: 'r14', userId: '1', emoji: '👏', createdAt: '2024-01-16T13:05:00Z' }
+        ],
         comments: [],
-        taggedUsers: []
+        taggedUsers: ['9', '15', '17']
       }
     ]
   },
@@ -362,18 +392,26 @@ export const mockEvents: Event[] = [
         url: 'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=400&fit=crop',
         uploadedBy: '3',
         uploadedAt: '2024-01-06T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: []
+        reactions: [
+          { id: 'r15', userId: '1', emoji: '🎲', createdAt: '2024-01-06T10:30:00Z' },
+          { id: 'r16', userId: '4', emoji: '😄', createdAt: '2024-01-06T10:35:00Z' }
+        ],
+        comments: [
+          { id: 'c5', userId: '1', user: mockUsers[0], message: 'Great game night!', createdAt: '2024-01-06T10:40:00Z' }
+        ],
+        taggedUsers: ['3', '1', '4']
       },
       {
         id: 'photo-3-2',
         url: 'https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&h=400&fit=crop',
         uploadedBy: '1',
         uploadedAt: '2024-01-06T11:00:00Z',
-        reactions: [],
+        reactions: [
+          { id: 'r17', userId: '3', emoji: '🃏', createdAt: '2024-01-06T11:05:00Z' },
+          { id: 'r18', userId: '6', emoji: '🎯', createdAt: '2024-01-06T11:10:00Z' }
+        ],
         comments: [],
-        taggedUsers: []
+        taggedUsers: ['1', '6', '7']
       }
     ]
   },
