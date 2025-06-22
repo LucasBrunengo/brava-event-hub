@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { MessageCircle, Calendar, CreditCard, Send, X, ExternalLink, ArrowLeft } from 'lucide-react';
 import { Message, Event, User } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
-import { useToast } from '@/hooks/use-toast';
 
 interface ChatPanelProps {
   messages: Message[];
@@ -33,30 +31,27 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 }) => {
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
-  const { toast } = useToast();
 
-  // Group messages by conversation
+  const getOtherUser = (userId: string): User | undefined => {
+    return users.find(user => user.id === userId);
+  };
+
+  const getEvent = (eventId?: string): Event | undefined => {
+    if (!eventId) return undefined;
+    return events.find(event => event.id === eventId);
+  };
+  
+  // 1. Defensively group messages, ignoring any that are malformed.
   const conversations = messages.reduce((acc, message) => {
     const otherUserId = message.senderId === currentUserId ? message.receiverId : message.senderId;
-
-    // Defensively skip messages that don't have a valid other user
-    if (otherUserId && typeof otherUserId === 'string' && otherUserId.trim() !== '') {
+    if (otherUserId && typeof otherUserId === 'string') {
       if (!acc[otherUserId]) {
         acc[otherUserId] = [];
       }
       acc[otherUserId].push(message);
     }
-
     return acc;
   }, {} as Record<string, Message[]>);
-
-  const getOtherUser = (userId: string) => {
-    return users.find(user => user.id === userId);
-  };
-
-  const getEvent = (eventId?: string) => {
-    return events.find(event => event.id === eventId);
-  };
 
   const handleSendMessage = () => {
     if (newMessage.trim() && selectedChat) {
@@ -64,11 +59,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       setNewMessage('');
     }
   };
-
-  const handlePayment = (amount: number, paymentMethods: string[]) => {
-    onPaymentRequest(amount, paymentMethods);
-  };
-
+  
   const renderMessageContent = (message: Message) => {
     switch (message.type) {
       case 'event_invite':
@@ -86,17 +77,13 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                   <div className="bg-white p-2 rounded border">
                     <h4 className="font-medium text-sm">{event.name}</h4>
                     <p className="text-xs text-muted-foreground">{event.description}</p>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                      <Calendar className="w-3 h-3" />
-                      <span>{new Date(event.date).toLocaleDateString()}</span>
-                    </div>
                   </div>
                   <Button 
                     size="sm" 
                     className="w-full"
                     onClick={() => {
                       onEventClick(event.id);
-                      onClose(); // Close the chat panel
+                      onClose();
                     }}
                   >
                     <ExternalLink className="w-3 h-3 mr-1" />
@@ -118,30 +105,9 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               </div>
               <p className="text-sm mb-3">{message.content}</p>
               {message.amount && message.senderId !== currentUserId && (
-                <div className="space-y-3">
-                  <div className="bg-white p-3 rounded border">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">Amount Owed:</span>
-                      <span className="text-lg font-bold text-green-600">€{message.amount}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Tap to pay with your preferred method
-                    </p>
-                    <div className="grid grid-cols-3 gap-2">
-                      {message.paymentMethods?.map((method) => (
-                        <Button
-                          key={method}
-                          size="sm"
-                          variant="outline"
-                          className="text-xs h-8"
-                          onClick={() => handlePayment(message.amount!, message.paymentMethods!)}
-                        >
-                          {method}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                 <Button size="sm" onClick={() => onPaymentRequest(message.amount!, message.paymentMethods || [])}>
+                    Pay €{message.amount}
+                  </Button>
               )}
             </CardContent>
           </Card>
@@ -152,126 +118,122 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
     }
   };
 
+  const selectedUserName = selectedChat ? (getOtherUser(selectedChat)?.name || 'Chat') : 'Messages';
+
   return (
     <div className="absolute inset-0 z-30 bg-white flex flex-col animate-slide-in-from-right">
       {/* Header */}
-      <div className="flex-shrink-0 flex items-center justify-between p-4 bg-white border-b border-gray-200">
-        {selectedChat ? (
-          <>
-            <DialogTitle className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={() => setSelectedChat(null)}>
-                <ArrowLeft className="w-4 h-4" />
-              </Button>
-              {getOtherUser(selectedChat)?.name || 'Chat'}
-            </DialogTitle>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="w-4 h-4" />
+      <div className="flex-shrink-0 flex items-center justify-between p-4 bg-white border-b">
+        <div className="flex items-center gap-2">
+          {selectedChat ? (
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setSelectedChat(null)}>
+              <ArrowLeft className="w-4 h-4" />
             </Button>
-          </>
-        ) : (
-          <>
-            <DialogTitle className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5" />
-              Messages
-            </DialogTitle>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="w-4 h-4" />
-            </Button>
-          </>
-        )}
+          ) : (
+            <MessageCircle className="w-5 h-5" />
+          )}
+          <h2 className="font-semibold text-lg">{selectedUserName}</h2>
+        </div>
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
+          <X className="w-4 h-4" />
+        </Button>
       </div>
 
+      {/* Body */}
       <div className="flex-1 p-4 overflow-y-auto space-y-4">
         {selectedChat ? (
-          conversations[selectedChat]?.map((message) => {
-            const sender = getOtherUser(message.senderId);
-            if (!sender) return null; // Defend against missing sender
+          // Individual Chat View
+          (conversations[selectedChat] || []).map((message) => {
+            const sender = message.senderId === currentUserId ? 'You' : getOtherUser(message.senderId)?.name;
+            if (!sender) return null; // Defensive check
 
             return (
               <div
                 key={message.id}
-                className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-2 ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`max-w-[80%] ${message.senderId === currentUserId ? 'order-2' : 'order-1'}`}>
-                  {renderMessageContent(message)}
-                  <span className="text-xs text-muted-foreground mt-1 block">
-                    {formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })}
-                  </span>
-                </div>
                 {message.senderId !== currentUserId && (
-                  <Avatar className="w-6 h-6 ml-2 order-1">
-                    <AvatarImage src={sender.avatar} />
-                    <AvatarFallback className="text-xs">{sender.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src={getOtherUser(message.senderId)?.avatar} />
+                      <AvatarFallback>{(getOtherUser(message.senderId)?.name || '?').charAt(0)}</AvatarFallback>
+                    </Avatar>
                 )}
+                 <div className={`max-w-[80%] p-3 rounded-lg ${message.senderId === currentUserId ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>
+                    {renderMessageContent(message)}
+                    <span className="text-xs opacity-70 mt-1 block">
+                      {formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })}
+                    </span>
+                 </div>
               </div>
             );
           })
         ) : (
-          <>
-            {Object.entries(conversations).map(([userId, userMessages]) => {
-              const user = getOtherUser(userId);
-              if (!user) return null; // Safely skip rendering if user not found
+          // Conversation List View
+          Object.entries(conversations).map(([userId, userMessages]) => {
+            const user = getOtherUser(userId);
+            // 2. Defensively skip rendering if user not found.
+            if (!user) return null;
 
-              const lastMessage = userMessages.length > 0 ? userMessages[userMessages.length - 1] : null;
-              const unreadCount = userMessages.filter(m => !m.isRead && m.senderId !== currentUserId).length;
+            // 3. Defensively handle case where a conversation might be empty.
+            const lastMessage = userMessages.length > 0 ? userMessages[userMessages.length - 1] : null;
+            const unreadCount = userMessages.filter(m => !m.isRead && m.senderId !== currentUserId).length;
 
-              return (
-                <Card
-                  key={userId}
-                  className="cursor-pointer transition-all hover:shadow-md"
-                  onClick={() => setSelectedChat(userId)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="w-10 h-10">
-                        <AvatarImage src={user.avatar} />
-                        <AvatarFallback>{user.name?.charAt(0) || '?'}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <h4 className="font-semibold text-sm">{user.name || 'Unknown User'}</h4>
-                          {unreadCount > 0 && (
-                            <Badge className="bg-green-500 text-white text-xs">
-                              {unreadCount}
-                            </Badge>
-                          )}
-                        </div>
-                        {lastMessage ? (
-                          <>
-                            <p className="text-sm text-muted-foreground truncate">
-                              {lastMessage.content}
-                            </p>
-                            <span className="text-xs text-muted-foreground">
-                              {formatDistanceToNow(new Date(lastMessage.createdAt), { addSuffix: true })}
-                            </span>
-                          </>
-                        ) : (
-                          <p className="text-sm text-muted-foreground italic">No messages yet.</p>
+            return (
+              <Card
+                key={userId}
+                className="cursor-pointer transition-all hover:shadow-md"
+                onClick={() => setSelectedChat(userId)}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="w-10 h-10">
+                      <AvatarImage src={user.avatar} />
+                      {/* 4. Defensively handle missing user name for avatar fallback. */}
+                      <AvatarFallback>{user.name?.charAt(0) || '?'}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        {/* 5. Defensively handle missing user name for heading. */}
+                        <h4 className="font-semibold text-sm">{user.name || 'Unknown User'}</h4>
+                        {unreadCount > 0 && (
+                          <Badge className="bg-green-500 text-white text-xs">{unreadCount}</Badge>
                         )}
                       </div>
+                      {lastMessage ? (
+                        <>
+                          <p className="text-sm text-muted-foreground truncate">{lastMessage.content}</p>
+                          <span className="text-xs text-muted-foreground">
+                            {formatDistanceToNow(new Date(lastMessage.createdAt), { addSuffix: true })}
+                          </span>
+                        </>
+                      ) : (
+                        <p className="text-sm text-muted-foreground italic">No messages yet.</p>
+                      )}
                     </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
         )}
       </div>
 
-      <div className="p-4 border-t">
-        <div className="flex gap-2">
-          <Input
-            placeholder="Type a message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-          />
-          <Button size="sm" onClick={handleSendMessage} disabled={!newMessage.trim()}>
-            <Send className="w-4 h-4" />
-          </Button>
+      {/* Footer */}
+      {selectedChat && (
+        <div className="p-4 border-t bg-white">
+          <div className="flex gap-2">
+            <Input
+              placeholder="Type a message..."
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            />
+            <Button onClick={handleSendMessage} disabled={!newMessage.trim()}>
+              <Send className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }; 
