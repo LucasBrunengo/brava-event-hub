@@ -12,7 +12,11 @@ export const mockUsers: User[] = [
   { id: '9', name: 'Pablo Moreno', email: 'pablo.moreno@example.com', avatar: 'https://i.pravatar.cc/150?img=9', phone: '+34666444666' },
   { id: '10', name: 'Elena Jimenez', email: 'elena.jimenez@example.com', avatar: 'https://i.pravatar.cc/150?img=10', phone: '+34666444555' },
   { id: '11', name: 'Adrian Romero', email: 'adrian.romero@example.com', avatar: 'https://i.pravatar.cc/150?img=11', phone: '+34666444444' },
-  { id: '12', name: 'Raquel Navarro', email: 'raquel.navarro@example.com', avatar: 'https://i.pravatar.cc/150?img=12', phone: '+34666444333' }
+  { id: '12', name: 'Raquel Navarro', email: 'raquel.navarro@example.com', avatar: 'https://i.pravatar.cc/150?img=12', phone: '+34666444333' },
+  // --- Producers ---
+  { id: 'prod1', name: 'Primavera Sound', email: 'info@primaverasound.com', avatar: 'https://www.primaverasound.com/themes/ps2022/assets/img/ps-logo.png', phone: '' },
+  { id: 'prod2', name: 'Sónar Festival', email: 'info@sonarfestival.com', avatar: 'https://www.sonar.es/img/logo-sonar-2023.png', phone: '' },
+  { id: 'prod3', name: 'Brunch in the Park', email: 'info@brunch-in.com', avatar: 'https://barcelona.brunch-in.com/img/logo.png', phone: '' },
 ];
 
 export const mockCurrentUser: User = mockUsers[0]; // Lucas Brunengo is the current user
@@ -167,8 +171,8 @@ export const mockEvents: Event[] = [
     date: new Date(new Date().setMonth(new Date().getMonth() + 2)).toISOString().split('T')[0], // 2 months from now
     time: '4:00 PM',
     location: 'Parc del Fòrum',
-    organizerId: '2',
-    organizer: mockUsers[1],
+    organizerId: 'prod1',
+    organizer: mockUsers.find(u => u.id === 'prod1')!,
     attendees: [
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString() },
       { userId: '2', user: mockUsers[1], status: 'going', joinedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString() },
@@ -211,8 +215,8 @@ export const mockEvents: Event[] = [
     date: new Date(new Date().setMonth(new Date().getMonth() + 3)).toISOString().split('T')[0], // 3 months from now
     time: '2:00 PM',
     location: 'Fira Barcelona',
-    organizerId: '2',
-    organizer: mockUsers[1],
+    organizerId: 'prod2',
+    organizer: mockUsers.find(u => u.id === 'prod2')!,
     attendees: [
       { userId: '2', user: mockUsers[1], status: 'going', joinedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString() },
       { userId: '3', user: mockUsers[2], status: 'going', joinedAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString() },
@@ -255,8 +259,8 @@ export const mockEvents: Event[] = [
     date: new Date(new Date().setMonth(new Date().getMonth() + 4)).toISOString().split('T')[0], // 4 months from now
     time: '1:00 PM',
     location: 'Jardins de Joan Brossa, Montjuïc',
-    organizerId: '10',
-    organizer: mockUsers[9],
+    organizerId: 'prod3',
+    organizer: mockUsers.find(u => u.id === 'prod3')!,
     attendees: [],
     createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
     hasExpenseSplitting: false,
