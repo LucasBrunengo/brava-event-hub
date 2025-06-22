@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { MessageCircle, Calendar, CreditCard, Send, X, ExternalLink, ArrowLeft } from 'lucide-react';
 import { Message, Event, User } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
+import { useApp } from '@/context/AppContext';
 
 interface ChatPanelProps {
   messages: Message[];
@@ -29,6 +30,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   onPaymentRequest,
   onClose
 }) => {
+  const { setViewedProfile } = useApp();
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
 
@@ -39,6 +41,10 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   const getEvent = (eventId?: string): Event | undefined => {
     if (!eventId) return undefined;
     return events.find(event => event.id === eventId);
+  };
+
+  const handleUserClick = (user: User) => {
+    setViewedProfile(user);
   };
   
   // 1. Defensively group messages, ignoring any that are malformed.
@@ -144,7 +150,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         {selectedChat ? (
           // Individual Chat View
           (conversations[selectedChat] || []).map((message) => {
-            const sender = message.senderId === currentUserId ? 'You' : getOtherUser(message.senderId)?.name;
+            const sender = getOtherUser(message.senderId);
             if (!sender) return null; // Defensive check
 
             return (
@@ -153,10 +159,12 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 className={`flex gap-2 ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}
               >
                 {message.senderId !== currentUserId && (
+                  <button onClick={() => handleUserClick(sender)}>
                     <Avatar className="w-8 h-8">
-                      <AvatarImage src={getOtherUser(message.senderId)?.avatar} />
-                      <AvatarFallback>{(getOtherUser(message.senderId)?.name || '?').charAt(0)}</AvatarFallback>
+                      <AvatarImage src={sender.avatar} />
+                      <AvatarFallback>{sender.name?.charAt(0) || '?'}</AvatarFallback>
                     </Avatar>
+                  </button>
                 )}
                  <div className={`max-w-[80%] p-3 rounded-lg ${message.senderId === currentUserId ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>
                     {renderMessageContent(message)}
@@ -171,10 +179,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
           // Conversation List View
           Object.entries(conversations).map(([userId, userMessages]) => {
             const user = getOtherUser(userId);
-            // 2. Defensively skip rendering if user not found.
             if (!user) return null;
 
-            // 3. Defensively handle case where a conversation might be empty.
             const lastMessage = userMessages.length > 0 ? userMessages[userMessages.length - 1] : null;
             const unreadCount = userMessages.filter(m => !m.isRead && m.senderId !== currentUserId).length;
 
@@ -186,14 +192,14 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3">
-                    <Avatar className="w-10 h-10">
-                      <AvatarImage src={user.avatar} />
-                      {/* 4. Defensively handle missing user name for avatar fallback. */}
-                      <AvatarFallback>{user.name?.charAt(0) || '?'}</AvatarFallback>
-                    </Avatar>
+                    <button onClick={(e) => { e.stopPropagation(); handleUserClick(user); }}>
+                      <Avatar className="w-10 h-10">
+                        <AvatarImage src={user.avatar} />
+                        <AvatarFallback>{user.name?.charAt(0) || '?'}</AvatarFallback>
+                      </Avatar>
+                    </button>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        {/* 5. Defensively handle missing user name for heading. */}
                         <h4 className="font-semibold text-sm">{user.name || 'Unknown User'}</h4>
                         {unreadCount > 0 && (
                           <Badge className="bg-green-500 text-white text-xs">{unreadCount}</Badge>

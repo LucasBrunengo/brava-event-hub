@@ -4,16 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Calendar, MapPin, User, MessageSquare, ExternalLink, Ticket, Euro, Edit, Share2, Heart, MessageCircle } from 'lucide-react';
-import { Event, UserProfile as UserProfileType } from '@/types';
+import { ArrowLeft, Calendar, MapPin, User, ExternalLink, Ticket, Euro, Edit, Share2 } from 'lucide-react';
+import { Event, User as UserType } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ExpenseSection } from './ExpenseSection';
 import { CommentSection } from './CommentSection';
 import { EventMap } from './EventMap';
 import { PhotoGallery } from './PhotoGallery';
-import { UserProfile } from '../profile/UserProfile';
-import { QuickPay } from './QuickPay';
 import { EditEventForm } from './EditEventForm';
 import { InviteFriendsModal } from './InviteFriendsModal';
 
@@ -25,8 +23,7 @@ interface EventDetailProps {
 }
 
 export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare, portalContainer }) => {
-  const { currentUser, events, updateEventRSVP } = useApp();
-  const [showUserProfile, setShowUserProfile] = useState<UserProfileType | null>(null);
+  const { currentUser, setViewedProfile } = useApp();
   const [isEditing, setIsEditing] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
 
@@ -53,29 +50,8 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
     setShowInviteModal(true);
   };
 
-  const handleOrganizerClick = () => {
-    // Create mock user profile data
-    const sharedEvents = events.filter(e => 
-      e.attendees.some(a => a.userId === currentUser?.id && a.status === 'going') &&
-      e.attendees.some(a => a.userId === event.organizerId && a.status === 'going')
-    );
-
-    const userProfile: UserProfileType = {
-      user: event.organizer,
-      mutualFriends: Math.floor(Math.random() * 15) + 1,
-      sharedEvents,
-      sharedPhotos: [],
-      friendship: {
-        id: 'friendship-1',
-        userId1: currentUser?.id || '',
-        userId2: event.organizerId,
-        status: 'accepted',
-        createdAt: new Date().toISOString(),
-        sharedEvents: sharedEvents.map(e => e.id)
-      }
-    };
-
-    setShowUserProfile(userProfile);
+  const handleUserClick = (user: UserType) => {
+    setViewedProfile(user);
   };
 
   const getStatusButtonClass = (status: 'going' | 'maybe' | 'not-going') => {
@@ -93,15 +69,6 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
     if (!event.ticketPrice || !event.discountPercentage) return event.ticketPrice;
     return event.ticketPrice * (1 - event.discountPercentage / 100);
   };
-
-  if (showUserProfile) {
-    return (
-      <UserProfile 
-        userProfile={showUserProfile} 
-        onBack={() => setShowUserProfile(null)} 
-      />
-    );
-  }
 
   if (isEditing) {
     return (
@@ -179,7 +146,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
                 <span>
                   Organized by{' '}
                   <button 
-                    onClick={handleOrganizerClick}
+                    onClick={() => handleUserClick(event.organizer)}
                     className="text-primary hover:underline font-medium"
                   >
                     {event.organizer.name}
@@ -225,13 +192,6 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
                 {event.ticketPrice && ` - €${event.isPromoted && event.discountPercentage ? getDiscountedPrice()?.toFixed(2) : event.ticketPrice?.toFixed(2)}`}
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>
-            )}
-
-            {/* Quick Pay for public events with ticket prices */}
-            {event.isPublic && event.ticketPrice && (
-              <div className="mt-4">
-                <QuickPay />
-              </div>
             )}
           </div>
         </CardContent>
@@ -282,10 +242,12 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
               <div className="flex items-center">
                 <div className="flex -space-x-2 overflow-hidden">
                   {event.attendees.slice(0, 5).map(attendee => (
-                    <Avatar key={attendee.userId} className="inline-block h-8 w-8 rounded-full ring-2 ring-white">
-                      <AvatarImage src={attendee.user.avatar} />
-                      <AvatarFallback>{attendee.user.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
+                     <button key={attendee.userId} onClick={() => handleUserClick(attendee.user)}>
+                      <Avatar className="inline-block h-8 w-8 rounded-full ring-2 ring-white">
+                        <AvatarImage src={attendee.user.avatar} />
+                        <AvatarFallback>{attendee.user.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                    </button>
                   ))}
                 </div>
                 {event.totalAttendees > 5 && (
@@ -297,7 +259,10 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
             ) : (
               event.attendees.map((attendee) => (
                 <div key={attendee.userId} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                  <div 
+                    className="flex items-center gap-3 cursor-pointer"
+                    onClick={() => handleUserClick(attendee.user)}
+                  >
                     <Avatar className="w-8 h-8">
                       <AvatarImage src={attendee.user.avatar} />
                       <AvatarFallback>

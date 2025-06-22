@@ -5,6 +5,7 @@ import { Dashboard } from '@/components/dashboard/Dashboard';
 import { CreateEventForm } from '@/components/events/CreateEventForm';
 import { EventDetail } from '@/components/events/EventDetail';
 import { ProfilePage } from '@/components/profile/ProfilePage';
+import { UserProfile } from '@/components/profile/UserProfile';
 import { PastEventDetail } from '@/components/events/PastEventDetail';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { NotificationsPanel } from '@/components/layout/NotificationsPanel';
@@ -30,7 +31,9 @@ const Index = () => {
     markMessageAsRead, 
     events, 
     users,
-    currentUser
+    currentUser,
+    viewedProfile,
+    setViewedProfile,
   } = useApp();
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -49,6 +52,17 @@ const Index = () => {
   const handleLoadingComplete = () => {
     setIsLoading(false);
   };
+
+  if (viewedProfile) {
+    return (
+       <PhoneFrame>
+        <UserProfile 
+          userProfile={viewedProfile}
+          onBack={() => setViewedProfile(null)}
+        />
+      </PhoneFrame>
+    )
+  }
 
   if (isLoading) {
     return (
@@ -252,10 +266,11 @@ const Index = () => {
           container={portalContainerRef.current}
         />
       )}
+      
       <PremiumModal 
         isOpen={showPremiumModal} 
         onClose={() => setShowPremiumModal(false)} 
-        container={portalContainerRef.current}
+        container={portalContainerRef.current} 
       />
     </PhoneFrame>
   );

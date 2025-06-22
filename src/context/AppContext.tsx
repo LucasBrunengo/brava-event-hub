@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { User, Event, Expense, Comment, Notification, Message } from '@/types';
+import { User, Event, Expense, Comment, Notification, Message, UserProfile as UserProfileType } from '@/types';
 import { mockUsers, mockEvents, mockExpenses, mockComments, mockCurrentUser, mockNotifications, mockMessages } from '@/data/mockData';
 
 interface AppContextType {
@@ -32,6 +32,10 @@ interface AppContextType {
 
   // Comments
   addComment: (eventId: string, message: string) => void;
+  
+  // Profiles
+  viewedProfile: UserProfileType | null;
+  setViewedProfile: (user: User | null) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -46,8 +50,45 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [users, setUsers] = useState<User[]>(mockUsers);
+  const [viewedProfile, setViewedProfileInternal] = useState<UserProfileType | null>(null);
 
   console.log('AppProvider rendered - isAuthenticated:', isAuthenticated, 'currentUser:', currentUser);
+
+  const setViewedProfile = (user: User | null) => {
+    if (!user) {
+      setViewedProfileInternal(null);
+      return;
+    }
+
+    if (user.id === currentUser?.id) {
+       // Later, this could navigate to the main profile page
+       console.log("Viewing current user's profile.");
+       return; 
+    }
+    
+    // Create mock user profile data
+    const sharedEvents = events.filter(e => 
+      e.attendees.some(a => a.userId === currentUser?.id && a.status === 'going') &&
+      e.attendees.some(a => a.userId === user.id && a.status === 'going')
+    );
+
+    const userProfile: UserProfileType = {
+      user,
+      mutualFriends: Math.floor(Math.random() * 15) + 1,
+      sharedEvents,
+      sharedPhotos: [],
+      friendship: {
+        id: `friendship-${user.id}`,
+        userId1: currentUser?.id || '',
+        userId2: user.id,
+        status: 'accepted',
+        createdAt: new Date().toISOString(),
+        sharedEvents: sharedEvents.map(e => e.id)
+      }
+    };
+    
+    setViewedProfileInternal(userProfile);
+  };
 
   const login = async (email: string, password: string): Promise<boolean> => {
     console.log('Logging in with:', email, password);
@@ -304,6 +345,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     updatePaymentStatus,
     addComment,
     inviteFriendsToEvent,
+    viewedProfile,
+    setViewedProfile,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -7,10 +7,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Event } from '@/types';
+import { Event, User } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { Plus } from 'lucide-react';
-import { QuickPay } from './QuickPay';
 import { DialogOverlay, DialogPortal } from '@radix-ui/react-dialog';
 
 interface ExpenseSectionProps {
@@ -19,7 +18,7 @@ interface ExpenseSectionProps {
 }
 
 export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event, portalContainer }) => {
-  const { expenses, currentUser, addExpense, updatePaymentStatus } = useApp();
+  const { expenses, currentUser, addExpense, updatePaymentStatus, setViewedProfile } = useApp();
   const [isAddingExpense, setIsAddingExpense] = useState(false);
   const [newExpense, setNewExpense] = useState({
     name: '',
@@ -30,6 +29,10 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event, portalCon
   const eventExpenses = expenses.filter(e => e.eventId === event.id);
   const goingAttendees = event.attendees.filter(a => a.status === 'going');
 
+  const handleUserClick = (user: User) => {
+    setViewedProfile(user);
+  };
+  
   const handleAddExpense = async () => {
     if (!newExpense.name || !newExpense.amount || newExpense.splitBetween.length === 0) {
       return;
@@ -87,6 +90,16 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event, portalCon
 
     return { totalOwed: owed, totalPaid: paid, netBalance: paid - owed };
   }, [eventExpenses, currentUser]);
+  
+  const PayerProfile: React.FC<{ userId: string }> = ({ userId }) => {
+    const user = goingAttendees.find(a => a.userId === userId)?.user;
+    if (!user) return <span>A member</span>;
+    return (
+      <button onClick={() => handleUserClick(user)} className="font-medium text-primary hover:underline">
+        {user.id === currentUser?.id ? 'you' : user.name}
+      </button>
+    );
+  };
 
   return (
     <div className="space-y-4">
@@ -211,7 +224,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event, portalCon
                   <div>
                     <h4 className="font-semibold">{expense.name}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Paid by {goingAttendees.find(a => a.userId === expense.paidBy)?.user.name}
+                      Paid by <PayerProfile userId={expense.paidBy} />
                     </p>
                   </div>
                   <div className="text-right">
@@ -229,7 +242,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event, portalCon
 
                     return (
                       <div key={payment.id} className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleUserClick(user)}>
                           <Avatar className="w-6 h-6">
                             <AvatarImage src={user.avatar} />
                             <AvatarFallback className="text-xs">
@@ -269,8 +282,6 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event, portalCon
           ))}
         </div>
       )}
-
-      <QuickPay />
     </div>
   );
 };
