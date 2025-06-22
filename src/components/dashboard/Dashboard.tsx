@@ -7,7 +7,7 @@ import { useApp } from '@/context/AppContext';
 import { EventsList } from '@/components/events/EventsList';
 import { PublicEventsList } from '@/components/events/PublicEventsList';
 import { Event } from '@/types';
-import { mockPublicEvents } from '@/data/mockData';
+import { mockEvents } from '@/data/mockData';
 
 interface DashboardProps {
   onCreateEvent: () => void;
@@ -31,6 +31,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateEvent, onEventClic
   const attendingCount = events.filter(event => 
     event.attendees.some(a => a.userId === currentUser?.id && a.status === 'going')
   ).length;
+  const publicEvents = mockEvents.filter(event => event.isPublic);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -122,7 +123,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateEvent, onEventClic
             </CardHeader>
             <CardContent>
               <PublicEventsList 
-                events={mockPublicEvents} 
+                events={publicEvents} 
                 onEventClick={onEventClick}
               />
             </CardContent>
