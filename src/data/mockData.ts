@@ -40,6 +40,9 @@ export const mockEvents: Event[] = [
     comments: [
       { id: 'c1', eventId: '1', userId: '2', user: mockUsers[1], message: "Can't wait for this VIP night! 🎉 The DJ is supposed to be amazing.", createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c1b', eventId: '1', userId: '3', user: mockUsers[2], message: "So excited! I've got my outfit ready.", createdAt: new Date(Date.now() - 1 * 12 * 60 * 60 * 1000).toISOString() },
+      { id: 'c1c', eventId: '1', userId: '4', user: mockUsers[3], message: "Is there a dress code for this?", createdAt: new Date(Date.now() - 1 * 10 * 60 * 60 * 1000).toISOString() },
+      { id: 'c1d', eventId: '1', userId: '1', user: mockUsers[0], message: "Smart casual should be fine! Let's just look sharp.", createdAt: new Date(Date.now() - 1 * 8 * 60 * 60 * 1000).toISOString() },
+      { id: 'c1e', eventId: '1', userId: '5', user: mockUsers[4], message: "I'll be there a bit late, save me a spot!", createdAt: new Date(Date.now() - 1 * 6 * 60 * 60 * 1000).toISOString() },
     ],
   },
   {
@@ -62,6 +65,9 @@ export const mockEvents: Event[] = [
     comments: [
       { id: 'c2', eventId: '2', userId: '4', user: mockUsers[3], message: "Praying for good weather! 🏐 I'm so ready.", createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c2b', eventId: '2', userId: '5', user: mockUsers[4], message: "I'll bring a cooler with some drinks for the sunset part.", createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c2c', eventId: '2', userId: '1', user: mockUsers[0], message: "Great idea! I'll bring some snacks too.", createdAt: new Date(Date.now() - 2 * 20 * 60 * 60 * 1000).toISOString() },
+      { id: 'c2d', eventId: '2', userId: '6', user: mockUsers[5], message: "I'm a maybe for now, will confirm tomorrow!", createdAt: new Date(Date.now() - 1 * 18 * 60 * 60 * 1000).toISOString() },
+      { id: 'c2e', eventId: '2', userId: '7', user: mockUsers[6], message: "Is anyone bringing a volleyball?", createdAt: new Date(Date.now() - 1 * 16 * 60 * 60 * 1000).toISOString() },
     ],
   },
 
@@ -87,6 +93,9 @@ export const mockEvents: Event[] = [
     comments: [
       { id: 'c3', eventId: '3', userId: '3', user: mockUsers[2], message: "Visca Barça! 🔵🔴 This is a must-win game.", createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c3b', eventId: '3', userId: '1', user: mockUsers[0], message: "It's going to be a tense one. Can't wait!", createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c3c', eventId: '3', userId: '2', user: mockUsers[1], message: "I booked a table with a good view of the screen.", createdAt: new Date(Date.now() - 3 * 12 * 60 * 60 * 1000).toISOString() },
+      { id: 'c3d', eventId: '3', userId: '4', user: mockUsers[3], message: "I might be a bit late, hope that's okay!", createdAt: new Date(Date.now() - 2 * 10 * 60 * 60 * 1000).toISOString() },
+      { id: 'c3e', eventId: '3', userId: '1', user: mockUsers[0], message: "No problem, see you there!", createdAt: new Date(Date.now() - 1 * 8 * 60 * 60 * 1000).toISOString() },
     ],
   },
   {
@@ -110,6 +119,9 @@ export const mockEvents: Event[] = [
     comments: [
       { id: 'c4', eventId: '4', userId: '5', user: mockUsers[4], message: "Sutton is always a good time! The music is top-notch.", createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c4b', eventId: '4', userId: '1', user: mockUsers[0], message: "Heard great things. Hopefully I can make it!", createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c4c', eventId: '4', userId: '2', user: mockUsers[1], message: "Are we getting a table or just entry?", createdAt: new Date(Date.now() - 2 * 12 * 60 * 60 * 1000).toISOString() },
+      { id: 'c4d', eventId: '4', userId: '4', user: mockUsers[3], message: "Just entry for now, we can decide on a table there.", createdAt: new Date(Date.now() - 2 * 10 * 60 * 60 * 1000).toISOString() },
+      { id: 'c4e', eventId: '4', userId: '3', user: mockUsers[2], message: "Sounds good to me!", createdAt: new Date(Date.now() - 1 * 8 * 60 * 60 * 1000).toISOString() },
     ],
   },
 
@@ -151,6 +163,8 @@ export const mockEvents: Event[] = [
       { id: 'c5', eventId: '5', userId: '3', user: mockUsers[2], message: "The lineup this year is insane! So many good headliners.", createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c5b', eventId: '5', userId: '4', user: mockUsers[3], message: "Counting down the days! Who else is going from the group?", createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c5c', eventId: '5', userId: '1', user: mockUsers[0], message: "I've been waiting for this all year! 🎵 Let's coordinate where to meet.", createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c5d', eventId: '5', userId: '6', user: mockUsers[5], message: "Does anyone know the best way to get to the Parc del Fòrum?", createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c5e', eventId: '5', userId: '7', user: mockUsers[6], message: "The L4 metro line is probably the easiest way.", createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString() },
     ],
     totalAttendees: 220000
   },
@@ -189,6 +203,9 @@ export const mockEvents: Event[] = [
     comments: [
       { id: 'c6', eventId: '6', userId: '3', user: mockUsers[2], message: "Sónar by Day is always a vibe. The tech part is fascinating.", createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c6b', eventId: '6', userId: '5', user: mockUsers[4], message: "Excited for the AV shows. Hope I can make it!", createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c6c', eventId: '6', userId: '8', user: mockUsers[7], message: "The lineup for Sónar by Night looks incredible this year.", createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c6d', eventId: '6', userId: '9', user: mockUsers[8], message: "I'm mostly going for the tech talks and workshops.", createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c6e', eventId: '6', userId: '10', user: mockUsers[9], message: "Same here! The intersection of music and tech is so cool.", createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString() },
     ],
     totalAttendees: 85000
   },
@@ -212,6 +229,9 @@ export const mockEvents: Event[] = [
     comments: [
       { id: 'c7', eventId: '7', userId: '6', user: mockUsers[5], message: "Perfect plan for a Sunday! 🌞", createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c7b', eventId: '7', userId: '7', user: mockUsers[6], message: "Their food truck selection is always on point.", createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c7c', eventId: '7', userId: '2', user: mockUsers[1], message: "I love the new layout of the festival grounds.", createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c7d', eventId: '7', userId: '8', user: mockUsers[7], message: "The new stage is amazing!", createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() },
+      { id: 'c7e', eventId: '7', userId: '9', user: mockUsers[8], message: "Can't wait for the next one!", createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString() },
     ],
     totalAttendees: 15000
   },
@@ -240,6 +260,8 @@ export const mockEvents: Event[] = [
       { id: 'c8', eventId: '8', userId: '1', user: mockUsers[0], message: "Best concert ever! Duki killed it 🔥", createdAt: '2024-05-16T02:30:00Z' },
       { id: 'c8b', eventId: '8', userId: '2', user: mockUsers[1], message: "The crowd was absolutely wild! So glad we went.", createdAt: '2024-05-16T03:00:00Z' },
       { id: 'c8c', eventId: '8', userId: '4', user: mockUsers[3], message: "What a performance! Can't believe we were there.", createdAt: '2024-05-16T10:15:00Z' },
+      { id: 'c8d', eventId: '8', userId: '3', user: mockUsers[2], message: "The energy was insane! We should go see him again.", createdAt: '2024-05-16T11:00:00Z' },
+      { id: 'c8e', eventId: '8', userId: '1', user: mockUsers[0], message: "Agreed! Let's keep an eye out for his next tour.", createdAt: '2024-05-16T12:00:00Z' },
     ],
     photos: [
       {
@@ -275,6 +297,8 @@ export const mockEvents: Event[] = [
       { id: 'c9', eventId: '9', userId: '5', user: mockUsers[4], message: "Great matches everyone! We need a rematch soon 😄", createdAt: '2024-06-20T20:00:00Z' },
       { id: 'c9b', eventId: '9', userId: '1', user: mockUsers[0], message: "Amazing tournament! So much fun.", createdAt: '2024-06-20T20:30:00Z' },
       { id: 'c9c', eventId: '9', userId: '6', user: mockUsers[5], message: "Thanks for organizing! Let's do it again. 🎾", createdAt: '2024-06-20T21:00:00Z' },
+      { id: 'c9d', eventId: '9', userId: '7', user: mockUsers[6], message: "I'm down for a rematch next week!", createdAt: '2024-06-21T10:00:00Z' },
+      { id: 'c9e', eventId: '9', userId: '5', user: mockUsers[4], message: "Perfect! I'll set up another event.", createdAt: '2024-06-21T11:00:00Z' },
     ],
     photos: [
       {
@@ -310,6 +334,8 @@ export const mockEvents: Event[] = [
       { id: 'c10', eventId: '10', userId: '2', user: mockUsers[1], message: "The patatas bravas at that first place were incredible!", createdAt: '2024-07-05T22:00:00Z' },
       { id: 'c10b', eventId: '10', userId: '1', user: mockUsers[0], message: "Best tapas tour ever! And the vermouth... 🍷", createdAt: '2024-07-05T22:30:00Z' },
       { id: 'c10c', eventId: '10', userId: '8', user: mockUsers[7], message: "We have to go back to that place with the cool artwork.", createdAt: '2024-07-06T10:00:00Z' },
+      { id: 'c10d', eventId: '10', userId: '9', user: mockUsers[8], message: "I agree! The food was amazing.", createdAt: '2024-07-06T11:00:00Z' },
+      { id: 'c10e', eventId: '10', userId: '2', user: mockUsers[1], message: "Next time we should try the Gràcia neighborhood.", createdAt: '2024-07-06T12:00:00Z' },
     ],
     photos: [
       {
