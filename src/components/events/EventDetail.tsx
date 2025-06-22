@@ -20,11 +20,12 @@ import { InviteFriendsModal } from './InviteFriendsModal';
 interface EventDetailProps {
   event: Event;
   onBack: () => void;
-  onShare?: () => void;
+  onShare: () => void;
+  portalContainer?: HTMLElement | null;
 }
 
-export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare }) => {
-  const { currentUser, events } = useApp();
+export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare, portalContainer }) => {
+  const { currentUser, events, updateEventRSVP } = useApp();
   const [showUserProfile, setShowUserProfile] = useState<UserProfileType | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -153,6 +154,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
         event={event}
         isOpen={showInviteModal}
         onClose={() => setShowInviteModal(false)}
+        container={portalContainer}
       />
 
       {/* Event Info */}

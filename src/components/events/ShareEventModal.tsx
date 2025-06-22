@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogPortal, DialogOverlay } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Share2, Users, Send, X, Search } from 'lucide-react';
@@ -17,6 +17,7 @@ interface ShareEventModalProps {
   onShare: (selectedFriends: User[], message: string) => void;
   onClose: () => void;
   isOpen: boolean;
+  container?: HTMLElement | null;
 }
 
 export const ShareEventModal: React.FC<ShareEventModalProps> = ({
@@ -24,7 +25,8 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
   friends,
   onShare,
   onClose,
-  isOpen
+  isOpen,
+  container
 }) => {
   const [selectedFriends, setSelectedFriends] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -68,85 +70,88 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="fixed inset-4 z-50 w-auto h-auto max-h-[80vh] flex flex-col mx-0 p-0 max-w-none rounded-2xl border-0">
-        <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
-          <DialogTitle className="flex items-center gap-2">
-            <Share2 className="w-5 h-5" />
-            Share Event
-          </DialogTitle>
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            <X className="w-4 h-4" />
-          </Button>
-        </DialogHeader>
+      <DialogPortal container={container}>
+        <DialogOverlay />
+        <DialogContent className="absolute bottom-0 left-0 right-0 h-[90%] w-full flex flex-col rounded-t-2xl border-t bg-white p-0 animate-slide-in-from-bottom">
+          <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
+            <DialogTitle className="flex items-center gap-2">
+              <Share2 className="w-5 h-5" />
+              Share Event
+            </DialogTitle>
+            <Button variant="ghost" size="sm" onClick={onClose}>
+              <X className="w-4 h-4" />
+            </Button>
+          </DialogHeader>
 
-        <div className="flex-1 p-4 overflow-y-auto">
-          <div className="space-y-4">
-            {/* Event Preview */}
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="font-semibold mb-2">{event.name}</h3>
-                <p className="text-sm text-muted-foreground mb-2">{event.description}</p>
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <span>📅 {new Date(event.date).toLocaleDateString()}</span>
-                  <span>📍 {event.location}</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Message Input */}
-            <div className="space-y-2">
-              <Label htmlFor="message">Personal Message (Optional)</Label>
-              <Textarea
-                id="message"
-                placeholder="Add a personal message to your invitation..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            {/* Friends List */}
-            <div className="space-y-2">
-              <Label>Select Friends to Invite</Label>
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {friends.map((friend) => (
-                  <div key={friend.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted">
-                    <Checkbox
-                      id={friend.id}
-                      checked={selectedFriends.some(f => f.id === friend.id)}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          setSelectedFriends([...selectedFriends, friend]);
-                        } else {
-                          setSelectedFriends(selectedFriends.filter(f => f.id !== friend.id));
-                        }
-                      }}
-                    />
-                    <Label htmlFor={friend.id} className="flex items-center gap-3 flex-1 cursor-pointer">
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage src={friend.avatar} />
-                        <AvatarFallback>{friend.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium">{friend.name}</span>
-                    </Label>
+          <div className="flex-1 p-4 overflow-y-auto">
+            <div className="space-y-4">
+              {/* Event Preview */}
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="font-semibold mb-2">{event.name}</h3>
+                  <p className="text-sm text-muted-foreground mb-2">{event.description}</p>
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <span>📅 {new Date(event.date).toLocaleDateString()}</span>
+                    <span>📍 {event.location}</span>
                   </div>
-                ))}
+                </CardContent>
+              </Card>
+
+              {/* Message Input */}
+              <div className="space-y-2">
+                <Label htmlFor="message">Personal Message (Optional)</Label>
+                <Textarea
+                  id="message"
+                  placeholder="Add a personal message to your invitation..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              {/* Friends List */}
+              <div className="space-y-2">
+                <Label>Select Friends to Invite</Label>
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {friends.map((friend) => (
+                    <div key={friend.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted">
+                      <Checkbox
+                        id={friend.id}
+                        checked={selectedFriends.some(f => f.id === friend.id)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedFriends([...selectedFriends, friend]);
+                          } else {
+                            setSelectedFriends(selectedFriends.filter(f => f.id !== friend.id));
+                          }
+                        }}
+                      />
+                      <Label htmlFor={friend.id} className="flex items-center gap-3 flex-1 cursor-pointer">
+                        <Avatar className="w-8 h-8">
+                          <AvatarImage src={friend.avatar} />
+                          <AvatarFallback>{friend.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium">{friend.name}</span>
+                      </Label>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="p-4 border-t">
-          <Button 
-            onClick={handleShare}
-            disabled={selectedFriends.length === 0}
-            className="w-full brava-gradient"
-          >
-            <Share2 className="w-4 h-4 mr-2" />
-            Send Invitations ({selectedFriends.length})
-          </Button>
-        </div>
-      </DialogContent>
+          <div className="p-4 border-t">
+            <Button 
+              onClick={handleShare}
+              disabled={selectedFriends.length === 0}
+              className="w-full brava-gradient"
+            >
+              <Share2 className="w-4 h-4 mr-2" />
+              Send Invitations ({selectedFriends.length})
+            </Button>
+          </div>
+        </DialogContent>
+      </DialogPortal>
     </Dialog>
   );
 }; 

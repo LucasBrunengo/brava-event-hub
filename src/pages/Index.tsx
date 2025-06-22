@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/context/AppContext';
 import { WelcomeScreen } from '@/components/auth/WelcomeScreen';
 import { Dashboard } from '@/components/dashboard/Dashboard';
@@ -16,11 +16,22 @@ import { Bell, MessageCircle, Crown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Event } from '@/types';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
+import PhoneFrame from '@/components/layout/PhoneFrame';
 
 type View = 'dashboard' | 'create' | 'profile' | 'event-detail' | 'past-event-detail';
 
 const Index = () => {
-  const { isAuthenticated, notifications, messages, markNotificationAsRead, sendMessage, markMessageAsRead, events, users } = useApp();
+  const { 
+    isAuthenticated, 
+    notifications, 
+    messages, 
+    markNotificationAsRead, 
+    sendMessage, 
+    markMessageAsRead, 
+    events, 
+    users,
+    currentUser
+  } = useApp();
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -28,31 +39,30 @@ const Index = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const portalContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 3000); // 3-second loading screen
+    const timer = setTimeout(() => setIsLoading(false), 1500); // Adjusted for quicker loading
     return () => clearTimeout(timer);
   }, []);
 
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
+
   if (isLoading) {
-    return <LoadingScreen />;
+    return <LoadingScreen onLoadingComplete={handleLoadingComplete} />;
   }
 
-  console.log('Index component rendered - isAuthenticated:', isAuthenticated);
-  console.log('WelcomeScreen component:', WelcomeScreen);
-
   if (!isAuthenticated) {
-    console.log('Rendering WelcomeScreen');
     return (
-      <div className="min-h-screen w-full bg-gray-50">
-        <div className="max-w-md mx-auto bg-white min-h-screen">
+      <div className="min-h-screen w-full bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white min-h-screen">
           <WelcomeScreen />
         </div>
       </div>
     );
   }
-
-  console.log('Rendering authenticated content, currentView:', currentView);
 
   const handleEventClick = (event: Event) => {
     setSelectedEvent(event);
@@ -94,6 +104,7 @@ const Index = () => {
   };
 
   const handleNotificationClick = (notification: any) => {
+    setShowNotifications(false);
     if (notification.relatedEventId) {
       const event = events.find(e => e.id === notification.relatedEventId);
       if (event) {
@@ -103,6 +114,7 @@ const Index = () => {
   };
 
   const handleChatEventClick = (eventId: string) => {
+    setShowChat(false);
     const event = events.find(e => e.id === eventId);
     if (event) {
       handleEventClick(event);
@@ -122,135 +134,111 @@ const Index = () => {
   };
 
   const unreadNotifications = notifications.filter(n => !n.isRead).length;
-  const unreadMessages = messages.filter(m => !m.isRead && m.senderId !== '1').length;
+  const unreadMessages = messages.filter(m => !m.isRead && m.receiverId === currentUser?.id).length;
 
   return (
-    <div className="w-full bg-gray-50 h-full">
-      <div className="w-full bg-white h-full">
-        <div className="flex flex-col h-full relative">
-          {/* Header with premium, notifications and chat */}
-          <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
-            <div className="flex items-center gap-2">
-              <img src="/brava-logo.png" alt="Brava Logo" className="w-8 h-8" />
-              <span className="font-semibold text-lg">Brava</span>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="bg-gradient-to-r from-purple-500 to-blue-500 text-white border-0 hover:from-purple-600 hover:to-blue-600"
-                onClick={() => setShowPremiumModal(true)}
-              >
-                <Crown className="w-4 h-4 mr-1" />
-                Premium +
-              </Button>
-              <Button variant="ghost" size="sm" className="relative" onClick={() => setShowNotifications(true)}>
-                <Bell className="w-5 h-5" />
-                {unreadNotifications > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
-                    {unreadNotifications}
-                  </Badge>
-                )}
-              </Button>
-              <Button variant="ghost" size="sm" className="relative" onClick={() => setShowChat(true)}>
-                <MessageCircle className="w-5 h-5" />
-                {unreadMessages > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-green-500">
-                    {unreadMessages}
-                  </Badge>
-                )}
-              </Button>
-            </div>
+    <PhoneFrame>
+      <div ref={portalContainerRef} className="flex flex-col h-full bg-white relative">
+        {/* App Header */}
+        <div className="flex-shrink-0 flex items-center justify-between p-4 bg-white border-b border-gray-200 z-10">
+          <div className="flex items-center gap-2">
+            <img src="/brava-logo.png" alt="Brava Logo" className="w-8 h-8" />
+            <span className="font-semibold text-lg">Brava</span>
           </div>
-
-          <div className="flex-1 overflow-y-auto pb-20 relative">
-            <div className="p-4">
-              {currentView === 'dashboard' && (
-                <Dashboard 
-                  onCreateEvent={handleCreateEvent}
-                  onEventClick={handleEventClick}
-                />
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-gradient-to-r from-purple-500 to-blue-500 text-white border-0 hover:from-purple-600 hover:to-blue-600"
+              onClick={() => setShowPremiumModal(true)}
+            >
+              <Crown className="w-4 h-4 mr-1" />
+              Premium
+            </Button>
+            <Button variant="ghost" size="sm" className="relative" onClick={() => setShowNotifications(!showNotifications)}>
+              <Bell className="w-5 h-5" />
+              {unreadNotifications > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                  {unreadNotifications}
+                </Badge>
               )}
-              
-              {currentView === 'create' && (
-                <CreateEventForm 
-                  onBack={handleBack}
-                  onEventCreated={handleEventCreated}
-                />
+            </Button>
+            <Button variant="ghost" size="sm" className="relative" onClick={() => setShowChat(!showChat)}>
+              <MessageCircle className="w-5 h-5" />
+              {unreadMessages > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-green-500">
+                  {unreadMessages}
+                </Badge>
               )}
-              
-              {currentView === 'event-detail' && selectedEvent && (
-                <EventDetail 
-                  event={selectedEvent}
-                  onBack={handleBack}
-                  onShare={() => setShowShareModal(true)}
-                />
-              )}
-              
-              {currentView === 'past-event-detail' && selectedEvent && (
-                <PastEventDetail 
-                  event={selectedEvent}
-                  onBack={handleBack}
-                />
-              )}
-              
-              {currentView === 'profile' && (
-                <ProfilePage onPastEventClick={handlePastEventClick} />
-              )}
-            </div>
-
-            {/* Notifications Panel */}
-            {showNotifications && (
-              <NotificationsPanel
-                notifications={notifications}
-                events={events}
-                users={users}
-                onNotificationClick={handleNotificationClick}
-                onMarkAsRead={markNotificationAsRead}
-                onClose={() => setShowNotifications(false)}
-              />
-            )}
-
-            {/* Chat Panel */}
-            {showChat && (
-              <ChatPanel
-                messages={messages}
-                events={events}
-                users={users}
-                currentUserId="1"
-                onSendMessage={sendMessage}
-                onEventClick={handleChatEventClick}
-                onPaymentRequest={handlePaymentRequest}
-                onClose={() => setShowChat(false)}
-              />
-            )}
-
-            {/* Share Event Modal */}
-            {showShareModal && selectedEvent && (
-              <ShareEventModal
-                event={selectedEvent}
-                friends={users.filter(user => user.id !== '1')} // Exclude current user
-                onShare={handleShareEvent}
-                onClose={() => setShowShareModal(false)}
-                isOpen={showShareModal}
-              />
-            )}
-
-            {/* Premium Modal */}
-            <PremiumModal
-              isOpen={showPremiumModal}
-              onClose={() => setShowPremiumModal(false)}
-            />
+            </Button>
           </div>
+        </div>
 
-          <BottomNav 
-            activeTab={getActiveTab()}
-            onTabChange={handleTabChange}
-          />
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto pb-20">
+          <div className="p-4">
+            {currentView === 'dashboard' && <Dashboard onCreateEvent={handleCreateEvent} onEventClick={handleEventClick} />}
+            {currentView === 'create' && <CreateEventForm onBack={handleBack} onEventCreated={handleEventCreated} />}
+            {currentView === 'event-detail' && selectedEvent && (
+              <EventDetail 
+                event={selectedEvent} 
+                onBack={handleBack} 
+                onShare={() => setShowShareModal(true)} 
+                portalContainer={portalContainerRef.current} 
+              />
+            )}
+            {currentView === 'past-event-detail' && selectedEvent && <PastEventDetail event={selectedEvent} onBack={handleBack} />}
+            {currentView === 'profile' && <ProfilePage onPastEventClick={handlePastEventClick} />}
+          </div>
+        </div>
+        
+        {/* Bottom Navigation */}
+        <div className="flex-shrink-0">
+          <BottomNav activeTab={getActiveTab()} onTabChange={handleTabChange} />
         </div>
       </div>
-    </div>
+
+      {/* Overlays - These will now be contained by PhoneFrame's relative parent */}
+      {showNotifications && (
+        <NotificationsPanel
+          notifications={notifications}
+          events={events}
+          users={users}
+          onNotificationClick={handleNotificationClick}
+          onMarkAsRead={markNotificationAsRead}
+          onClose={() => setShowNotifications(false)}
+        />
+      )}
+      {showChat && (
+        <ChatPanel
+          messages={messages}
+          events={events}
+          users={users}
+          currentUserId={currentUser?.id || ''}
+          onSendMessage={sendMessage}
+          onEventClick={handleChatEventClick}
+          onPaymentRequest={handlePaymentRequest}
+          onClose={() => setShowChat(false)}
+        />
+      )}
+
+      {/* Dialog Modals - These are portaled so their position is managed by the library */}
+      {showShareModal && selectedEvent && (
+        <ShareEventModal
+          event={selectedEvent}
+          friends={users.filter(user => user.id !== currentUser?.id)}
+          onShare={handleShareEvent}
+          onClose={() => setShowShareModal(false)}
+          isOpen={showShareModal}
+          container={portalContainerRef.current}
+        />
+      )}
+      <PremiumModal 
+        isOpen={showPremiumModal} 
+        onClose={() => setShowPremiumModal(false)} 
+        container={portalContainerRef.current}
+      />
+    </PhoneFrame>
   );
 };
 
