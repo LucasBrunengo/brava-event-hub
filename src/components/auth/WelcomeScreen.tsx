@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -67,11 +66,11 @@ export const WelcomeScreen = () => {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="mx-auto w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-            <div className="text-2xl font-bold brava-text-gradient">B</div>
+            <img src="/brava-logo.png" alt="Brava Logo" className="w-12 h-12" />
           </div>
           <div>
             <h1 className="text-4xl font-bold text-white mb-2">Welcome to Brava</h1>
-            <p className="text-white/80 text-lg">Organize events without the WhatsApp chaos</p>
+            <p className="text-white/80 text-lg">Your events, all in one place.</p>
           </div>
         </div>
 
