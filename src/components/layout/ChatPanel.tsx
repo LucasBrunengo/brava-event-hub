@@ -38,9 +38,9 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   // Group messages by conversation
   const conversations = messages.reduce((acc, message) => {
     const otherUserId = message.senderId === currentUserId ? message.receiverId : message.senderId;
-    
+
     // Defensively skip messages that don't have a valid other user
-    if (otherUserId) {
+    if (otherUserId && typeof otherUserId === 'string' && otherUserId.trim() !== '') {
       if (!acc[otherUserId]) {
         acc[otherUserId] = [];
       }
