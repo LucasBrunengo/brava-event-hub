@@ -219,7 +219,7 @@ export const mockEvents: Event[] = [
     photos: [
       {
         id: 'photo-1-1',
-        url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
         uploadedAt: '2024-01-02T10:00:00Z',
         reactions: [
@@ -233,7 +233,7 @@ export const mockEvents: Event[] = [
       },
       {
         id: 'photo-1-2',
-        url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '2',
         uploadedAt: '2024-01-02T11:00:00Z',
         reactions: [
@@ -245,7 +245,7 @@ export const mockEvents: Event[] = [
       },
       {
         id: 'photo-1-3',
-        url: 'https://images.unsplash.com/photo-1504674900240-9a9049b7d8ce?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1504674900240-9a9049b7d8ce?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '5',
         uploadedAt: '2024-01-02T12:00:00Z',
         reactions: [
@@ -259,7 +259,7 @@ export const mockEvents: Event[] = [
       },
       {
         id: 'photo-1-4',
-        url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '6',
         uploadedAt: '2024-01-02T13:00:00Z',
         reactions: [
@@ -314,7 +314,7 @@ export const mockEvents: Event[] = [
     photos: [
       {
         id: 'photo-2-1',
-        url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '2',
         uploadedAt: '2024-01-16T10:00:00Z',
         reactions: [
@@ -328,7 +328,7 @@ export const mockEvents: Event[] = [
       },
       {
         id: 'photo-2-2',
-        url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
         uploadedAt: '2024-01-16T11:00:00Z',
         reactions: [
@@ -340,7 +340,7 @@ export const mockEvents: Event[] = [
       },
       {
         id: 'photo-2-3',
-        url: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '6',
         uploadedAt: '2024-01-16T12:00:00Z',
         reactions: [
@@ -354,7 +354,7 @@ export const mockEvents: Event[] = [
       },
       {
         id: 'photo-2-4',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '9',
         uploadedAt: '2024-01-16T13:00:00Z',
         reactions: [
@@ -389,7 +389,7 @@ export const mockEvents: Event[] = [
     photos: [
       {
         id: 'photo-3-1',
-        url: 'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '3',
         uploadedAt: '2024-01-06T10:00:00Z',
         reactions: [
@@ -403,7 +403,7 @@ export const mockEvents: Event[] = [
       },
       {
         id: 'photo-3-2',
-        url: 'https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
         uploadedAt: '2024-01-06T11:00:00Z',
         reactions: [
@@ -456,7 +456,7 @@ export const mockEvents: Event[] = [
     photos: [
       {
         id: 'photo-4-1',
-        url: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
         uploadedAt: '2024-02-02T10:00:00Z',
         reactions: [],
@@ -465,7 +465,7 @@ export const mockEvents: Event[] = [
       },
       {
         id: 'photo-4-2',
-        url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=400&fit=crop',
+        url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '2',
         uploadedAt: '2024-02-02T11:00:00Z',
         reactions: [],

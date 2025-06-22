@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Heart, MessageCircle, Tag, Send } from 'lucide-react';
+import { Heart, MessageCircle, Tag, Send, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { EventPhoto, User } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { formatDistanceToNow } from 'date-fns';
@@ -20,6 +19,7 @@ interface PhotoGalleryProps {
 export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, eventId }) => {
   const { currentUser } = useApp();
   const [selectedPhoto, setSelectedPhoto] = useState<EventPhoto | null>(null);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [newComment, setNewComment] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('');
 
@@ -35,6 +35,32 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
     // In a real app, this would update the backend
     console.log(`User ${currentUser?.id} commented "${newComment}" on photo ${photoId}`);
     setNewComment('');
+  };
+
+  const handlePhotoClick = (photo: EventPhoto, index: number) => {
+    setSelectedPhoto(photo);
+    setSelectedPhotoIndex(index);
+  };
+
+  const handlePreviousPhoto = () => {
+    if (selectedPhotoIndex > 0) {
+      const newIndex = selectedPhotoIndex - 1;
+      setSelectedPhotoIndex(newIndex);
+      setSelectedPhoto(photos[newIndex]);
+    }
+  };
+
+  const handleNextPhoto = () => {
+    if (selectedPhotoIndex < photos.length - 1) {
+      const newIndex = selectedPhotoIndex + 1;
+      setSelectedPhotoIndex(newIndex);
+      setSelectedPhoto(photos[newIndex]);
+    }
+  };
+
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    // Fallback to a placeholder image if the original fails to load
+    event.currentTarget.src = 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&crop=center';
   };
 
   if (!photos || photos.length === 0) {
@@ -61,18 +87,19 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
-            {photos.map((photo) => (
+            {photos.map((photo, index) => (
               <div key={photo.id} className="relative group cursor-pointer">
                 <img
                   src={photo.url}
                   alt="Event photo"
-                  className="aspect-square object-cover rounded-lg"
-                  onClick={() => setSelectedPhoto(photo)}
+                  className="aspect-square object-cover rounded-lg transition-transform group-hover:scale-105"
+                  onClick={() => handlePhotoClick(photo, index)}
+                  onError={handleImageError}
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all rounded-lg" />
                 <div className="absolute bottom-2 left-2 flex gap-1">
-                  {photo.reactions.slice(0, 3).map((reaction, index) => (
-                    <span key={index} className="text-xs bg-black/50 text-white px-1 rounded">
+                  {photo.reactions.slice(0, 3).map((reaction, reactionIndex) => (
+                    <span key={reactionIndex} className="text-xs bg-black/50 text-white px-1 rounded">
                       {reaction.emoji}
                     </span>
                   ))}
@@ -90,91 +117,150 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                     </Badge>
                   </div>
                 )}
+                <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Badge className="bg-black/50 text-white text-xs">
+                    Click to view
+                  </Badge>
+                </div>
               </div>
             ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* Photo Detail Modal */}
+      {/* Enhanced Photo Detail Modal */}
       <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
           {selectedPhoto && (
             <>
-              <DialogHeader>
-                <DialogTitle>Photo Details</DialogTitle>
+              <DialogHeader className="flex flex-row items-center justify-between">
+                <DialogTitle className="flex items-center gap-2">
+                  <span>Photo {selectedPhotoIndex + 1} of {photos.length}</span>
+                  {selectedPhoto.taggedUsers.length > 0 && (
+                    <Badge variant="outline">
+                      <Tag className="w-3 h-3 mr-1" />
+                      {selectedPhoto.taggedUsers.length} tagged
+                    </Badge>
+                  )}
+                </DialogTitle>
+                <Button variant="ghost" size="sm" onClick={() => setSelectedPhoto(null)}>
+                  <X className="w-4 h-4" />
+                </Button>
               </DialogHeader>
-              <div className="space-y-4">
-                <img
-                  src={selectedPhoto.url}
-                  alt="Event photo"
-                  className="w-full aspect-square object-cover rounded-lg"
-                />
-                
-                {/* Reactions */}
-                <div className="flex gap-2 flex-wrap">
-                  {commonEmojis.map((emoji) => (
-                    <Button
-                      key={emoji}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleReaction(selectedPhoto.id, emoji)}
-                      className="text-lg p-2 h-auto"
-                    >
-                      {emoji}
-                    </Button>
-                  ))}
+              
+              <div className="flex gap-4 h-full">
+                {/* Photo Section */}
+                <div className="flex-1 relative">
+                  <img
+                    src={selectedPhoto.url}
+                    alt="Event photo"
+                    className="w-full h-96 object-cover rounded-lg"
+                    onError={handleImageError}
+                  />
+                  
+                  {/* Navigation Arrows */}
+                  {photos.length > 1 && (
+                    <>
+                      {selectedPhotoIndex > 0 && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
+                          onClick={handlePreviousPhoto}
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {selectedPhotoIndex < photos.length - 1 && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
+                          onClick={handleNextPhoto}
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </>
+                  )}
                 </div>
 
-                {/* Current Reactions */}
-                {selectedPhoto.reactions.length > 0 && (
-                  <div className="flex gap-2 flex-wrap">
-                    {selectedPhoto.reactions.map((reaction) => (
-                      <Badge key={reaction.id} variant="outline">
-                        {reaction.emoji} {attendees.find(u => u.id === reaction.userId)?.name}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-
-                {/* Comments */}
-                <div className="space-y-2 max-h-40 overflow-y-auto">
-                  {selectedPhoto.comments.map((comment) => (
-                    <div key={comment.id} className="flex gap-2">
-                      <Avatar className="w-6 h-6">
-                        <AvatarImage src={comment.user.avatar} />
-                        <AvatarFallback className="text-xs">
-                          {comment.user.name.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <div className="text-sm">
-                          <span className="font-semibold">{comment.user.name}</span>
-                          <span className="ml-2">{comment.message}</span>
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+                {/* Comments and Reactions Section */}
+                <div className="w-80 flex flex-col">
+                  {/* Reactions */}
+                  <div className="mb-4">
+                    <h4 className="font-semibold mb-2">Reactions</h4>
+                    <div className="flex gap-2 flex-wrap">
+                      {commonEmojis.map((emoji) => (
+                        <Button
+                          key={emoji}
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleReaction(selectedPhoto.id, emoji)}
+                          className="text-lg p-2 h-auto"
+                        >
+                          {emoji}
+                        </Button>
+                      ))}
+                    </div>
+                    
+                    {/* Current Reactions */}
+                    {selectedPhoto.reactions.length > 0 && (
+                      <div className="mt-3">
+                        <h5 className="text-sm font-medium mb-2">Current Reactions</h5>
+                        <div className="flex gap-2 flex-wrap">
+                          {selectedPhoto.reactions.map((reaction) => (
+                            <Badge key={reaction.id} variant="outline" className="text-sm">
+                              {reaction.emoji} {attendees.find(u => u.id === reaction.userId)?.name}
+                            </Badge>
+                          ))}
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    )}
+                  </div>
 
-                {/* Add Comment */}
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Add a comment..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleComment(selectedPhoto.id)}
-                  />
-                  <Button 
-                    size="sm" 
-                    onClick={() => handleComment(selectedPhoto.id)}
-                    disabled={!newComment.trim()}
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
+                  {/* Comments */}
+                  <div className="flex-1 flex flex-col">
+                    <h4 className="font-semibold mb-2">Comments</h4>
+                    <div className="flex-1 space-y-2 max-h-48 overflow-y-auto">
+                      {selectedPhoto.comments.map((comment) => (
+                        <div key={comment.id} className="flex gap-2 p-2 bg-muted rounded">
+                          <Avatar className="w-6 h-6">
+                            <AvatarImage src={comment.user.avatar} />
+                            <AvatarFallback className="text-xs">
+                              {comment.user.name.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <div className="text-sm">
+                              <span className="font-semibold">{comment.user.name}</span>
+                              <span className="ml-2">{comment.message}</span>
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Add Comment */}
+                    <div className="flex gap-2 mt-4">
+                      <Input
+                        placeholder="Add a comment..."
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleComment(selectedPhoto.id)}
+                      />
+                      <Button 
+                        size="sm" 
+                        onClick={() => handleComment(selectedPhoto.id)}
+                        disabled={!newComment.trim()}
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>
