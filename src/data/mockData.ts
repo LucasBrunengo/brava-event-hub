@@ -300,30 +300,43 @@ export const mockEvents: Event[] = [
 export const mockExpenses: Expense[] = [
   {
     id: 'exp1',
-    eventId: '1',
-    name: 'VIP Table Reservation',
-    amount: 300,
-    paidBy: '1',
+    eventId: '1', // Pachá VIP Night
+    name: 'VIP Table & Bottles',
+    amount: 600,
+    paidBy: '1', // Javier García
     splitBetween: ['1', '2', '3'],
     payments: [
-      { id: 'p1', expenseId: 'exp1', userId: '2', amount: 100, status: 'paid' },
-      { id: 'p2', expenseId: 'exp1', userId: '3', amount: 100, status: 'pending' },
+      { id: 'p1', expenseId: 'exp1', userId: '2', amount: 200, status: 'paid' },
+      { id: 'p2', expenseId: 'exp1', userId: '3', amount: 200, status: 'pending' },
     ],
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
   },
   {
     id: 'exp2',
-    eventId: '3',
-    name: 'Bar Tab',
-    amount: 120,
-    paidBy: '2',
+    eventId: '3', // Barça Watch Party
+    name: 'Bar Tab - First Round',
+    amount: 80,
+    paidBy: '2', // Maria Rodriguez
     splitBetween: ['1', '2', '3', '4'],
     payments: [
-      { id: 'p3', expenseId: 'exp2', userId: '1', amount: 30, status: 'pending' },
-      { id: 'p4', expenseId: 'exp2', userId: '3', amount: 30, status: 'paid' },
-      { id: 'p5', expenseId: 'exp2', userId: '4', amount: 30, status: 'pending' },
+      { id: 'p3', expenseId: 'exp2', userId: '1', amount: 20, status: 'pending' },
+      { id: 'p4', expenseId: 'exp2', userId: '3', amount: 20, status: 'paid' },
+      { id: 'p5', expenseId: 'exp2', userId: '4', amount: 20, status: 'pending' },
     ],
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+  },
+  {
+    id: 'exp3',
+    eventId: '4', // Sutton Club Night
+    name: 'Pre-purchased Tickets',
+    amount: 100,
+    paidBy: '4', // Sofia Lopez
+    splitBetween: ['1', '4', '5'],
+    payments: [
+      { id: 'p6', expenseId: 'exp3', userId: '1', amount: 33.33, status: 'pending' },
+      { id: 'p7', expenseId: 'exp3', userId: '5', amount: 33.33, status: 'paid' },
+    ],
+    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString()
   }
 ];
 

@@ -58,19 +58,33 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
     }
   };
 
-  const getTotalOwed = (userId: string) => {
-    return eventExpenses.reduce((total, expense) => {
-      const payment = expense.payments.find(p => p.userId === userId);
-      return total + (payment?.status === 'pending' ? payment.amount : 0);
-    }, 0);
-  };
+  const { totalOwed, totalPaid, netBalance } = React.useMemo(() => {
+    if (!currentUser) {
+      return { totalOwed: 0, totalPaid: 0, netBalance: 0 };
+    }
 
-  const getTotalPaid = (userId: string) => {
-    return eventExpenses.reduce((total, expense) => {
-      const payment = expense.payments.find(p => p.userId === userId);
-      return total + (payment?.status === 'paid' ? payment.amount : 0);
-    }, 0);
-  };
+    let owed = 0;
+    let paid = 0;
+
+    eventExpenses.forEach(expense => {
+      // Amount user owes to others
+      const paymentAsDebtor = expense.payments.find(p => p.userId === currentUser.id && p.status === 'pending');
+      if (paymentAsDebtor) {
+        owed += paymentAsDebtor.amount;
+      }
+      
+      // Amount others owe to the user
+      if (expense.paidBy === currentUser.id) {
+        expense.payments.forEach(payment => {
+          if (payment.status === 'pending') {
+            paid += payment.amount;
+          }
+        });
+      }
+    });
+
+    return { totalOwed: owed, totalPaid: paid, netBalance: paid - owed };
+  }, [eventExpenses, currentUser]);
 
   return (
     <div className="space-y-4">
@@ -152,20 +166,21 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event }) => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
+          {netBalance >= 0 ? (
+            <div className="text-center">
               <p className="text-2xl font-bold text-green-600">
-                €{getTotalPaid(currentUser?.id || '').toFixed(2)}
+                €{netBalance.toFixed(2)}
               </p>
-              <p className="text-sm text-muted-foreground">You've Paid</p>
+              <p className="text-sm text-muted-foreground">You are owed in total</p>
             </div>
-            <div>
+          ) : (
+            <div className="text-center">
               <p className="text-2xl font-bold text-orange-600">
-                €{getTotalOwed(currentUser?.id || '').toFixed(2)}
+                €{Math.abs(netBalance).toFixed(2)}
               </p>
-              <p className="text-sm text-muted-foreground">You Owe</p>
+              <p className="text-sm text-muted-foreground">You owe in total</p>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
 
