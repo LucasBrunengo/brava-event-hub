@@ -1,7 +1,7 @@
 import { User, Event, Expense, Comment, EventPhoto, Notification, Message } from '@/types';
 
 export const mockUsers: User[] = [
-  { id: '1', name: 'Javier García', email: 'javier.garcia@example.com', avatar: 'https://i.pravatar.cc/150?img=1', phone: '+34666555444' },
+  { id: '1', name: 'Lucas Brunengo', email: 'lucas.brunengo@example.com', avatar: 'https://i.pravatar.cc/150?img=1', phone: '+34666555444' },
   { id: '2', name: 'Maria Rodriguez', email: 'maria.rodriguez@example.com', avatar: 'https://i.pravatar.cc/150?img=2', phone: '+34666555333' },
   { id: '3', name: 'Carlos Martinez', email: 'carlos.martinez@example.com', avatar: 'https://i.pravatar.cc/150?img=3', phone: '+34666555222' },
   { id: '4', name: 'Sofia Lopez', email: 'sofia.lopez@example.com', avatar: 'https://i.pravatar.cc/150?img=4', phone: '+34666555111' },
@@ -15,10 +15,10 @@ export const mockUsers: User[] = [
   { id: '12', name: 'Raquel Navarro', email: 'raquel.navarro@example.com', avatar: 'https://i.pravatar.cc/150?img=12', phone: '+34666444333' }
 ];
 
-export const mockCurrentUser: User = mockUsers[0]; // Javier García is the current user
+export const mockCurrentUser: User = mockUsers[0]; // Lucas Brunengo is the current user
 
 export const mockEvents: Event[] = [
-  // --- PRIVATE EVENTS ORGANIZED BY CURRENT USER (Javier) ---
+  // --- PRIVATE EVENTS ORGANIZED BY CURRENT USER (Lucas) ---
   {
     id: '1',
     name: 'Pachá VIP Night',
@@ -305,7 +305,7 @@ export const mockExpenses: Expense[] = [
     eventId: '1', // Pachá VIP Night
     name: 'VIP Table & Bottles',
     amount: 600,
-    paidBy: '1', // Javier García
+    paidBy: '1', // Lucas Brunengo
     splitBetween: ['1', '2', '3'],
     payments: [
       { id: 'p1', expenseId: 'exp1', userId: '2', amount: 200, status: 'paid' },
@@ -349,7 +349,7 @@ export const mockNotifications: Notification[] = [
     id: 'n1',
     type: 'event_invite',
     title: "You're invited to Pachá VIP Night!",
-    message: "Javier García has invited you to their event.",
+    message: "Lucas Brunengo has invited you to their event.",
     userId: '4',
     relatedEventId: '1',
     relatedUserId: '1',
