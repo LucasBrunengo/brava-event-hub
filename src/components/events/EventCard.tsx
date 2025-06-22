@@ -50,12 +50,6 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="font-semibold text-lg text-foreground">{event.name}</h3>
-              {event.isPublic && event.isPromoted && (
-                <Badge className="bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs">
-                  <Tag className="w-3 h-3 mr-1" />
-                  -{event.discountPercentage}%
-                </Badge>
-              )}
             </div>
             <p className="text-sm text-muted-foreground line-clamp-2">{event.description}</p>
           </div>

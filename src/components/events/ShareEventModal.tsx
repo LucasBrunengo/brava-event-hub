@@ -7,6 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Share2, Users, Send, X, Search } from 'lucide-react';
 import { User, Event } from '@/types';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface ShareEventModalProps {
   event: Event;
@@ -26,6 +29,7 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
   const [selectedFriends, setSelectedFriends] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [customMessage, setCustomMessage] = useState(`Hey! I think you'd love this event: ${event.name}`);
+  const [message, setMessage] = useState('');
 
   const filteredFriends = friends.filter(friend =>
     friend.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -45,7 +49,7 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
 
   const handleShare = () => {
     if (selectedFriends.length > 0) {
-      onShare(selectedFriends, customMessage);
+      onShare(selectedFriends, message);
       setSelectedFriends([]);
       setCustomMessage(`Hey! I think you'd love this event: ${event.name}`);
       onClose();
@@ -64,7 +68,7 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="absolute bottom-0 left-0 right-0 w-full h-auto max-h-[85vh] flex flex-col mx-0 p-0 max-w-none rounded-t-2xl border-0">
+      <DialogContent className="fixed inset-4 z-50 w-auto h-auto max-h-[80vh] flex flex-col mx-0 p-0 max-w-none rounded-2xl border-0">
         <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
           <DialogTitle className="flex items-center gap-2">
             <Share2 className="w-5 h-5" />
@@ -75,125 +79,72 @@ export const ShareEventModal: React.FC<ShareEventModalProps> = ({
           </Button>
         </DialogHeader>
 
-        <div className="flex flex-col flex-1 overflow-hidden">
-          {/* Event Preview */}
-          <div className="p-4 border-b bg-gray-50">
+        <div className="flex-1 p-4 overflow-y-auto">
+          <div className="space-y-4">
+            {/* Event Preview */}
             <Card>
-              <CardContent className="p-3">
-                <div className="flex items-start gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center text-white font-bold">
-                    {event.name.charAt(0)}
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-sm">{event.name}</h4>
-                    <p className="text-xs text-muted-foreground mt-1">{event.description}</p>
-                    <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                      <span>📅 {new Date(event.date).toLocaleDateString()}</span>
-                      <span>📍 {event.location}</span>
-                    </div>
-                  </div>
+              <CardContent className="p-4">
+                <h3 className="font-semibold mb-2">{event.name}</h3>
+                <p className="text-sm text-muted-foreground mb-2">{event.description}</p>
+                <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                  <span>📅 {new Date(event.date).toLocaleDateString()}</span>
+                  <span>📍 {event.location}</span>
                 </div>
               </CardContent>
             </Card>
-          </div>
 
-          {/* Search and Selection Controls */}
-          <div className="p-4 border-b">
-            <div className="space-y-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <Input
-                  placeholder="Search friends..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={handleSelectAll}>
-                  Select All
-                </Button>
-                <Button variant="outline" size="sm" onClick={handleClearAll}>
-                  Clear All
-                </Button>
-                {selectedFriends.length > 0 && (
-                  <Badge className="bg-blue-500 text-white">
-                    {selectedFriends.length} selected
-                  </Badge>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Friends List */}
-          <div className="flex-1 overflow-y-auto p-4">
+            {/* Message Input */}
             <div className="space-y-2">
-              {filteredFriends.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p>No friends found</p>
-                </div>
-              ) : (
-                filteredFriends.map((friend) => {
-                  const isSelected = selectedFriends.some(f => f.id === friend.id);
-                  return (
-                    <Card
-                      key={friend.id}
-                      className={`cursor-pointer transition-all hover:shadow-md ${
-                        isSelected ? 'ring-2 ring-blue-200 bg-blue-50' : ''
-                      }`}
-                      onClick={() => toggleFriendSelection(friend)}
-                    >
-                      <CardContent className="p-3">
-                        <div className="flex items-center gap-3">
-                          <Avatar className="w-10 h-10">
-                            <AvatarImage src={friend.avatar} />
-                            <AvatarFallback>{friend.name.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-sm">{friend.name}</h4>
-                            <p className="text-xs text-muted-foreground">{friend.email}</p>
-                          </div>
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                            isSelected 
-                              ? 'bg-blue-500 border-blue-500' 
-                              : 'border-gray-300'
-                          }`}>
-                            {isSelected && (
-                              <div className="w-2 h-2 bg-white rounded-full"></div>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })
-              )}
+              <Label htmlFor="message">Personal Message (Optional)</Label>
+              <Textarea
+                id="message"
+                placeholder="Add a personal message to your invitation..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                rows={3}
+              />
             </div>
-          </div>
 
-          {/* Custom Message and Share Button */}
-          <div className="p-4 border-t">
-            <div className="space-y-3">
-              <div>
-                <label className="text-sm font-medium">Custom Message</label>
-                <Input
-                  placeholder="Add a personal message..."
-                  value={customMessage}
-                  onChange={(e) => setCustomMessage(e.target.value)}
-                />
+            {/* Friends List */}
+            <div className="space-y-2">
+              <Label>Select Friends to Invite</Label>
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {friends.map((friend) => (
+                  <div key={friend.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted">
+                    <Checkbox
+                      id={friend.id}
+                      checked={selectedFriends.some(f => f.id === friend.id)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setSelectedFriends([...selectedFriends, friend]);
+                        } else {
+                          setSelectedFriends(selectedFriends.filter(f => f.id !== friend.id));
+                        }
+                      }}
+                    />
+                    <Label htmlFor={friend.id} className="flex items-center gap-3 flex-1 cursor-pointer">
+                      <Avatar className="w-8 h-8">
+                        <AvatarImage src={friend.avatar} />
+                        <AvatarFallback>{friend.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <span className="font-medium">{friend.name}</span>
+                    </Label>
+                  </div>
+                ))}
               </div>
-              <Button 
-                className="w-full" 
-                onClick={handleShare}
-                disabled={selectedFriends.length === 0}
-              >
-                <Send className="w-4 h-4 mr-2" />
-                Share with {selectedFriends.length} friend{selectedFriends.length !== 1 ? 's' : ''}
-              </Button>
             </div>
           </div>
+        </div>
+
+        <div className="p-4 border-t">
+          <Button 
+            onClick={handleShare}
+            disabled={selectedFriends.length === 0}
+            className="w-full brava-gradient"
+          >
+            <Share2 className="w-4 h-4 mr-2" />
+            Send Invitations ({selectedFriends.length})
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

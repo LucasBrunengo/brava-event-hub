@@ -74,7 +74,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
   return (
     <>
       <Dialog open={true} onOpenChange={onClose}>
-        <DialogContent className="absolute bottom-0 left-0 right-0 w-full h-auto max-h-[85vh] flex flex-col mx-0 p-0 max-w-none rounded-t-2xl border-0">
+        <DialogContent className="fixed inset-4 z-50 w-auto h-auto max-h-[80vh] flex flex-col mx-0 p-0 max-w-none rounded-2xl border-0">
           <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
             <DialogTitle className="flex items-center gap-2">
               <Bell className="w-5 h-5" />
@@ -137,7 +137,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
       {/* Notification Detail Modal */}
       {selectedNotification && (
         <Dialog open={!!selectedNotification} onOpenChange={() => setSelectedNotification(null)}>
-          <DialogContent className="absolute bottom-0 left-0 right-0 w-full h-auto max-h-[85vh] flex flex-col mx-0 p-0 max-w-none rounded-t-2xl border-0">
+          <DialogContent className="fixed inset-4 z-50 w-auto h-auto max-h-[80vh] flex flex-col mx-0 p-0 max-w-none rounded-2xl border-0">
             <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
               <DialogTitle className="flex items-center gap-2">
                 {getNotificationIcon(selectedNotification.type)}

@@ -71,21 +71,41 @@ export const LoadingScreen = ({ onLoadingComplete }: LoadingScreenProps) => {
   };
 
   return (
-    <div className="absolute inset-0 bg-gray-900 z-50 flex items-center justify-center overflow-hidden rounded-[2rem]">
-      <motion.div animate={logoControls} className="z-10">
-        <img src="/brava-logo.png" alt="Brava Logo" className="w-24 h-24 drop-shadow-lg" />
-      </motion.div>
-      <div className="absolute inset-0">
-        {[...Array(100)].map((_, i) => (
-          <motion.div
-            key={i}
-            className={`${getParticleSize(i)} ${getParticleColor(i)} rounded-full absolute top-1/2 left-1/2`}
-            variants={particleVariants}
-            initial="hidden"
-            animate={controls}
-            custom={i}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+      <div className="relative">
+        {/* Logo */}
+        <div className="relative z-10">
+          <img 
+            src="/brava-logo.png" 
+            alt="Brava" 
+            className="w-24 h-24 object-contain"
           />
-        ))}
+        </div>
+
+        {/* Animated particles */}
+        <div className="absolute inset-0 -z-10">
+          {[...Array(100)].map((_, i) => (
+            <motion.div
+              key={i}
+              className={`${getParticleSize(i)} ${getParticleColor(i)} rounded-full absolute top-1/2 left-1/2`}
+              variants={particleVariants}
+              initial="hidden"
+              animate={controls}
+              custom={i}
+            />
+          ))}
+        </div>
+
+        {/* Loading text */}
+        <motion.div
+          className="mt-8 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <p className="text-lg font-semibold text-gray-800">Loading Brava Event Hub</p>
+          <p className="text-sm text-gray-600 mt-2">Your events are waiting...</p>
+        </motion.div>
       </div>
     </div>
   );

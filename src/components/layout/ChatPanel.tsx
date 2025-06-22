@@ -148,7 +148,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   return (
     <>
       <Dialog open={true} onOpenChange={onClose}>
-        <DialogContent className="absolute bottom-0 left-0 right-0 w-full h-auto max-h-[85vh] flex flex-col mx-0 p-0 max-w-none rounded-t-2xl border-0">
+        <DialogContent className="fixed inset-4 z-50 w-auto h-auto max-h-[80vh] flex flex-col mx-0 p-0 max-w-none rounded-2xl border-0">
           {!selectedChat ? (
             // Conversations List
             <>
@@ -171,24 +171,26 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                   return (
                     <Card
                       key={userId}
-                      className="cursor-pointer hover:bg-gray-50 transition-colors"
+                      className="cursor-pointer transition-all hover:shadow-md"
                       onClick={() => setSelectedChat(userId)}
                     >
-                      <CardContent className="p-3">
+                      <CardContent className="p-4">
                         <div className="flex items-center gap-3">
                           <Avatar className="w-10 h-10">
-                            <AvatarImage src={user?.avatar} />
-                            <AvatarFallback>{user?.name.charAt(0)}</AvatarFallback>
+                            <AvatarImage src={user.avatar} />
+                            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                           </Avatar>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <h4 className="font-semibold text-sm">{user?.name}</h4>
+                            <div className="flex items-center justify-between mb-1">
+                              <h4 className="font-semibold text-sm">{user.name}</h4>
                               {unreadCount > 0 && (
-                                <Badge className="bg-blue-500 text-white text-xs">{unreadCount}</Badge>
+                                <Badge className="bg-green-500 text-white text-xs">
+                                  {unreadCount}
+                                </Badge>
                               )}
                             </div>
                             <p className="text-sm text-muted-foreground truncate">
-                              {lastMessage.content.substring(0, 50)}...
+                              {lastMessage.content}
                             </p>
                             <span className="text-xs text-muted-foreground">
                               {formatDistanceToNow(new Date(lastMessage.createdAt), { addSuffix: true })}
@@ -205,24 +207,18 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
             // Individual Chat
             <>
               <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
-                <div className="flex items-center gap-3">
+                <DialogTitle className="flex items-center gap-2">
                   <Button variant="ghost" size="sm" onClick={() => setSelectedChat(null)}>
                     <ArrowLeft className="w-4 h-4" />
                   </Button>
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src={getOtherUser(selectedChat)?.avatar} />
-                    <AvatarFallback>{getOtherUser(selectedChat)?.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <DialogTitle className="text-base">{getOtherUser(selectedChat)?.name}</DialogTitle>
-                  </div>
-                </div>
+                  {getOtherUser(selectedChat).name}
+                </DialogTitle>
                 <Button variant="ghost" size="sm" onClick={onClose}>
                   <X className="w-4 h-4" />
                 </Button>
               </DialogHeader>
 
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div className="flex-1 p-4 overflow-y-auto space-y-4">
                 {conversations[selectedChat]?.map((message) => (
                   <div
                     key={message.id}

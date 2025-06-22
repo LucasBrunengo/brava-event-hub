@@ -37,6 +37,10 @@ export const mockEvents: Event[] = [
     hasExpenseSplitting: true,
     isPublic: false,
     ticketPrice: 50.00,
+    comments: [
+      { id: 'c1', eventId: '1', userId: '2', user: mockUsers[1], message: "Can't wait for this VIP night! 🎉", createdAt: '2024-01-02T15:00:00Z' },
+      { id: 'c1b', eventId: '1', userId: '3', user: mockUsers[2], message: "The lineup is going to be amazing", createdAt: '2024-01-03T12:30:00Z' },
+    ],
   },
   {
     id: '2',
@@ -55,6 +59,10 @@ export const mockEvents: Event[] = [
     createdAt: '2024-01-15T10:00:00Z',
     hasExpenseSplitting: false,
     isPublic: false,
+    comments: [
+      { id: 'c2', eventId: '2', userId: '4', user: mockUsers[3], message: "Perfect weather for volleyball! 🏐", createdAt: '2024-01-18T14:00:00Z' },
+      { id: 'c2b', eventId: '2', userId: '5', user: mockUsers[4], message: "I'll bring the drinks for sunset", createdAt: '2024-01-19T10:30:00Z' },
+    ],
   },
 
   // --- PRIVATE EVENTS ORGANIZED BY OTHERS ---
@@ -76,6 +84,10 @@ export const mockEvents: Event[] = [
     createdAt: '2024-01-20T10:00:00Z',
     hasExpenseSplitting: true,
     isPublic: false,
+    comments: [
+      { id: 'c3', eventId: '3', userId: '3', user: mockUsers[2], message: "Visca Barça! 🔵🔴", createdAt: '2024-01-24T16:00:00Z' },
+      { id: 'c3b', eventId: '3', userId: '1', user: mockUsers[0], message: "This is going to be intense!", createdAt: '2024-01-25T11:00:00Z' },
+    ],
   },
   {
     id: '4',
@@ -95,6 +107,10 @@ export const mockEvents: Event[] = [
     hasExpenseSplitting: true,
     isPublic: false,
     ticketPrice: 25.00,
+    comments: [
+      { id: 'c4', eventId: '4', userId: '5', user: mockUsers[4], message: "Sutton is always a great time! 🎵", createdAt: '2024-02-08T13:00:00Z' },
+      { id: 'c4b', eventId: '4', userId: '1', user: mockUsers[0], message: "I've heard great things about this place", createdAt: '2024-02-09T15:30:00Z' },
+    ],
   },
 
   // --- PUBLIC EVENTS ---
@@ -133,6 +149,8 @@ export const mockEvents: Event[] = [
     ],
     comments: [
       { id: 'c5', eventId: '5', userId: '3', user: mockUsers[2], message: "The lineup this year is insane!", createdAt: '2024-05-20T14:00:00Z' },
+      { id: 'c5b', eventId: '5', userId: '4', user: mockUsers[3], message: "Can't wait for this! Who else is going?", createdAt: '2024-05-21T10:30:00Z' },
+      { id: 'c5c', eventId: '5', userId: '1', user: mockUsers[0], message: "I've been waiting for this all year! 🎵", createdAt: '2024-05-22T16:45:00Z' },
     ],
     totalAttendees: 220000
   },
@@ -168,6 +186,10 @@ export const mockEvents: Event[] = [
         taggedUsers: ['3']
       }
     ],
+    comments: [
+      { id: 'c6', eventId: '6', userId: '3', user: mockUsers[2], message: "The electronic music scene here is incredible!", createdAt: '2024-02-16T14:00:00Z' },
+      { id: 'c6b', eventId: '6', userId: '5', user: mockUsers[4], message: "Can't wait for the technology exhibits", createdAt: '2024-02-17T11:30:00Z' },
+    ],
     totalAttendees: 85000
   },
   {
@@ -187,7 +209,119 @@ export const mockEvents: Event[] = [
     ticketPrice: 45.00,
     discountPercentage: 10,
     ticketUrl: 'https://barcelona.brunch-in.com/',
+    comments: [
+      { id: 'c7', eventId: '7', userId: '6', user: mockUsers[5], message: "Perfect summer vibes! 🌞", createdAt: '2024-05-25T12:00:00Z' },
+      { id: 'c7b', eventId: '7', userId: '7', user: mockUsers[6], message: "The food trucks are amazing here", createdAt: '2024-05-26T14:30:00Z' },
+    ],
     totalAttendees: 15000
+  },
+
+  // --- PAST EVENTS (RECENT) ---
+  {
+    id: '8',
+    name: 'Duki Concert at Razzmatazz',
+    description: 'Incredible night with Duki at Razzmatazz! The energy was absolutely insane.',
+    date: '2024-01-15',
+    time: '10:00 PM',
+    location: 'Razzmatazz, Poblenou',
+    organizerId: '3',
+    organizer: mockUsers[2],
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-10T10:00:00Z', ticketStatus: 'purchased' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-11T11:00:00Z', ticketStatus: 'purchased' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-12T12:00:00Z', ticketStatus: 'purchased' },
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-13T13:00:00Z', ticketStatus: 'purchased' },
+    ],
+    createdAt: '2024-01-10T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: false,
+    ticketPrice: 35.00,
+    comments: [
+      { id: 'c8', eventId: '8', userId: '1', user: mockUsers[0], message: "Best concert ever! Duki killed it 🔥", createdAt: '2024-01-16T02:30:00Z' },
+      { id: 'c8b', eventId: '8', userId: '2', user: mockUsers[1], message: "The crowd was absolutely wild!", createdAt: '2024-01-16T03:00:00Z' },
+      { id: 'c8c', eventId: '8', userId: '4', user: mockUsers[3], message: "Can't believe we got to see him live!", createdAt: '2024-01-16T10:15:00Z' },
+    ],
+    photos: [
+      {
+        id: '8',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '1',
+        uploadedAt: '2024-01-16T02:45:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['2', '3', '4']
+      }
+    ]
+  },
+  {
+    id: '9',
+    name: 'Tennis Match - Friends Tournament',
+    description: 'Friendly tennis tournament with friends at the local club. Great competition and lots of fun!',
+    date: '2024-01-20',
+    time: '3:00 PM',
+    location: 'Tennis Club Barcelona, Sarrià',
+    organizerId: '5',
+    organizer: mockUsers[4],
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-18T10:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-01-18T11:00:00Z' },
+      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-01-19T12:00:00Z' },
+      { userId: '7', user: mockUsers[6], status: 'going', joinedAt: '2024-01-19T13:00:00Z' },
+    ],
+    createdAt: '2024-01-18T10:00:00Z',
+    hasExpenseSplitting: true,
+    isPublic: false,
+    comments: [
+      { id: 'c9', eventId: '9', userId: '5', user: mockUsers[4], message: "Great match everyone! Next time I'll win 😄", createdAt: '2024-01-20T18:00:00Z' },
+      { id: 'c9b', eventId: '9', userId: '1', user: mockUsers[0], message: "Amazing tournament! The weather was perfect", createdAt: '2024-01-20T18:30:00Z' },
+      { id: 'c9c', eventId: '9', userId: '6', user: mockUsers[5], message: "Thanks for organizing this! 🎾", createdAt: '2024-01-20T19:00:00Z' },
+    ],
+    photos: [
+      {
+        id: '9',
+        url: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '5',
+        uploadedAt: '2024-01-20T18:15:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['1', '6', '7']
+      }
+    ]
+  },
+  {
+    id: '10',
+    name: 'Tapas Tour in Gràcia',
+    description: 'Exploring the best tapas bars in Gràcia neighborhood. Amazing food and great company!',
+    date: '2024-01-25',
+    time: '8:00 PM',
+    location: 'Gràcia, Barcelona',
+    organizerId: '2',
+    organizer: mockUsers[1],
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-22T10:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-22T11:00:00Z' },
+      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-01-23T12:00:00Z' },
+      { userId: '9', user: mockUsers[8], status: 'going', joinedAt: '2024-01-24T13:00:00Z' },
+    ],
+    createdAt: '2024-01-22T10:00:00Z',
+    hasExpenseSplitting: true,
+    isPublic: false,
+    comments: [
+      { id: 'c10', eventId: '10', userId: '2', user: mockUsers[1], message: "The patatas bravas at that first place were incredible!", createdAt: '2024-01-25T22:00:00Z' },
+      { id: 'c10b', eventId: '10', userId: '1', user: mockUsers[0], message: "Best tapas tour ever! 🍷", createdAt: '2024-01-25T22:30:00Z' },
+      { id: 'c10c', eventId: '10', userId: '8', user: mockUsers[7], message: "We should do this again next month!", createdAt: '2024-01-26T10:00:00Z' },
+    ],
+    photos: [
+      {
+        id: '10',
+        url: 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '2',
+        uploadedAt: '2024-01-25T21:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['1', '8', '9']
+      }
+    ]
   }
 ];
 

@@ -252,7 +252,9 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
       {/* Attendees */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Attendees ({event.attendees.length})</CardTitle>
+          <CardTitle className="text-lg">
+            Attendees ({event.isPublic && event.totalAttendees ? event.totalAttendees : event.attendees.length})
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -282,7 +284,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
                         <p className="font-semibold">{attendee.user.name}</p>
                         {!event.isPublic && attendee.ticketStatus && (
                           <Badge 
@@ -291,11 +293,11 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
                               attendee.ticketStatus === 'pending' ? 'secondary' :
                               'outline'
                             }
-                            className={
+                            className={`text-xs px-2 py-0.5 ${
                               attendee.ticketStatus === 'purchased' ? 'bg-green-500 text-white' : ''
-                            }
+                            }`}
                           >
-                            {attendee.ticketStatus === 'purchased' && <Ticket className="w-3 h-3 mr-1" />}
+                            {attendee.ticketStatus === 'purchased' && <Ticket className="w-2.5 h-2.5 mr-1" />}
                             {attendee.ticketStatus.charAt(0).toUpperCase() + attendee.ticketStatus.slice(1)}
                           </Badge>
                         )}
