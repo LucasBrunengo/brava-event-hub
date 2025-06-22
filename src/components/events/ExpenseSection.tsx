@@ -11,7 +11,7 @@ import { Event } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { Plus } from 'lucide-react';
 import { QuickPay } from './QuickPay';
-import { DialogPortal } from '@radix-ui/react-dialog';
+import { DialogOverlay, DialogPortal } from '@radix-ui/react-dialog';
 
 interface ExpenseSectionProps {
   event: Event;
@@ -103,7 +103,8 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({ event, portalCon
                 </Button>
               </DialogTrigger>
               <DialogPortal container={portalContainer}>
-                <DialogContent>
+                <DialogOverlay className="absolute inset-0 bg-black/30" />
+                <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
                   <DialogHeader>
                     <DialogTitle>Add New Expense</DialogTitle>
                   </DialogHeader>
