@@ -72,9 +72,9 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-50">
-      <div className="max-w-md mx-auto bg-white min-h-screen">
-        <div className="flex flex-col h-screen relative z-10">
+    <div className="w-full bg-gray-50 h-full">
+      <div className="w-full bg-white h-full">
+        <div className="flex flex-col h-full relative">
           <div className="flex-1 overflow-y-auto pb-20">
             <div className="p-4">
               {currentView === 'dashboard' && (
