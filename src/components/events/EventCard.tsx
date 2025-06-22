@@ -121,11 +121,6 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
                 Promoted
               </Badge>
             )}
-            {event.isPublic && event.ticketPrice && (
-              <Badge variant="outline" className="text-xs">
-                💳 Pay Online
-              </Badge>
-            )}
           </div>
         </div>
       </CardContent>

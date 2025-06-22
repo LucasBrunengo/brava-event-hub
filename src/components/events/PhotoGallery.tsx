@@ -216,31 +216,31 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
 
       {/* Enhanced Photo Detail Modal */}
       <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
+        <DialogContent className="max-w-full max-h-full w-full h-full p-0 bg-black/95">
           {selectedPhoto && (
             <>
-              <DialogHeader className="flex flex-row items-center justify-between">
-                <DialogTitle className="flex items-center gap-2">
+              <DialogHeader className="flex flex-row items-center justify-between p-4 bg-black/50 text-white">
+                <DialogTitle className="flex items-center gap-2 text-white">
                   <span>Photo {selectedPhotoIndex + 1} of {localPhotos.length}</span>
                   {selectedPhoto.taggedUsers.length > 0 && (
-                    <Badge variant="outline">
+                    <Badge variant="outline" className="bg-white/20 text-white border-white/30">
                       <Tag className="w-3 h-3 mr-1" />
                       {selectedPhoto.taggedUsers.length} tagged
                     </Badge>
                   )}
                 </DialogTitle>
-                <Button variant="ghost" size="sm" onClick={() => setSelectedPhoto(null)}>
+                <Button variant="ghost" size="sm" onClick={() => setSelectedPhoto(null)} className="text-white hover:bg-white/20">
                   <X className="w-4 h-4" />
                 </Button>
               </DialogHeader>
               
-              <div className="flex gap-4 h-full">
+              <div className="flex flex-col h-full">
                 {/* Photo Section */}
-                <div className="flex-1 relative">
+                <div className="flex-1 relative flex items-center justify-center">
                   <img
                     src={selectedPhoto.url}
                     alt="Event photo"
-                    className="w-full h-96 object-cover rounded-lg"
+                    className="max-w-full max-h-full object-contain"
                     onError={handleImageError}
                   />
                   
@@ -251,7 +251,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
+                          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
                           onClick={handlePreviousPhoto}
                         >
                           <ChevronLeft className="w-4 h-4" />
@@ -261,7 +261,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
                           onClick={handleNextPhoto}
                         >
                           <ChevronRight className="w-4 h-4" />
@@ -272,7 +272,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                 </div>
 
                 {/* Comments and Reactions Section */}
-                <div className="w-80 flex flex-col">
+                <div className="p-4 bg-white">
                   {/* Reactions */}
                   <div className="mb-4">
                     <h4 className="font-semibold mb-2">Reactions</h4>
@@ -313,7 +313,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                   {/* Comments */}
                   <div className="flex-1 flex flex-col">
                     <h4 className="font-semibold mb-2">Comments</h4>
-                    <div className="flex-1 space-y-2 max-h-48 overflow-y-auto">
+                    <div className="space-y-2 max-h-32 overflow-y-auto">
                       {selectedPhoto.comments.map((comment) => (
                         <div key={comment.id} className="flex gap-2 p-2 bg-muted rounded">
                           <Avatar className="w-6 h-6">

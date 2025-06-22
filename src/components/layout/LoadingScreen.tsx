@@ -64,14 +64,14 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete 
     <AnimatePresence>
       {loadingPhase !== 'complete' && (
         <motion.div
-          className="fixed inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center z-50"
+          className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center z-50 rounded-3xl"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
           {/* Fireworks */}
           {showFireworks && (
-            <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden">
               <FireworkBurst x={20} y={30} delay={0} />
               <FireworkBurst x={80} y={40} delay={0.2} />
               <FireworkBurst x={50} y={70} delay={0.4} />
@@ -153,19 +153,6 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete 
               transition={{ delay: 0.5, duration: 0.5 }}
             >
               Loading...
-            </motion.div>
-          )}
-
-          {/* Explosion Text */}
-          {loadingPhase === 'exploding' && (
-            <motion.div
-              className="absolute text-white text-2xl font-bold"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              BOOM!
             </motion.div>
           )}
         </motion.div>

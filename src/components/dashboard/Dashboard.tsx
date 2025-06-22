@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -37,17 +36,22 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateEvent, onEventClic
     <div className="space-y-6 animate-fade-in">
       {/* Header with Background */}
       <div className="relative">
-        <div className="absolute inset-0 h-48 brava-gradient rounded-lg opacity-90" />
-        <div className="relative z-10 p-6 text-white text-center">
-          <div className="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
-            <span className="text-2xl font-bold text-white">B</span>
+        <div className="absolute inset-0 h-40 brava-gradient rounded-lg opacity-90" />
+        <div className="relative z-10 p-4 text-white text-center">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+              <span className="text-xl font-bold text-white">B</span>
+            </div>
+            <div className="text-left">
+              <h1 className="text-2xl font-bold leading-tight">Brava</h1>
+              <p className="text-white/90 text-sm">Event Hub</p>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold mb-2">Welcome to Brava</h1>
-          <p className="text-white/90 mb-6">Organize events seamlessly with your friends</p>
+          <p className="text-white/90 mb-4 text-sm">Organize events seamlessly with your friends</p>
           
           <Button 
             onClick={onCreateEvent}
-            className="bg-white text-purple-600 hover:bg-white/90 font-semibold"
+            className="bg-white text-purple-600 hover:bg-white/90 font-semibold text-sm px-4 py-2"
           >
             <Plus className="w-4 h-4 mr-2" />
             Create New Event

@@ -8,6 +8,9 @@ import { ProfilePage } from '@/components/profile/ProfilePage';
 import { PastEventDetail } from '@/components/events/PastEventDetail';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { Event } from '@/types';
+import { Button } from '@/components/ui/button';
+import { Bell, MessageCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 type View = 'dashboard' | 'create' | 'profile' | 'event-detail' | 'past-event-detail';
 
@@ -75,6 +78,31 @@ const Index = () => {
     <div className="w-full bg-gray-50 h-full">
       <div className="w-full bg-white h-full">
         <div className="flex flex-col h-full relative">
+          {/* Header with notifications and chat */}
+          <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-sm">B</span>
+              </div>
+              <span className="font-semibold text-lg">Brava</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" className="relative">
+                <Bell className="w-5 h-5" />
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                  3
+                </Badge>
+              </Button>
+              <Button variant="ghost" size="sm" className="relative">
+                <MessageCircle className="w-5 h-5" />
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-green-500">
+                  1
+                </Badge>
+              </Button>
+            </div>
+          </div>
+
           <div className="flex-1 overflow-y-auto pb-20">
             <div className="p-4">
               {currentView === 'dashboard' && (
