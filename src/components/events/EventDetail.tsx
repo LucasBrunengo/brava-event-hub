@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Calendar, MapPin, User, MessageSquare, ExternalLink, Ticket, Euro, Edit } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, User, MessageSquare, ExternalLink, Ticket, Euro, Edit, Share2, Heart, MessageCircle } from 'lucide-react';
 import { Event, UserProfile as UserProfileType } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { format } from 'date-fns';
@@ -18,9 +18,10 @@ import { QuickPay } from './QuickPay';
 interface EventDetailProps {
   event: Event;
   onBack: () => void;
+  onShare?: () => void;
 }
 
-export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
+export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare }) => {
   const { currentUser, updateEventRSVP, events } = useApp();
   const [isUpdatingRSVP, setIsUpdatingRSVP] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState<UserProfileType | null>(null);
@@ -116,6 +117,12 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack }) => {
           <Button variant="outline" size="sm">
             <Edit className="w-4 h-4 mr-2" />
             Edit Event
+          </Button>
+        )}
+        {onShare && (
+          <Button variant="outline" size="sm" onClick={onShare}>
+            <Share2 className="w-4 h-4 mr-2" />
+            Share
           </Button>
         )}
       </div>

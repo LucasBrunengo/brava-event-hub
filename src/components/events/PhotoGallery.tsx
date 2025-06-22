@@ -240,13 +240,15 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
                   <img
                     src={selectedPhoto.url}
                     alt="Event photo"
-                    className="max-w-full max-h-full object-contain rounded-lg cursor-pointer hover:scale-105 transition-transform"
+                    className="photo-modal-img max-w-full max-h-full object-contain rounded-lg cursor-pointer hover:scale-105 transition-transform"
                     onError={handleImageError}
-                    onClick={() => {
+                    onClick={(e) => {
                       // Toggle full screen view
-                      const img = document.querySelector('.photo-modal-img') as HTMLElement;
-                      if (img) {
-                        img.classList.toggle('scale-150');
+                      const img = e.currentTarget;
+                      if (img.classList.contains('scale-150')) {
+                        img.classList.remove('scale-150');
+                      } else {
+                        img.classList.add('scale-150');
                       }
                     }}
                   />

@@ -60,7 +60,7 @@ export interface EventAttendee {
   user: User;
   status: 'going' | 'maybe' | 'not-going';
   joinedAt: string;
-  hasPurchasedTicket?: boolean;
+  ticketStatus?: 'purchased' | 'pending' | 'not-purchased';
 }
 
 export interface Expense {

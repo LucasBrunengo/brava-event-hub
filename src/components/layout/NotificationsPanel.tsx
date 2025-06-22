@@ -74,8 +74,8 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
   return (
     <>
       <Dialog open={true} onOpenChange={onClose}>
-        <DialogContent className="max-w-md max-h-[80vh] overflow-hidden">
-          <DialogHeader className="flex flex-row items-center justify-between">
+        <DialogContent className="max-w-full w-full max-h-[80vh] overflow-hidden mx-0 p-0">
+          <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
             <DialogTitle className="flex items-center gap-2">
               <Bell className="w-5 h-5" />
               Notifications
@@ -85,7 +85,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
             </Button>
           </DialogHeader>
 
-          <div className="space-y-2 max-h-96 overflow-y-auto">
+          <div className="space-y-2 max-h-96 overflow-y-auto px-4 pb-4">
             {notifications.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <Bell className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -137,14 +137,17 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
       {/* Notification Detail Modal */}
       {selectedNotification && (
         <Dialog open={!!selectedNotification} onOpenChange={() => setSelectedNotification(null)}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
+          <DialogContent className="max-w-full w-full max-h-[80vh] overflow-hidden mx-0 p-0">
+            <DialogHeader className="flex flex-row items-center justify-between p-4 border-b">
               <DialogTitle className="flex items-center gap-2">
                 {getNotificationIcon(selectedNotification.type)}
                 {selectedNotification.title}
               </DialogTitle>
+              <Button variant="ghost" size="sm" onClick={() => setSelectedNotification(null)}>
+                <X className="w-4 h-4" />
+              </Button>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="space-y-4 p-4 max-h-96 overflow-y-auto">
               <p className="text-muted-foreground">{selectedNotification.message}</p>
               
               {selectedNotification.relatedEventId && (
@@ -155,7 +158,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
                       const event = getRelatedEvent(selectedNotification.relatedEventId);
                       return event ? (
                         <div className="space-y-2">
-                          <h5 className="font-medium">{event.name}</h5>
+                          <h5 className="font-medium text-sm">{event.name}</h5>
                           <p className="text-sm text-muted-foreground">{event.description}</p>
                           <div className="flex items-center gap-2 text-sm">
                             <Calendar className="w-4 h-4" />

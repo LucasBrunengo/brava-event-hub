@@ -185,373 +185,322 @@ export const mockEvents: Event[] = [
   {
     id: '1',
     name: 'Beach BBQ Party',
-    description: 'Join us for a fun beach BBQ with great food, music, and sunset views! Bring your friends and appetite.',
-    date: '2025-07-15',
-    time: '6:00 PM',
+    description: 'Join us for an amazing beach BBQ with music, games, and great food! Perfect for meeting new people and enjoying the Barcelona sunset.',
+    date: '2024-02-15',
+    time: '7:00 PM',
     location: 'Barceloneta Beach',
     organizerId: '1',
     organizer: mockUsers[0],
     attendees: [
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-01T10:00:00Z' },
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-02T10:00:00Z' },
-      { userId: '3', user: mockUsers[2], status: 'maybe', joinedAt: '2024-01-03T10:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'not-going', joinedAt: '2024-01-04T10:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-01-05T10:00:00Z' },
-      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-01-06T10:00:00Z' },
-      { userId: '7', user: mockUsers[6], status: 'maybe', joinedAt: '2024-01-07T10:00:00Z' },
-      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-01-08T10:00:00Z' },
-      { userId: '9', user: mockUsers[8], status: 'going', joinedAt: '2024-01-09T10:00:00Z' },
-      { userId: '10', user: mockUsers[9], status: 'maybe', joinedAt: '2024-01-10T10:00:00Z' },
-      { userId: '11', user: mockUsers[10], status: 'going', joinedAt: '2024-01-11T10:00:00Z' },
-      { userId: '12', user: mockUsers[11], status: 'going', joinedAt: '2024-01-12T10:00:00Z' },
-      { userId: '13', user: mockUsers[12], status: 'going', joinedAt: '2024-01-13T10:00:00Z' },
-      { userId: '14', user: mockUsers[13], status: 'maybe', joinedAt: '2024-01-14T10:00:00Z' },
-      { userId: '15', user: mockUsers[14], status: 'going', joinedAt: '2024-01-15T10:00:00Z' },
-      { userId: '16', user: mockUsers[15], status: 'going', joinedAt: '2024-01-16T10:00:00Z' },
-      { userId: '17', user: mockUsers[16], status: 'going', joinedAt: '2024-01-17T10:00:00Z' },
-      { userId: '18', user: mockUsers[17], status: 'maybe', joinedAt: '2024-01-18T10:00:00Z' },
-      { userId: '19', user: mockUsers[18], status: 'going', joinedAt: '2024-01-19T10:00:00Z' },
-      { userId: '20', user: mockUsers[19], status: 'going', joinedAt: '2024-01-20T10:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-02T11:00:00Z' },
+      { userId: '3', user: mockUsers[2], status: 'maybe', joinedAt: '2024-01-03T12:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-04T13:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'not-going', joinedAt: '2024-01-05T14:00:00Z' }
     ],
     createdAt: '2024-01-01T10:00:00Z',
     hasExpenseSplitting: true,
     isPublic: false,
     photos: [
       {
-        id: 'photo-1-1',
+        id: '1',
         url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
-        uploadedAt: '2024-01-02T10:00:00Z',
-        reactions: [
-          { id: 'r1', userId: '2', emoji: '❤️', createdAt: '2024-01-02T10:30:00Z' },
-          { id: 'r2', userId: '5', emoji: '🔥', createdAt: '2024-01-02T10:35:00Z' }
-        ],
-        comments: [
-          { id: 'c1', userId: '2', user: mockUsers[1], message: 'Amazing food!', createdAt: '2024-01-02T10:30:00Z' }
-        ],
-        taggedUsers: ['1', '2']
+        uploadedAt: '2024-01-10T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['2', '3']
       },
       {
-        id: 'photo-1-2',
+        id: '2',
         url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '2',
-        uploadedAt: '2024-01-02T11:00:00Z',
-        reactions: [
-          { id: 'r3', userId: '1', emoji: '😍', createdAt: '2024-01-02T11:05:00Z' },
-          { id: 'r4', userId: '6', emoji: '👏', createdAt: '2024-01-02T11:10:00Z' }
-        ],
+        uploadedAt: '2024-01-11T11:00:00Z',
+        reactions: [],
         comments: [],
-        taggedUsers: ['2', '5']
-      },
-      {
-        id: 'photo-1-3',
-        url: 'https://images.unsplash.com/photo-1504674900240-9a9049b7d8ce?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '5',
-        uploadedAt: '2024-01-02T12:00:00Z',
-        reactions: [
-          { id: 'r5', userId: '1', emoji: '🔥', createdAt: '2024-01-02T12:10:00Z' },
-          { id: 'r6', userId: '2', emoji: '❤️', createdAt: '2024-01-02T12:15:00Z' }
-        ],
-        comments: [
-          { id: 'c2', userId: '1', user: mockUsers[0], message: 'Perfect sunset!', createdAt: '2024-01-02T12:15:00Z' }
-        ],
-        taggedUsers: ['5', '6']
-      },
-      {
-        id: 'photo-1-4',
-        url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '6',
-        uploadedAt: '2024-01-02T13:00:00Z',
-        reactions: [
-          { id: 'r7', userId: '1', emoji: '🤩', createdAt: '2024-01-02T13:05:00Z' }
-        ],
-        comments: [],
-        taggedUsers: ['1', '2', '5', '6']
+        taggedUsers: ['1', '4']
       }
     ]
   },
   {
     id: '2',
     name: 'Primavera Sound Festival',
-    description: 'The ultimate music festival experience in Barcelona! Three days of incredible artists, food, and unforgettable memories.',
-    date: '2025-06-01',
+    description: 'The biggest music festival in Barcelona! Join us for an incredible lineup featuring international artists and local talent.',
+    date: '2024-06-01',
     time: '4:00 PM',
-    location: 'Park Güell',
+    location: 'Parc del Fòrum',
     organizerId: '2',
     organizer: mockUsers[1],
     attendees: [
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-15T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-16T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-17T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '4', user: mockUsers[3], status: 'not-going', joinedAt: '2024-01-18T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-01-19T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-01-20T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '7', user: mockUsers[6], status: 'going', joinedAt: '2024-01-21T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '8', user: mockUsers[7], status: 'maybe', joinedAt: '2024-01-22T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '9', user: mockUsers[8], status: 'going', joinedAt: '2024-01-23T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '10', user: mockUsers[9], status: 'going', joinedAt: '2024-01-24T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '11', user: mockUsers[10], status: 'going', joinedAt: '2024-01-25T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '12', user: mockUsers[11], status: 'maybe', joinedAt: '2024-01-26T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '13', user: mockUsers[12], status: 'going', joinedAt: '2024-01-27T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '14', user: mockUsers[13], status: 'going', joinedAt: '2024-01-28T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '15', user: mockUsers[14], status: 'going', joinedAt: '2024-01-29T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '16', user: mockUsers[15], status: 'maybe', joinedAt: '2024-01-30T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '17', user: mockUsers[16], status: 'going', joinedAt: '2024-01-31T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '18', user: mockUsers[17], status: 'going', joinedAt: '2024-02-01T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '19', user: mockUsers[18], status: 'going', joinedAt: '2024-02-02T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '20', user: mockUsers[19], status: 'maybe', joinedAt: '2024-02-03T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '21', user: mockUsers[20], status: 'going', joinedAt: '2024-02-04T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '22', user: mockUsers[21], status: 'going', joinedAt: '2024-02-05T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '23', user: mockUsers[22], status: 'going', joinedAt: '2024-02-06T10:00:00Z', hasPurchasedTicket: true },
-      { userId: '24', user: mockUsers[23], status: 'maybe', joinedAt: '2024-02-07T10:00:00Z', hasPurchasedTicket: false },
-      { userId: '25', user: mockUsers[24], status: 'going', joinedAt: '2024-02-08T10:00:00Z', hasPurchasedTicket: true },
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-15T10:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-16T11:00:00Z' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-17T12:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-01-18T13:00:00Z' }
     ],
     createdAt: '2024-01-15T10:00:00Z',
     hasExpenseSplitting: false,
-    isPublic: false,
-    ticketUrl: 'https://primaverasound.com/tickets',
-    ticketPrice: 280,
+    isPublic: true,
+    isPromoted: true,
+    ticketPrice: 89.99,
+    discountPercentage: 15,
+    ticketUrl: 'https://www.primaverasound.com',
     photos: [
       {
-        id: 'photo-2-1',
+        id: '3',
         url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '2',
-        uploadedAt: '2024-01-16T10:00:00Z',
-        reactions: [
-          { id: 'r8', userId: '1', emoji: '🎵', createdAt: '2024-01-16T10:30:00Z' },
-          { id: 'r9', userId: '6', emoji: '🔥', createdAt: '2024-01-16T10:35:00Z' }
-        ],
-        comments: [
-          { id: 'c3', userId: '1', user: mockUsers[0], message: 'Incredible atmosphere!', createdAt: '2024-01-16T10:40:00Z' }
-        ],
-        taggedUsers: ['2', '6']
-      },
-      {
-        id: 'photo-2-2',
-        url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
-        uploadedAt: '2024-01-16T11:00:00Z',
-        reactions: [
-          { id: 'r10', userId: '2', emoji: '❤️', createdAt: '2024-01-16T11:05:00Z' },
-          { id: 'r11', userId: '9', emoji: '🤩', createdAt: '2024-01-16T11:10:00Z' }
-        ],
+        uploadedAt: '2024-01-20T10:00:00Z',
+        reactions: [],
         comments: [],
-        taggedUsers: ['1', '9']
-      },
-      {
-        id: 'photo-2-3',
-        url: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '6',
-        uploadedAt: '2024-01-16T12:00:00Z',
-        reactions: [
-          { id: 'r12', userId: '1', emoji: '🎉', createdAt: '2024-01-16T12:05:00Z' },
-          { id: 'r13', userId: '2', emoji: '🔥', createdAt: '2024-01-16T12:10:00Z' }
-        ],
-        comments: [
-          { id: 'c4', userId: '2', user: mockUsers[1], message: 'Best festival ever!', createdAt: '2024-01-16T12:15:00Z' }
-        ],
-        taggedUsers: ['6', '11', '13']
-      },
-      {
-        id: 'photo-2-4',
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '9',
-        uploadedAt: '2024-01-16T13:00:00Z',
-        reactions: [
-          { id: 'r14', userId: '1', emoji: '👏', createdAt: '2024-01-16T13:05:00Z' }
-        ],
-        comments: [],
-        taggedUsers: ['9', '15', '17']
+        taggedUsers: ['2', '3']
       }
     ]
   },
   {
     id: '3',
-    name: 'Game Night',
-    description: 'Board games, card games, and lots of fun! Perfect for a cozy evening with friends.',
-    date: '2025-01-10',
-    time: '7:00 PM',
-    location: 'Gracia',
-    organizerId: '3',
-    organizer: mockUsers[2],
+    name: 'Board Game Night',
+    description: 'A fun evening of board games, snacks, and good company! We\'ll have a variety of games for all skill levels.',
+    date: '2024-02-10',
+    time: '8:00 PM',
+    location: 'Café Central, Gràcia',
+    organizerId: '1',
+    organizer: mockUsers[0],
     attendees: [
       { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-05T10:00:00Z' },
-      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-05T10:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-06T10:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-01-07T10:00:00Z' },
-      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-01-08T10:00:00Z' },
-      { userId: '7', user: mockUsers[6], status: 'going', joinedAt: '2024-01-09T10:00:00Z' },
-      { userId: '8', user: mockUsers[7], status: 'maybe', joinedAt: '2024-01-10T10:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-06T11:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-01-07T12:00:00Z' }
     ],
     createdAt: '2024-01-05T10:00:00Z',
     hasExpenseSplitting: true,
     isPublic: false,
     photos: [
       {
-        id: 'photo-3-1',
-        url: 'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '3',
-        uploadedAt: '2024-01-06T10:00:00Z',
-        reactions: [
-          { id: 'r15', userId: '1', emoji: '🎲', createdAt: '2024-01-06T10:30:00Z' },
-          { id: 'r16', userId: '4', emoji: '😄', createdAt: '2024-01-06T10:35:00Z' }
-        ],
-        comments: [
-          { id: 'c5', userId: '1', user: mockUsers[0], message: 'Great game night!', createdAt: '2024-01-06T10:40:00Z' }
-        ],
-        taggedUsers: ['3', '1', '4']
-      },
-      {
-        id: 'photo-3-2',
-        url: 'https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&h=400&fit=crop&crop=center',
+        id: '4',
+        url: 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
-        uploadedAt: '2024-01-06T11:00:00Z',
-        reactions: [
-          { id: 'r17', userId: '3', emoji: '🃏', createdAt: '2024-01-06T11:05:00Z' },
-          { id: 'r18', userId: '6', emoji: '🎯', createdAt: '2024-01-06T11:10:00Z' }
-        ],
+        uploadedAt: '2024-01-12T10:00:00Z',
+        reactions: [],
         comments: [],
-        taggedUsers: ['1', '6', '7']
+        taggedUsers: ['4']
       }
     ]
   },
   {
     id: '4',
-    name: 'Tapas Tour',
-    description: 'Explore the best tapas bars in the Gothic Quarter. Sample delicious bites and local wines.',
-    date: '2025-08-20',
-    time: '7:30 PM',
-    location: 'Gothic Quarter',
-    organizerId: '1',
-    organizer: mockUsers[0],
+    name: 'Tapas Tour - Gothic Quarter',
+    description: 'Explore the best tapas bars in the Gothic Quarter! We\'ll visit 4 different places and try traditional Spanish dishes.',
+    date: '2024-02-20',
+    time: '8:30 PM',
+    location: 'Gothic Quarter, Barcelona',
+    organizerId: '3',
+    organizer: mockUsers[2],
     attendees: [
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-02-01T10:00:00Z' },
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-02-02T10:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-02-03T10:00:00Z' },
-      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-02-04T10:00:00Z' },
-      { userId: '7', user: mockUsers[6], status: 'going', joinedAt: '2024-02-05T10:00:00Z' },
-      { userId: '8', user: mockUsers[7], status: 'maybe', joinedAt: '2024-02-06T10:00:00Z' },
-      { userId: '9', user: mockUsers[8], status: 'going', joinedAt: '2024-02-07T10:00:00Z' },
-      { userId: '10', user: mockUsers[9], status: 'going', joinedAt: '2024-02-08T10:00:00Z' },
-      { userId: '11', user: mockUsers[10], status: 'going', joinedAt: '2024-02-09T10:00:00Z' },
-      { userId: '12', user: mockUsers[11], status: 'maybe', joinedAt: '2024-02-10T10:00:00Z' },
-      { userId: '13', user: mockUsers[12], status: 'going', joinedAt: '2024-02-11T10:00:00Z' },
-      { userId: '14', user: mockUsers[13], status: 'going', joinedAt: '2024-02-12T10:00:00Z' },
-      { userId: '15', user: mockUsers[14], status: 'going', joinedAt: '2024-02-13T10:00:00Z' },
-      { userId: '16', user: mockUsers[15], status: 'maybe', joinedAt: '2024-02-14T10:00:00Z' },
-      { userId: '17', user: mockUsers[16], status: 'going', joinedAt: '2024-02-15T10:00:00Z' },
-      { userId: '18', user: mockUsers[17], status: 'going', joinedAt: '2024-02-16T10:00:00Z' },
-      { userId: '19', user: mockUsers[18], status: 'going', joinedAt: '2024-02-17T10:00:00Z' },
-      { userId: '20', user: mockUsers[19], status: 'maybe', joinedAt: '2024-02-18T10:00:00Z' },
-      { userId: '21', user: mockUsers[20], status: 'going', joinedAt: '2024-02-19T10:00:00Z' },
-      { userId: '22', user: mockUsers[21], status: 'going', joinedAt: '2024-02-20T10:00:00Z' },
-      { userId: '23', user: mockUsers[22], status: 'going', joinedAt: '2024-02-21T10:00:00Z' },
-      { userId: '24', user: mockUsers[23], status: 'maybe', joinedAt: '2024-02-22T10:00:00Z' },
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-20T10:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-21T11:00:00Z' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-22T12:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-23T13:00:00Z' }
     ],
-    createdAt: '2024-02-01T10:00:00Z',
+    createdAt: '2024-01-20T10:00:00Z',
     hasExpenseSplitting: true,
-    isPublic: true,
-    isPromoted: true,
-    ticketPrice: 45,
-    discountPercentage: 15,
+    isPublic: false,
     photos: [
       {
-        id: 'photo-4-1',
-        url: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '1',
-        uploadedAt: '2024-02-02T10:00:00Z',
+        id: '5',
+        url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '3',
+        uploadedAt: '2024-01-25T10:00:00Z',
         reactions: [],
         comments: [],
-        taggedUsers: []
-      },
-      {
-        id: 'photo-4-2',
-        url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '2',
-        uploadedAt: '2024-02-02T11:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: []
+        taggedUsers: ['1', '2', '4']
       }
     ]
   },
   {
     id: '5',
-    name: 'Salsa Night',
-    description: 'Dance the night away at a lively salsa club in El Born. Beginners welcome!',
-    date: '2025-09-05',
+    name: 'Salsa Night at El Born',
+    description: 'Dance the night away with the best salsa music in Barcelona! All levels welcome, we\'ll have beginner lessons too.',
+    date: '2024-02-25',
     time: '10:00 PM',
-    location: 'El Born',
+    location: 'El Born, Barcelona',
     organizerId: '2',
     organizer: mockUsers[1],
     attendees: [
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-02-15T10:00:00Z' },
-      { userId: '3', user: mockUsers[2], status: 'maybe', joinedAt: '2024-02-16T10:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-02-17T10:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-02-18T10:00:00Z' },
-      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-02-19T10:00:00Z' },
-      { userId: '7', user: mockUsers[6], status: 'maybe', joinedAt: '2024-02-20T10:00:00Z' },
-      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-02-21T10:00:00Z' },
-      { userId: '9',  user: mockUsers[8], status: 'going', joinedAt: '2024-02-22T10:00:00Z' },
-      { userId: '10', user: mockUsers[9], status: 'going', joinedAt: '2024-02-23T10:00:00Z' },
-      { userId: '11', user: mockUsers[10], status: 'maybe', joinedAt: '2024-02-24T10:00:00Z' },
-      { userId: '12', user: mockUsers[11], status: 'going', joinedAt: '2024-02-25T10:00:00Z' },
-      { userId: '13', user: mockUsers[12], status: 'going', joinedAt: '2024-02-26T10:00:00Z' },
-      { userId: '14', user: mockUsers[13], status: 'going', joinedAt: '2024-02-27T10:00:00Z' },
-      { userId: '15', user: mockUsers[14], status: 'maybe', joinedAt: '2024-02-28T10:00:00Z' },
-      { userId: '16', user: mockUsers[15], status: 'going', joinedAt: '2024-03-01T10:00:00Z' },
-      { userId: '17', user: mockUsers[16], status: 'going', joinedAt: '2024-03-02T10:00:00Z' },
-      { userId: '18', user: mockUsers[17], status: 'going', joinedAt: '2024-03-03T10:00:00Z' },
-      { userId: '19', user: mockUsers[18], status: 'maybe', joinedAt: '2024-03-04T10:00:00Z' },
-      { userId: '20', user: mockUsers[19], status: 'going', joinedAt: '2024-03-05T10:00:00Z' },
-      { userId: '21', user: mockUsers[20], status: 'going', joinedAt: '2024-03-06T10:00:00Z' },
-      { userId: '22', user: mockUsers[21], status: 'going', joinedAt: '2024-03-07T10:00:00Z' },
-      { userId: '23', user: mockUsers[22], status: 'maybe', joinedAt: '2024-03-08T10:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-25T10:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-26T11:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-01-27T12:00:00Z' }
+    ],
+    createdAt: '2024-01-25T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: true,
+    ticketPrice: 15.00,
+    photos: [
+      {
+        id: '6',
+        url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '2',
+        uploadedAt: '2024-01-30T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['4']
+      }
+    ]
+  },
+  {
+    id: '6',
+    name: 'Sunset Yoga on the Beach',
+    description: 'Relax and rejuvenate with a peaceful yoga session as the sun sets over the Mediterranean. All levels welcome.',
+    date: '2024-02-28',
+    time: '7:30 PM',
+    location: 'Nova Icaria Beach',
+    organizerId: '5',
+    organizer: mockUsers[4],
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-28T10:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-01-29T11:00:00Z' }
+    ],
+    createdAt: '2024-01-28T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: true,
+    ticketPrice: 12.00,
+    photos: [
+      {
+        id: '7',
+        url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '5',
+        uploadedAt: '2024-02-01T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['1']
+      }
+    ]
+  },
+  {
+    id: '7',
+    name: 'Duki Concert - Palau Sant Jordi',
+    description: 'The Argentine trap superstar is coming to Barcelona! Don\'t miss this incredible show with special guests.',
+    date: '2024-03-15',
+    time: '9:00 PM',
+    location: 'Palau Sant Jordi',
+    organizerId: '1',
+    organizer: mockUsers[0],
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-30T10:00:00Z', ticketStatus: 'purchased' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-31T11:00:00Z', ticketStatus: 'purchased' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-02-01T12:00:00Z', ticketStatus: 'pending' },
+      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-02-02T13:00:00Z' }
+    ],
+    createdAt: '2024-01-30T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: false,
+    ticketPrice: 65.00,
+    ticketUrl: 'https://www.ticketmaster.es',
+    photos: [
+      {
+        id: '8',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '1',
+        uploadedAt: '2024-02-05T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['2', '3']
+      }
+    ]
+  },
+  {
+    id: '8',
+    name: 'Razzmatazz Club Night',
+    description: 'The most iconic club in Barcelona! Join us for an unforgettable night of electronic music and dancing.',
+    date: '2024-03-08',
+    time: '11:00 PM',
+    location: 'Razzmatazz Club',
+    organizerId: '4',
+    organizer: mockUsers[3],
+    attendees: [
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-02-05T10:00:00Z' },
+      { userId: '1', user: mockUsers[0], status: 'maybe', joinedAt: '2024-02-06T11:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-02-07T12:00:00Z' }
+    ],
+    createdAt: '2024-02-05T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: true,
+    ticketPrice: 20.00,
+    ticketUrl: 'https://www.razzmatazz.com',
+    photos: [
+      {
+        id: '9',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '4',
+        uploadedAt: '2024-02-10T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['1', '2']
+      }
+    ]
+  },
+  {
+    id: '9',
+    name: 'Sónar Festival',
+    description: 'The world\'s most advanced music, creativity and technology festival. Experience cutting-edge electronic music and digital art.',
+    date: '2024-06-13',
+    time: '2:00 PM',
+    location: 'Fira Barcelona',
+    organizerId: '2',
+    organizer: mockUsers[1],
+    attendees: [
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-02-10T10:00:00Z' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-02-11T11:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-02-12T12:00:00Z' }
+    ],
+    createdAt: '2024-02-10T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: true,
+    isPromoted: true,
+    ticketPrice: 120.00,
+    discountPercentage: 10,
+    ticketUrl: 'https://www.sonar.es',
+    photos: [
+      {
+        id: '10',
+        url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '2',
+        uploadedAt: '2024-02-15T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['3']
+      }
+    ]
+  },
+  {
+    id: '10',
+    name: 'Fever Mystery Dinner',
+    description: 'An immersive mystery dinner experience! Solve a thrilling case while enjoying a gourmet meal in a secret location.',
+    date: '2024-03-22',
+    time: '8:00 PM',
+    location: 'Secret Location (revealed 24h before)',
+    organizerId: '5',
+    organizer: mockUsers[4],
+    attendees: [
+      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-02-15T10:00:00Z' },
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-02-16T11:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-02-17T12:00:00Z' }
     ],
     createdAt: '2024-02-15T10:00:00Z',
     hasExpenseSplitting: false,
     isPublic: true,
-    isPromoted: true,
-    ticketPrice: 25,
-    discountPercentage: 20,
-  },
-  {
-    id: '6',
-    name: 'Sunset Yoga',
-    description: 'Relax and rejuvenate with a sunset yoga session on the beach. All levels welcome.',
-    date: '2025-07-22',
-    time: '7:00 PM',
-    location: 'Bogatell Beach',
-    organizerId: '3',
-    organizer: mockUsers[2],
-    attendees: [
-      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-03-01T10:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-03-02T10:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-03-03T10:00:00Z' },
-      { userId: '6', user: mockUsers[5], status: 'maybe', joinedAt: '2024-03-04T10:00:00Z' },
-      { userId: '7', user: mockUsers[6], status: 'going', joinedAt: '2024-03-05T10:00:00Z' },
-      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-03-06T10:00:00Z' },
-      { userId: '9', user: mockUsers[8], status: 'going', joinedAt: '2024-03-07T10:00:00Z' },
-      { userId: '10', user: mockUsers[9], status: 'maybe', joinedAt: '2024-03-08T10:00:00Z' },
-      { userId: '11', user: mockUsers[10], status: 'going', joinedAt: '2024-03-09T10:00:00Z' },
-      { userId: '12', user: mockUsers[11], status: 'going', joinedAt: '2024-03-10T10:00:00Z' },
-      { userId: '13', user: mockUsers[12], status: 'going', joinedAt: '2024-03-11T10:00:00Z' },
-      { userId: '14', user: mockUsers[13], status: 'maybe', joinedAt: '2024-03-12T10:00:00Z' },
-      { userId: '15', user: mockUsers[14], status: 'going', joinedAt: '2024-03-13T10:00:00Z' },
-      { userId: '16', user: mockUsers[15], status: 'going', joinedAt: '2024-03-14T10:00:00Z' },
-      { userId: '17', user: mockUsers[16], status: 'going', joinedAt: '2024-03-15T10:00:00Z' },
-      { userId: '18', user: mockUsers[17], status: 'maybe', joinedAt: '2024-03-16T10:00:00Z' },
-      { userId: '19', user: mockUsers[18], status: 'going', joinedAt: '2024-03-17T10:00:00Z' },
-      { userId: '20', user: mockUsers[19], status: 'going', joinedAt: '2024-03-18T10:00:00Z' },
-      { userId: '21', user: mockUsers[20], status: 'going', joinedAt: '2024-03-19T10:00:00Z' },
-      { userId: '22', user: mockUsers[21], status: 'maybe', joinedAt: '2024-03-20T10:00:00Z' },
-      { userId: '23', user: mockUsers[22], status: 'going', joinedAt: '2024-03-21T10:00:00Z' },
-    ],
-    createdAt: '2024-03-01T10:00:00Z',
-    hasExpenseSplitting: false,
-    isPublic: true,
-    ticketPrice: 15,
-  },
+    ticketPrice: 45.00,
+    ticketUrl: 'https://feverup.com',
+    photos: [
+      {
+        id: '11',
+        url: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '5',
+        uploadedAt: '2024-02-20T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['1']
+      }
+    ]
+  }
 ];
 
 // Extract public events from mockEvents

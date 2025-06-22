@@ -87,7 +87,10 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                   <Button 
                     size="sm" 
                     className="w-full"
-                    onClick={() => onEventClick(event.id)}
+                    onClick={() => {
+                      onEventClick(event.id);
+                      onClose(); // Close the chat panel
+                    }}
                   >
                     <ExternalLink className="w-3 h-3 mr-1" />
                     View Event
@@ -107,7 +110,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 <span className="font-semibold text-sm">Payment Request</span>
               </div>
               <p className="text-sm mb-3">{message.content}</p>
-              {message.amount && (
+              {message.amount && message.senderId !== currentUserId && (
                 <div className="space-y-3">
                   <div className="bg-white p-3 rounded border">
                     <div className="flex items-center justify-between mb-2">
@@ -144,7 +147,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="max-w-md max-h-[80vh] overflow-hidden p-0">
+      <DialogContent className="max-w-full w-full max-h-[80vh] overflow-hidden mx-0 p-0">
         {!selectedChat ? (
           // Conversations List
           <>
@@ -158,7 +161,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               </Button>
             </DialogHeader>
 
-            <div className="space-y-1 max-h-96 overflow-y-auto">
+            <div className="space-y-1 max-h-96 overflow-y-auto px-4 pb-4">
               {Object.entries(conversations).map(([userId, userMessages]) => {
                 const user = getOtherUser(userId);
                 const lastMessage = userMessages[userMessages.length - 1];

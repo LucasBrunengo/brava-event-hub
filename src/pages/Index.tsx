@@ -9,8 +9,10 @@ import { PastEventDetail } from '@/components/events/PastEventDetail';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { NotificationsPanel } from '@/components/layout/NotificationsPanel';
 import { ChatPanel } from '@/components/layout/ChatPanel';
+import { ShareEventModal } from '@/components/events/ShareEventModal';
+import { PremiumModal } from '@/components/layout/PremiumModal';
 import { Button } from '@/components/ui/button';
-import { Bell, MessageCircle } from 'lucide-react';
+import { Bell, MessageCircle, Crown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Event } from '@/types';
 
@@ -22,6 +24,8 @@ const Index = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   console.log('Index component rendered - isAuthenticated:', isAuthenticated);
   console.log('WelcomeScreen component:', WelcomeScreen);
@@ -99,6 +103,13 @@ const Index = () => {
     console.log('Payment request:', amount, paymentMethods);
   };
 
+  const handleShareEvent = (selectedFriends: any[], message: string) => {
+    // Send event invitations to selected friends
+    selectedFriends.forEach(friend => {
+      sendMessage(friend.id, message, 'event_invite', selectedEvent?.id);
+    });
+  };
+
   const unreadNotifications = notifications.filter(n => !n.isRead).length;
   const unreadMessages = messages.filter(m => !m.isRead && m.senderId !== '1').length;
 
@@ -106,7 +117,7 @@ const Index = () => {
     <div className="w-full bg-gray-50 h-full">
       <div className="w-full bg-white h-full">
         <div className="flex flex-col h-full relative">
-          {/* Header with notifications and chat */}
+          {/* Header with premium, notifications and chat */}
           <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
@@ -116,6 +127,15 @@ const Index = () => {
             </div>
             
             <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="bg-gradient-to-r from-purple-500 to-blue-500 text-white border-0 hover:from-purple-600 hover:to-blue-600"
+                onClick={() => setShowPremiumModal(true)}
+              >
+                <Crown className="w-4 h-4 mr-1" />
+                Premium +
+              </Button>
               <Button variant="ghost" size="sm" className="relative" onClick={() => setShowNotifications(true)}>
                 <Bell className="w-5 h-5" />
                 {unreadNotifications > 0 && (
@@ -155,6 +175,7 @@ const Index = () => {
                 <EventDetail 
                   event={selectedEvent}
                   onBack={handleBack}
+                  onShare={() => setShowShareModal(true)}
                 />
               )}
               
@@ -201,6 +222,23 @@ const Index = () => {
               onClose={() => setShowChat(false)}
             />
           )}
+
+          {/* Share Event Modal */}
+          {showShareModal && selectedEvent && (
+            <ShareEventModal
+              event={selectedEvent}
+              friends={users.filter(user => user.id !== '1')} // Exclude current user
+              onShare={handleShareEvent}
+              onClose={() => setShowShareModal(false)}
+              isOpen={showShareModal}
+            />
+          )}
+
+          {/* Premium Modal */}
+          <PremiumModal
+            isOpen={showPremiumModal}
+            onClose={() => setShowPremiumModal(false)}
+          />
         </div>
       </div>
     </div>
