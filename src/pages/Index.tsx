@@ -51,7 +51,11 @@ const Index = () => {
   };
 
   if (isLoading) {
-    return <LoadingScreen onLoadingComplete={handleLoadingComplete} />;
+    return (
+      <PhoneFrame>
+        <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+      </PhoneFrame>
+    );
   }
 
   if (!isAuthenticated) {
