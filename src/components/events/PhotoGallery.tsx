@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogPortal } from '@/components/ui/dialog';
-import { Heart, MessageCircle, Tag, Send, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogPortal, DialogOverlay } from '@/components/ui/dialog';
+import { Heart, MessageCircle, Tag, Send, X, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { EventPhoto, User, PhotoReaction, PhotoComment } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { formatDistanceToNow } from 'date-fns';
@@ -25,6 +25,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
   const [selectedEmoji, setSelectedEmoji] = useState('');
   const [localPhotos, setLocalPhotos] = useState<EventPhoto[]>(photos);
   const [isPhotoExpanded, setIsPhotoExpanded] = useState(false);
+  const [isAddPhotosModalOpen, setIsAddPhotosModalOpen] = useState(false);
 
   useEffect(() => {
     // Update local photos if the prop changes
@@ -156,6 +157,21 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
     event.currentTarget.src = 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&crop=center';
   };
 
+  const handleAddPhoto = () => {
+    if (!currentUser) return;
+    const newPhoto: EventPhoto = {
+      id: `photo-${Date.now()}`,
+      url: `https://picsum.photos/seed/${Math.random()}/400/400`,
+      uploadedBy: currentUser.id,
+      uploadedAt: new Date().toISOString(),
+      reactions: [],
+      comments: [],
+      taggedUsers: [],
+    };
+    setLocalPhotos(prevPhotos => [newPhoto, ...prevPhotos]);
+    setIsAddPhotosModalOpen(false);
+  };
+
   if (!localPhotos || localPhotos.length === 0) {
     return (
       <Card>
@@ -165,8 +181,12 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
           </div>
           <h3 className="font-semibold mb-2">No Photos Yet</h3>
           <p className="text-muted-foreground text-sm">
-            Photos from the event will appear here
+            Be the first to add a photo!
           </p>
+           <Button size="sm" onClick={() => setIsAddPhotosModalOpen(true)} className="mt-4">
+            <Plus className="w-4 h-4 mr-2" />
+            Add Pictures
+          </Button>
         </CardContent>
       </Card>
     );
@@ -175,8 +195,12 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
   return (
     <>
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg">Event Gallery</CardTitle>
+          <Button size="sm" onClick={() => setIsAddPhotosModalOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Pictures
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
@@ -369,6 +393,27 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, attendees, e
         </DialogPortal>
       </Dialog>
       
+      {/* Add Photos Modal */}
+      <Dialog open={isAddPhotosModalOpen} onOpenChange={setIsAddPhotosModalOpen}>
+        <DialogPortal container={portalContainer}>
+          <DialogOverlay />
+          <DialogContent className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+            <DialogHeader>
+              <DialogTitle>Add a new photo</DialogTitle>
+            </DialogHeader>
+            <div className="py-4">
+              <p className="text-muted-foreground text-sm mb-4">
+                This is a simulation. Clicking the button below will add a new random placeholder image to the gallery.
+              </p>
+              <Button onClick={handleAddPhoto} className="w-full brava-gradient">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Random Picture
+              </Button>
+            </div>
+          </DialogContent>
+        </DialogPortal>
+      </Dialog>
+
       {/* Full-screen expanded photo view */}
       {isPhotoExpanded && selectedPhoto && (
         <div 
