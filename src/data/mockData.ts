@@ -220,6 +220,104 @@ export const mockEvents: Event[] = [
   },
   {
     id: '2',
+    name: 'FC Barcelona vs Real Madrid',
+    description: 'El Clásico! The biggest football match of the season. Let\'s watch it together at a sports bar with great atmosphere and drinks.',
+    date: '2024-02-20',
+    time: '9:00 PM',
+    location: 'Sports Bar Central, Gràcia',
+    organizerId: '2',
+    organizer: mockUsers[1],
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-15T10:00:00Z' },
+      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-16T11:00:00Z' },
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-17T12:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'maybe', joinedAt: '2024-01-18T13:00:00Z' },
+      { userId: '6', user: mockUsers[5], status: 'going', joinedAt: '2024-01-19T14:00:00Z' }
+    ],
+    createdAt: '2024-01-15T10:00:00Z',
+    hasExpenseSplitting: true,
+    isPublic: false,
+    photos: [
+      {
+        id: '2',
+        url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '2',
+        uploadedAt: '2024-01-20T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['1', '3']
+      }
+    ],
+    comments: [
+      { id: 'c3', eventId: '2', userId: '3', user: mockUsers[2], message: "Visca Barça! 🔵🔴", createdAt: '2024-02-18T14:00:00Z' },
+    ]
+  },
+  {
+    id: '3',
+    name: 'Beach Day at Barceloneta',
+    description: 'Perfect day for the beach! We\'ll bring volleyball, music, and snacks. Join us for a fun day in the sun!',
+    date: '2024-02-25',
+    time: '12:00 PM',
+    location: 'Barceloneta Beach',
+    organizerId: '1',
+    organizer: mockUsers[0],
+    attendees: [
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-20T10:00:00Z' },
+      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-21T11:00:00Z' },
+      { userId: '5', user: mockUsers[4], status: 'going', joinedAt: '2024-01-22T12:00:00Z' },
+      { userId: '7', user: mockUsers[6], status: 'maybe', joinedAt: '2024-01-23T13:00:00Z' }
+    ],
+    createdAt: '2024-01-20T10:00:00Z',
+    hasExpenseSplitting: true,
+    isPublic: false,
+    photos: [
+      {
+        id: '3',
+        url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '1',
+        uploadedAt: '2024-01-25T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['4', '5']
+      }
+    ],
+    comments: [
+      { id: 'c4', eventId: '3', userId: '4', user: mockUsers[3], message: "I'll bring the volleyball! 🏐", createdAt: '2024-02-22T10:00:00Z' },
+    ]
+  },
+  {
+    id: '4',
+    name: 'Razzmatazz Night Out',
+    description: 'The most iconic club in Barcelona! Join us for an unforgettable night of electronic music and dancing.',
+    date: '2024-03-01',
+    time: '11:30 PM',
+    location: 'Razzmatazz Club',
+    organizerId: '3',
+    organizer: mockUsers[2],
+    attendees: [
+      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-25T10:00:00Z', ticketStatus: 'purchased' },
+      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-26T11:00:00Z', ticketStatus: 'purchased' },
+      { userId: '2', user: mockUsers[1], status: 'maybe', joinedAt: '2024-01-27T12:00:00Z' },
+      { userId: '8', user: mockUsers[7], status: 'going', joinedAt: '2024-01-28T13:00:00Z', ticketStatus: 'pending' }
+    ],
+    createdAt: '2024-01-25T10:00:00Z',
+    hasExpenseSplitting: false,
+    isPublic: false,
+    ticketPrice: 25.00,
+    photos: [
+      {
+        id: '4',
+        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+        uploadedBy: '3',
+        uploadedAt: '2024-01-30T10:00:00Z',
+        reactions: [],
+        comments: [],
+        taggedUsers: ['1', '8']
+      }
+    ]
+  },
+  {
+    id: '5',
     name: 'Primavera Sound Festival',
     description: 'The biggest music festival in Barcelona! Join us for an incredible lineup featuring international artists and local talent.',
     date: '2024-06-01',
@@ -242,7 +340,7 @@ export const mockEvents: Event[] = [
     ticketUrl: 'https://www.primaverasound.com',
     photos: [
       {
-        id: '3',
+        id: '5',
         url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '1',
         uploadedAt: '2024-01-20T10:00:00Z',
@@ -252,12 +350,12 @@ export const mockEvents: Event[] = [
       }
     ],
     comments: [
-      { id: 'c3', eventId: '2', userId: '3', user: mockUsers[2], message: "The lineup this year is insane!", createdAt: '2024-05-20T14:00:00Z' },
+      { id: 'c5', eventId: '5', userId: '3', user: mockUsers[2], message: "The lineup this year is insane!", createdAt: '2024-05-20T14:00:00Z' },
     ],
     totalAttendees: 220000
   },
   {
-    id: '3',
+    id: '6',
     name: 'Sónar Festival',
     description: 'The world\'s most advanced music, creativity and technology festival. Experience cutting-edge electronic music and digital art.',
     date: '2024-06-13',
@@ -279,7 +377,7 @@ export const mockEvents: Event[] = [
     ticketUrl: 'https://www.sonar.es',
     photos: [
       {
-        id: '10',
+        id: '6',
         url: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop&crop=center',
         uploadedBy: '2',
         uploadedAt: '2024-02-15T10:00:00Z',
@@ -289,95 +387,6 @@ export const mockEvents: Event[] = [
       }
     ],
     totalAttendees: 85000
-  },
-  {
-    id: '4',
-    name: 'Board Game Night',
-    description: 'A fun evening of board games, snacks, and good company! We\'ll have a variety of games for all skill levels.',
-    date: '2024-02-10',
-    time: '8:00 PM',
-    location: 'Café Central, Gràcia',
-    organizerId: '1',
-    organizer: mockUsers[0],
-    attendees: [
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-05T10:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-06T11:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-01-07T12:00:00Z' }
-    ],
-    createdAt: '2024-01-05T10:00:00Z',
-    hasExpenseSplitting: true,
-    isPublic: false,
-    photos: [
-      {
-        id: '4',
-        url: 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '1',
-        uploadedAt: '2024-01-12T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['4']
-      }
-    ]
-  },
-  {
-    id: '5',
-    name: 'Tapas Tour - Gothic Quarter',
-    description: 'Explore the best tapas bars in the Gothic Quarter! We\'ll visit 4 different places and try traditional Spanish dishes.',
-    date: '2024-02-20',
-    time: '8:30 PM',
-    location: 'Gothic Quarter, Barcelona',
-    organizerId: '3',
-    organizer: mockUsers[2],
-    attendees: [
-      { userId: '1', user: mockUsers[0], status: 'going', joinedAt: '2024-01-20T10:00:00Z' },
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-21T11:00:00Z' },
-      { userId: '3', user: mockUsers[2], status: 'going', joinedAt: '2024-01-22T12:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-23T13:00:00Z' }
-    ],
-    createdAt: '2024-01-20T10:00:00Z',
-    hasExpenseSplitting: true,
-    isPublic: false,
-    photos: [
-      {
-        id: '5',
-        url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '3',
-        uploadedAt: '2024-01-25T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['1', '2', '4']
-      }
-    ]
-  },
-  {
-    id: '6',
-    name: 'Salsa Night at El Born',
-    description: 'Dance the night away with the best salsa music in Barcelona! All levels welcome, we\'ll have beginner lessons too.',
-    date: '2024-02-25',
-    time: '10:00 PM',
-    location: 'El Born, Barcelona',
-    organizerId: '2',
-    organizer: mockUsers[1],
-    attendees: [
-      { userId: '2', user: mockUsers[1], status: 'going', joinedAt: '2024-01-25T10:00:00Z' },
-      { userId: '4', user: mockUsers[3], status: 'going', joinedAt: '2024-01-26T11:00:00Z' },
-      { userId: '5', user: mockUsers[4], status: 'maybe', joinedAt: '2024-01-27T12:00:00Z' }
-    ],
-    createdAt: '2024-01-25T10:00:00Z',
-    hasExpenseSplitting: false,
-    isPublic: true,
-    ticketPrice: 15.00,
-    photos: [
-      {
-        id: '6',
-        url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop&crop=center',
-        uploadedBy: '2',
-        uploadedAt: '2024-01-30T10:00:00Z',
-        reactions: [],
-        comments: [],
-        taggedUsers: ['4']
-      }
-    ]
   },
   {
     id: '7',

@@ -70,11 +70,11 @@ export const LoadingScreen = ({ onLoadingComplete }: LoadingScreenProps) => {
   };
 
   return (
-    <div className="absolute inset-0 bg-background z-50 flex items-center justify-center overflow-hidden">
+    <div className="absolute inset-0 bg-background z-50 flex items-center justify-center overflow-hidden rounded-[2rem]">
       <motion.div animate={logoControls}>
         <img src="/brava-logo.png" alt="Brava Logo" className="w-24 h-24" />
       </motion.div>
-      <div className="absolute">
+      <div className="absolute inset-0 overflow-hidden rounded-[2rem]">
         {[...Array(80)].map((_, i) => (
           <motion.div
             key={i}

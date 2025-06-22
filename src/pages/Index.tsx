@@ -164,7 +164,7 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto pb-20">
+          <div className="flex-1 overflow-y-auto pb-20 relative">
             <div className="p-4">
               {currentView === 'dashboard' && (
                 <Dashboard 
@@ -199,54 +199,54 @@ const Index = () => {
                 <ProfilePage onPastEventClick={handlePastEventClick} />
               )}
             </div>
+
+            {/* Notifications Panel */}
+            {showNotifications && (
+              <NotificationsPanel
+                notifications={notifications}
+                events={events}
+                users={users}
+                onNotificationClick={handleNotificationClick}
+                onMarkAsRead={markNotificationAsRead}
+                onClose={() => setShowNotifications(false)}
+              />
+            )}
+
+            {/* Chat Panel */}
+            {showChat && (
+              <ChatPanel
+                messages={messages}
+                events={events}
+                users={users}
+                currentUserId="1"
+                onSendMessage={sendMessage}
+                onEventClick={handleChatEventClick}
+                onPaymentRequest={handlePaymentRequest}
+                onClose={() => setShowChat(false)}
+              />
+            )}
+
+            {/* Share Event Modal */}
+            {showShareModal && selectedEvent && (
+              <ShareEventModal
+                event={selectedEvent}
+                friends={users.filter(user => user.id !== '1')} // Exclude current user
+                onShare={handleShareEvent}
+                onClose={() => setShowShareModal(false)}
+                isOpen={showShareModal}
+              />
+            )}
+
+            {/* Premium Modal */}
+            <PremiumModal
+              isOpen={showPremiumModal}
+              onClose={() => setShowPremiumModal(false)}
+            />
           </div>
 
           <BottomNav 
             activeTab={getActiveTab()}
             onTabChange={handleTabChange}
-          />
-
-          {/* Notifications Panel */}
-          {showNotifications && (
-            <NotificationsPanel
-              notifications={notifications}
-              events={events}
-              users={users}
-              onNotificationClick={handleNotificationClick}
-              onMarkAsRead={markNotificationAsRead}
-              onClose={() => setShowNotifications(false)}
-            />
-          )}
-
-          {/* Chat Panel */}
-          {showChat && (
-            <ChatPanel
-              messages={messages}
-              events={events}
-              users={users}
-              currentUserId="1"
-              onSendMessage={sendMessage}
-              onEventClick={handleChatEventClick}
-              onPaymentRequest={handlePaymentRequest}
-              onClose={() => setShowChat(false)}
-            />
-          )}
-
-          {/* Share Event Modal */}
-          {showShareModal && selectedEvent && (
-            <ShareEventModal
-              event={selectedEvent}
-              friends={users.filter(user => user.id !== '1')} // Exclude current user
-              onShare={handleShareEvent}
-              onClose={() => setShowShareModal(false)}
-              isOpen={showShareModal}
-            />
-          )}
-
-          {/* Premium Modal */}
-          <PremiumModal
-            isOpen={showPremiumModal}
-            onClose={() => setShowPremiumModal(false)}
           />
         </div>
       </div>

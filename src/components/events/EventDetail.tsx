@@ -34,10 +34,15 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   const notGoingCount = event.attendees.filter(a => a.status === 'not-going').length;
 
   const handleRSVP = async (status: 'going' | 'maybe' | 'not-going') => {
-    if (!currentUser) return;
+    console.log('RSVP clicked:', status, 'currentUser:', currentUser);
+    if (!currentUser) {
+      console.log('No current user found');
+      return;
+    }
     
     setIsUpdatingRSVP(true);
     try {
+      console.log('Updating RSVP for event:', event.id, 'status:', status);
       updateEventRSVP(event.id, status);
     } finally {
       setIsUpdatingRSVP(false);
@@ -337,7 +342,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
         </TabsList>
 
         <TabsContent value="comments">
-          <CommentSection eventId={event.id} initialComments={event.comments || []} />
+          <CommentSection eventId={event.id} />
         </TabsContent>
 
         {!event.isPublic && event.hasExpenseSplitting && (
