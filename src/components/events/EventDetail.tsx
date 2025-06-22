@@ -180,7 +180,8 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
                 className="w-full brava-gradient"
               >
                 <Ticket className="w-4 h-4 mr-2" />
-                Buy Tickets - €{event.isPromoted && event.discountPercentage ? getDiscountedPrice()?.toFixed(2) : event.ticketPrice?.toFixed(2)}
+                Buy Tickets
+                {event.ticketPrice && ` - €${event.isPromoted && event.discountPercentage ? getDiscountedPrice()?.toFixed(2) : event.ticketPrice?.toFixed(2)}`}
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>
             )}

@@ -37,6 +37,7 @@ export const mockEvents: Event[] = [
     hasExpenseSplitting: true,
     isPublic: false,
     ticketPrice: 50.00,
+    ticketUrl: '#',
     comments: [
       { id: 'c1', eventId: '1', userId: '2', user: mockUsers[1], message: "Let's go! Pachá is always a vibe. Ready for some good music.", createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c1b', eventId: '1', userId: '3', user: mockUsers[2], message: "So in! What's the dress code? Smart casual?", createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() },
@@ -116,6 +117,7 @@ export const mockEvents: Event[] = [
     hasExpenseSplitting: true,
     isPublic: false,
     ticketPrice: 25.00,
+    ticketUrl: '#',
     comments: [
       { id: 'c4', eventId: '4', userId: '5', user: mockUsers[4], message: "Yes! Sutton has a great vibe. It's been a while.", createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c4b', eventId: '4', userId: '1', user: mockUsers[0], message: "I'm a maybe for now, will confirm closer to the date.", createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString() },
