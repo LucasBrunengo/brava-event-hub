@@ -101,23 +101,20 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
 
   return (
     <div className="space-y-6 animate-slide-up">
-      {/* Header */}
-      <div className="flex items-center gap-3">
+      {/* Back Button */}
+      <div className="flex items-center">
         <Button variant="ghost" size="sm" onClick={onBack}>
           <ArrowLeft className="w-4 h-4" />
         </Button>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold">{event.name}</h1>
-          <p className="text-muted-foreground">
-            Organized by{' '}
-            <button 
-              onClick={handleOrganizerClick}
-              className="text-primary hover:underline font-medium"
-            >
-              {event.organizer.name}
-            </button>
-          </p>
-        </div>
+      </div>
+
+      {/* Header */}
+      <div className="text-center">
+        <h1 className="text-2xl font-bold">{event.name}</h1>
+      </div>
+      
+      {/* Action Buttons */}
+      <div className="flex items-center justify-center gap-2">
         {currentUser?.id === event.organizerId && (
           <Button variant="outline" size="sm">
             <Edit className="w-4 h-4 mr-2" />
@@ -258,7 +255,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {event.isPublic && event.totalAttendees && (
+            {event.isPublic && event.totalAttendees ? (
               <div className="flex items-center">
                 <div className="flex -space-x-2 overflow-hidden">
                   {event.attendees.slice(0, 5).map(attendee => (
@@ -268,12 +265,13 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
                     </Avatar>
                   ))}
                 </div>
-                <p className="ml-3 text-sm font-medium text-muted-foreground">
-                  +{event.totalAttendees.toLocaleString()} others are going
-                </p>
+                {event.totalAttendees > 5 && (
+                  <p className="ml-3 text-sm font-medium text-muted-foreground">
+                    +{event.totalAttendees - 5} others are going
+                  </p>
+                )}
               </div>
-            )}
-            {!event.isPublic && (
+            ) : (
               event.attendees.map((attendee) => (
                 <div key={attendee.userId} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -286,37 +284,39 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
                     <div>
                       <div className="flex items-center gap-2">
                         <p className="font-semibold">{attendee.user.name}</p>
-                        {!event.isPublic && attendee.ticketStatus && (
-                          <Badge 
-                            variant={
-                              attendee.ticketStatus === 'purchased' ? 'default' :
-                              attendee.ticketStatus === 'pending' ? 'secondary' :
-                              'outline'
-                            }
-                            className={`text-xs px-2 py-0.5 ${
-                              attendee.ticketStatus === 'purchased' ? 'bg-green-500 text-white' : ''
-                            }`}
-                          >
-                            {attendee.ticketStatus === 'purchased' && <Ticket className="w-2.5 h-2.5 mr-1" />}
-                            {attendee.ticketStatus.charAt(0).toUpperCase() + attendee.ticketStatus.slice(1)}
-                          </Badge>
-                        )}
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Responded: {formatDistanceToNow(new Date(attendee.joinedAt), { addSuffix: true })}
                       </p>
                     </div>
                   </div>
-                  <Badge 
-                    className={
-                      attendee.status === 'going' ? 'bg-green-100 text-green-800' :
-                      attendee.status === 'maybe' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }
-                  >
-                    {attendee.status === 'going' ? 'Going' : 
-                     attendee.status === 'maybe' ? 'Maybe' : 'Not Going'}
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    {!event.isPublic && attendee.ticketStatus && (
+                      <Badge 
+                        variant={
+                          attendee.ticketStatus === 'purchased' ? 'default' :
+                          attendee.ticketStatus === 'pending' ? 'secondary' :
+                          'outline'
+                        }
+                        className={`text-xs px-2 py-0.5 ${
+                          attendee.ticketStatus === 'purchased' ? 'bg-green-500 text-white' : ''
+                        }`}
+                      >
+                        {attendee.ticketStatus === 'purchased' && <Ticket className="w-2.5 h-2.5 mr-1" />}
+                        {attendee.ticketStatus.charAt(0).toUpperCase() + attendee.ticketStatus.slice(1)}
+                      </Badge>
+                    )}
+                    <Badge 
+                      className={
+                        attendee.status === 'going' ? 'bg-green-100 text-green-800' :
+                        attendee.status === 'maybe' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }
+                    >
+                      {attendee.status === 'going' ? 'Going' : 
+                       attendee.status === 'maybe' ? 'Maybe' : 'Not Going'}
+                    </Badge>
+                  </div>
                 </div>
               ))
             )}

@@ -18,7 +18,7 @@ const App = () => {
   const handleLoadingComplete = () => {
     setLoading(false);
   };
-
+  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
