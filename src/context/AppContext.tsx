@@ -97,54 +97,28 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const updateEventRSVP = (eventId: string, status: 'going' | 'maybe' | 'not-going') => {
+    const user = currentUser || mockCurrentUser;
     if (!currentUser) {
-      // For the demo, if no user is logged in, we'll log them in automatically
-      const user = mockCurrentUser;
       setCurrentUser(user);
-      
-      setEvents(prev => 
-        prev.map(event => {
-          if (event.id === eventId) {
-            const existingAttendee = event.attendees.find(a => a.userId === user.id);
-            if (existingAttendee) {
-              return {
-                ...event,
-                attendees: event.attendees.map(a => 
-                  a.userId === user.id 
-                    ? { ...a, status }
-                    : a
-                )
-              };
-            } else {
-              return {
-                ...event,
-                attendees: [...event.attendees, { userId: user.id, user: user, status, joinedAt: new Date().toISOString() }]
-              };
-            }
-          }
-          return event;
-        })
-      );
-      return;
-    };
+    }
 
     setEvents(prev => 
       prev.map(event => {
         if (event.id === eventId) {
-          const existingAttendee = event.attendees.find(a => a.userId === currentUser.id);
+          const existingAttendee = event.attendees.find(a => a.userId === user.id);
           if (existingAttendee) {
+            // Update status
             return {
               ...event,
               attendees: event.attendees.map(a => 
-                a.userId === currentUser.id 
-                  ? { ...a, status }
-                  : a
+                a.userId === user.id ? { ...a, status } : a
               )
             };
           } else {
+            // Add new attendee
             return {
               ...event,
-              attendees: [...event.attendees, { userId: currentUser.id, user: currentUser, status, joinedAt: new Date().toISOString() }]
+              attendees: [...event.attendees, { userId: user.id, user, status, joinedAt: new Date().toISOString() }]
             };
           }
         }
