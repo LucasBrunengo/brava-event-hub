@@ -20,7 +20,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   myEvents,
   publicEvents
 }) => {
-  const { currentUser } = useApp();
+  const { currentUser, events } = useApp();
   const [filter, setFilter] = useState<'my-events' | 'public'>('public');
   const [publicCategory, setPublicCategory] = useState<'all' | 'entertainment' | 'dinner' | 'wellness' | 'other'>('all');
   const [publicSearch, setPublicSearch] = useState('');
@@ -29,6 +29,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
   const attendingCount = myEvents.filter(event => 
     event.attendees.some(a => a.userId === currentUser?.id && a.status === 'going')
   ).length;
+
+  const myTicketedEvents = events.filter(e => e.organizerId === currentUser?.id && (e.ticketTiers?.length || e.ticketPrice));
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -73,6 +75,22 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <p className="text-sm text-muted-foreground">Events Attending</p>
           </CardContent>
         </Card>
+        {myTicketedEvents.length > 0 && (
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="w-6 h-6 mx-auto mb-2">📈</div>
+              <p className="text-sm font-semibold">Organizer Analytics</p>
+            </CardContent>
+          </Card>
+        )}
+        {myTicketedEvents.length > 0 && (
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="w-6 h-6 mx-auto mb-2">💲</div>
+              <p className="text-sm font-semibold">Ticket Sales</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Filter Buttons */}

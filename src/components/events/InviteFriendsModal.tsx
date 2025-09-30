@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogPortal, DialogOverlay } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { User, Users, Send, X, Search } from 'lucide-react';
+import { Users, Send, X, Search } from 'lucide-react';
 import { User as UserType, Event } from '@/types';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
