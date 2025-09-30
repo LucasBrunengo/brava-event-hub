@@ -33,6 +33,25 @@ export interface Event {
   isPast?: boolean;
 }
 
+export type VenueCategory = 'restaurant' | 'wellness' | 'entertainment' | 'other';
+
+export interface VenueAvailabilitySlot {
+  date: string; // YYYY-MM-DD
+  times: string[]; // e.g., ["18:00", "18:30", ...]
+}
+
+export interface Venue {
+  id: string;
+  name: string;
+  category: VenueCategory;
+  address: string;
+  imageUrl?: string;
+  cuisines?: string[]; // for restaurants
+  tags?: string[]; // amenities like yoga, sauna, live-music
+  hasReservations: boolean;
+  availability?: VenueAvailabilitySlot[];
+}
+
 export interface EventPhoto {
   id: string;
   url: string;

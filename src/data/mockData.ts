@@ -1,4 +1,4 @@
-import { User, Event, Expense, Comment, EventPhoto, Notification, Message } from '@/types';
+import { User, Event, Expense, Comment, EventPhoto, Notification, Message, Venue } from '@/types';
 
 export const mockUsers: User[] = [
   { id: '1', name: 'Lucas Brunengo', email: 'lucas.brunengo@example.com', avatar: 'https://i.pinimg.com/474x/5f/ca/d2/5fcad25423c7b93be33f86ca91c9e4c0.jpg', phone: '+34666555444' },
@@ -491,5 +491,61 @@ export const mockMessages: Message[] = [
     content: 'Just sent it! Let me know when you get it.',
     isRead: true,
     createdAt: new Date(Date.now() - 19 * 60 * 60 * 1000).toISOString()
+  }
+];
+
+// --- Venues (Restaurants & Wellness) ---
+export const mockVenues: Venue[] = [
+  {
+    id: 'v1',
+    name: 'La Boqueria Tapas',
+    category: 'restaurant',
+    address: 'La Rambla, 91, Barcelona',
+    imageUrl: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400&h=300&fit=crop',
+    cuisines: ['Tapas', 'Spanish', 'Seafood'],
+    tags: ['reservations', 'family-friendly'],
+    hasReservations: true,
+    availability: [
+      { date: new Date().toISOString().split('T')[0], times: ['18:00', '18:30', '19:00', '20:00'] },
+      { date: new Date(Date.now() + 24*60*60*1000).toISOString().split('T')[0], times: ['18:00', '19:30', '21:00'] }
+    ]
+  },
+  {
+    id: 'v2',
+    name: 'Sushi Zen BCN',
+    category: 'restaurant',
+    address: 'Carrer de Mallorca, 200, Barcelona',
+    imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop',
+    cuisines: ['Sushi', 'Japanese'],
+    tags: ['romantic', 'vegan-options'],
+    hasReservations: true,
+    availability: [
+      { date: new Date().toISOString().split('T')[0], times: ['19:00', '19:30', '20:00', '21:00'] }
+    ]
+  },
+  {
+    id: 'v3',
+    name: 'Zen Yoga Studio',
+    category: 'wellness',
+    address: 'Carrer de Girona, 80, Barcelona',
+    imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop',
+    tags: ['yoga', 'mindfulness'],
+    hasReservations: true,
+    availability: [
+      { date: new Date().toISOString().split('T')[0], times: ['09:00', '11:00', '17:00'] },
+      { date: new Date(Date.now() + 2*24*60*60*1000).toISOString().split('T')[0], times: ['10:00', '12:00', '18:00'] }
+    ]
+  },
+  {
+    id: 'v4',
+    name: 'Eixample Gym Club',
+    category: 'wellness',
+    address: 'Carrer d\'Aragó, 150, Barcelona',
+    imageUrl: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=300&fit=crop',
+    tags: ['gym', 'sauna'],
+    hasReservations: true,
+    availability: [
+      { date: new Date().toISOString().split('T')[0], times: ['08:00', '13:00', '19:00'] }
+    ]
   }
 ];

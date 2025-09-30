@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Calendar, MapPin, User, ExternalLink, Ticket, Euro, Edit, Share2 } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, User, Ticket, Euro, Edit, Share2 } from 'lucide-react';
 import { Event, User as UserType } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -14,6 +14,10 @@ import { EventMap } from './EventMap';
 import { PhotoGallery } from './PhotoGallery';
 import { EditEventForm } from './EditEventForm';
 import { InviteFriendsModal } from './InviteFriendsModal';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogPortal, DialogOverlay } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { QuickPay } from './QuickPay';
 
 interface EventDetailProps {
   event: Event;
@@ -26,6 +30,9 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   const { currentUser, setViewedProfile } = useApp();
   const [isEditing, setIsEditing] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [ticketQuantity, setTicketQuantity] = useState(1);
+  const [ticketType, setTicketType] = useState<'general' | 'vip'>('general');
 
   const currentUserAttendee = event.attendees.find(a => a.userId === currentUser?.id);
   const [displayRsvpStatus, setDisplayRsvpStatus] = useState(currentUserAttendee?.status || null);
@@ -68,6 +75,22 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   const getDiscountedPrice = () => {
     if (!event.ticketPrice || !event.discountPercentage) return event.ticketPrice;
     return event.ticketPrice * (1 - event.discountPercentage / 100);
+  };
+
+  const getSelectedTicketPrice = () => {
+    const base = event.isPromoted && event.discountPercentage ? (getDiscountedPrice() || 0) : (event.ticketPrice || 0);
+    const multiplier = ticketType === 'vip' ? 2 : 1;
+    return base * multiplier;
+  };
+
+  const totalPrice = () => {
+    return getSelectedTicketPrice() * ticketQuantity;
+  };
+
+  const handlePurchase = () => {
+    // Demo purchase flow
+    setShowPurchaseModal(false);
+    setDisplayRsvpStatus('going');
   };
 
   if (isEditing) {
@@ -182,20 +205,47 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
               )}
             </div>
 
-            {event.ticketUrl && (
-              <Button 
-                onClick={() => window.open(event.ticketUrl, '_blank')}
-                className="w-full brava-gradient"
-              >
-                <Ticket className="w-4 h-4 mr-2" />
-                Buy Tickets
-                {event.ticketPrice && ` - €${event.isPromoted && event.discountPercentage ? getDiscountedPrice()?.toFixed(2) : event.ticketPrice?.toFixed(2)}`}
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </Button>
-            )}
+              {event.ticketPrice && (
+                <Button 
+                  onClick={() => setShowPurchaseModal(true)}
+                  className="w-full brava-gradient"
+                >
+                  <Ticket className="w-4 h-4 mr-2" />
+                  Buy Tickets in App
+                  {` - €${(event.isPromoted && event.discountPercentage ? getDiscountedPrice() : event.ticketPrice)?.toFixed(2)}`}
+                </Button>
+              )}
           </div>
         </CardContent>
       </Card>
+
+      {/* Purchase Tickets Modal */}
+      <Dialog open={showPurchaseModal} onOpenChange={setShowPurchaseModal}>
+        <DialogPortal container={portalContainer}>
+          <DialogOverlay className="bg-black/60" />
+          <DialogContent className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-h-[90%] flex flex-col rounded-2xl border bg-white p-0 shadow-2xl">
+            <DialogHeader className="p-4 border-b">
+              <DialogTitle className="text-lg">Buy Tickets</DialogTitle>
+            </DialogHeader>
+            <div className="p-4 space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <Button variant={ticketType === 'general' ? 'default' : 'outline'} onClick={() => setTicketType('general')}>General</Button>
+                <Button variant={ticketType === 'vip' ? 'default' : 'outline'} onClick={() => setTicketType('vip')}>VIP</Button>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="quantity">Quantity</Label>
+                <Input id="quantity" type="number" min={1} max={8} value={ticketQuantity} onChange={(e) => setTicketQuantity(Math.max(1, Math.min(8, Number(e.target.value))))} />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-muted rounded-md">
+                <span>Total</span>
+                <span className="font-semibold">€{totalPrice().toFixed(2)}</span>
+              </div>
+              <QuickPay />
+              <Button className="w-full brava-gradient" onClick={handlePurchase}>Confirm Purchase</Button>
+            </div>
+          </DialogContent>
+        </DialogPortal>
+      </Dialog>
 
       {/* RSVP Section */}
       <Card>

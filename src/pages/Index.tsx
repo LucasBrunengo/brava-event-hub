@@ -11,9 +11,8 @@ import { BottomNav } from '@/components/layout/BottomNav';
 import { NotificationsPanel } from '@/components/layout/NotificationsPanel';
 import { ChatPanel } from '@/components/layout/ChatPanel';
 import { ShareEventModal } from '@/components/events/ShareEventModal';
-import { PremiumModal } from '@/components/layout/PremiumModal';
 import { Button } from '@/components/ui/button';
-import { Bell, MessageCircle, Crown } from 'lucide-react';
+import { Bell, MessageCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Event } from '@/types';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
@@ -40,7 +39,7 @@ const Index = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  
   const [isLoading, setIsLoading] = useState(true);
   const portalContainerRef = useRef<HTMLDivElement>(null);
 
@@ -172,15 +171,7 @@ const Index = () => {
             <span className="font-semibold text-lg">Brava</span>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="bg-gradient-to-r from-purple-500 to-blue-500 text-white border-0 hover:from-purple-600 hover:to-blue-600"
-              onClick={() => setShowPremiumModal(true)}
-            >
-              <Crown className="w-4 h-4 mr-1" />
-              Premium
-            </Button>
+            {/* Premium disabled: free for all users */}
             <Button variant="ghost" size="sm" className="relative" onClick={() => setShowNotifications(!showNotifications)}>
               <Bell className="w-5 h-5" />
               {unreadNotifications > 0 && (
@@ -267,11 +258,7 @@ const Index = () => {
         />
       )}
       
-      <PremiumModal 
-        isOpen={showPremiumModal} 
-        onClose={() => setShowPremiumModal(false)} 
-        container={portalContainerRef.current} 
-      />
+      {/* Premium modal removed */}
     </PhoneFrame>
   );
 };

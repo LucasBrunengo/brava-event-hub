@@ -7,10 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { useApp } from '@/context/AppContext';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Calendar, Clock, MapPin, Users, Globe, Lock, Search } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, MapPin, Users, Globe, Lock, Search, PartyPopper, Salad, Dumbbell, Sparkles } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
-import { User } from '@/types';
+import { User, Venue } from '@/types';
+import { mockVenues } from '@/data/mockData';
+import ReservationScheduler from './ReservationScheduler';
 
 interface CreateEventFormProps {
   onBack: () => void;
@@ -27,6 +29,10 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
   const [isPublic, setIsPublic] = useState(true);
   const [invitedFriends, setInvitedFriends] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [reasonSelected, setReasonSelected] = useState<null | 'entertainment' | 'wellness' | 'dinner' | 'custom'>(null);
+  const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null);
+  const [reservationDate, setReservationDate] = useState<string | null>(null);
+  const [reservationTime, setReservationTime] = useState<string | null>(null);
 
   const { toast } = useToast();
 
@@ -46,10 +52,12 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const eventData = {
+      category: reasonSelected || 'custom',
+      venueId: selectedVenue?.id,
       name: eventName,
       description,
-      date,
-      time,
+      date: reservationDate || date,
+      time: reservationTime || time,
       location,
       isPublic,
       attendees: isPublic ? [] : invitedFriends.map(id => users.find(u => u.id === id)).filter(Boolean),
@@ -71,7 +79,85 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
         </div>
       </div>
 
+      {/* Step 1: Reason selection */}
+      {!reasonSelected && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Whats the reason for the event?</CardTitle>
+            <CardDescription>Choose a category to tailor the flow.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-3">
+              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('entertainment')}>
+                <PartyPopper className="w-5 h-5 mb-1" />
+                Entertainment
+              </Button>
+              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('wellness')}>
+                <Dumbbell className="w-5 h-5 mb-1" />
+                Wellness
+              </Button>
+              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('dinner')}>
+                <Salad className="w-5 h-5 mb-1" />
+                Dinner
+              </Button>
+              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('custom')}>
+                <Sparkles className="w-5 h-5 mb-1" />
+                Custom
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-6">
+        {reasonSelected && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Event Details</CardTitle>
+              <CardDescription>Selected category: {reasonSelected.charAt(0).toUpperCase() + reasonSelected.slice(1)}</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="flex flex-wrap gap-2 mb-4">
+                <Button type="button" variant="ghost" size="sm" onClick={() => setReasonSelected(null)}>
+                  Change category
+                </Button>
+              </div>
+              {(reasonSelected === 'dinner' || reasonSelected === 'wellness') && (
+                <div className="space-y-3">
+                  <Label>Select a venue</Label>
+                  <Input placeholder={reasonSelected === 'dinner' ? 'Search restaurants...' : 'Search wellness centers...'} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                  <div className="grid grid-cols-1 gap-3 max-h-56 overflow-y-auto">
+                    {mockVenues.filter(v => (reasonSelected === 'dinner' ? v.category === 'restaurant' : v.category === 'wellness'))
+                      .filter(v => v.name.toLowerCase().includes(searchQuery.toLowerCase()) || (v.cuisines || []).some(c => c.toLowerCase().includes(searchQuery.toLowerCase())))
+                      .map(v => (
+                        <button key={v.id} type="button" onClick={() => { setSelectedVenue(v); setLocation(v.address); setEventName(v.name); }} className={`w-full text-left border rounded-md p-3 hover:bg-muted ${selectedVenue?.id === v.id ? 'ring-2 ring-primary' : ''}`}>
+                          <div className="flex items-center gap-3">
+                            {v.imageUrl && (<img src={v.imageUrl} alt={v.name} className="w-12 h-12 object-cover rounded" />)}
+                            <div>
+                              <div className="font-semibold">{v.name}</div>
+                              <div className="text-xs text-muted-foreground">{v.address}</div>
+                              {v.cuisines && <div className="text-xs mt-1">{v.cuisines.join(', ')}</div>}
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                  </div>
+                  {selectedVenue?.hasReservations && (
+                    <div className="space-y-3">
+                      <div className="text-xs text-muted-foreground">This venue supports free reservations in-app.</div>
+                      <ReservationScheduler
+                        venue={selectedVenue}
+                        selectedDate={reservationDate}
+                        selectedTime={reservationTime}
+                        onSelect={(d, t) => { setReservationDate(d); setReservationTime(t); setDate(d); setTime(t); }}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
         <Card>
           <CardContent className="p-6 space-y-4">
             <Input placeholder="Event Name" value={eventName} onChange={(e) => setEventName(e.target.value)} required />
