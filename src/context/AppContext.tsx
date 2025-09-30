@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { User, Event, Expense, Comment, Notification, Message, UserProfile as UserProfileType } from '@/types';
+import { User, Event, Expense, Comment, Notification, Message, UserProfile as UserProfileType, MyTicket, TicketTier } from '@/types';
 import { mockUsers, mockEvents, mockExpenses, mockComments, mockCurrentUser, mockNotifications, mockMessages } from '@/data/mockData';
 
 interface AppContextType {
@@ -13,6 +13,7 @@ interface AppContextType {
   notifications: Notification[];
   messages: Message[];
   users: User[];
+  myTickets?: MyTicket[];
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
@@ -25,6 +26,7 @@ interface AppContextType {
   updateEvent: (eventId: string, eventData: Partial<Event>) => void;
   updateEventRSVP: (eventId: string, status: 'going' | 'maybe' | 'not-going') => void;
   inviteFriendsToEvent: (eventId: string, friendIds: string[], message: string) => void;
+  purchaseTickets?: (eventId: string, tierId: string, quantity: number) => void;
 
   // Expenses
   addExpense: (expenseData: { eventId: string; name: string; amount: number; splitBetween: string[] }) => void;
@@ -51,6 +53,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [users, setUsers] = useState<User[]>(mockUsers);
   const [viewedProfile, setViewedProfileInternal] = useState<UserProfileType | null>(null);
+  const [myTickets, setMyTickets] = useState<MyTicket[]>([]);
 
   console.log('AppProvider rendered - isAuthenticated:', isAuthenticated, 'currentUser:', currentUser);
 
@@ -134,6 +137,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       ticketPrice: eventData.ticketPrice,
       discountPercentage: eventData.discountPercentage,
       photos: eventData.photos || [],
+      category: eventData.category,
+      venueId: eventData.venueId,
+      totalTickets: eventData.totalTickets || 0,
+      soldTickets: 0,
+      ticketTiers: eventData.ticketTiers || [],
     };
 
     setEvents(prev => [...prev, newEvent]);
@@ -322,6 +330,35 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     });
   };
 
+  const purchaseTickets = (eventId: string, tierId: string, quantity: number) => {
+    if (!currentUser || quantity <= 0) return;
+    setEvents(prev => prev.map(e => {
+      if (e.id !== eventId) return e;
+      const tiers = e.ticketTiers || [];
+      const idx = tiers.findIndex(t => t.id === tierId);
+      if (idx === -1) return e;
+      const tier = tiers[idx];
+      const remaining = tier.quantity - tier.sold;
+      const toSell = Math.min(quantity, Math.max(remaining, 0));
+      const updatedTier: TicketTier = { ...tier, sold: tier.sold + toSell };
+      const updatedTiers = [...tiers];
+      updatedTiers[idx] = updatedTier;
+      return { ...e, soldTickets: (e.soldTickets || 0) + toSell, ticketTiers: updatedTiers };
+    }));
+
+    const ticket: MyTicket = {
+      id: `ticket-${Date.now()}`,
+      userId: currentUser.id,
+      eventId,
+      tierId,
+      tierName: (events.find(e => e.id === eventId)?.ticketTiers || []).find(t => t.id === tierId)?.name || 'Ticket',
+      quantity,
+      qrData: `${eventId}:${tierId}:${currentUser.id}:${Date.now()}`,
+      purchasedAt: new Date().toISOString(),
+    };
+    setMyTickets(prev => [...prev, ticket]);
+  };
+
   const value: AppContextType = {
     isAuthenticated,
     currentUser,
@@ -332,6 +369,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     notifications,
     messages,
     users,
+    myTickets,
     login,
     register,
     logout,
@@ -345,6 +383,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     updatePaymentStatus,
     addComment,
     inviteFriendsToEvent,
+    purchaseTickets,
     viewedProfile,
     setViewedProfile,
   };

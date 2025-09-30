@@ -13,7 +13,7 @@ interface ProfilePageProps {
 }
 
 export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) => {
-  const { currentUser, events, expenses, logout } = useApp();
+  const { currentUser, events, expenses, logout, myTickets } = useApp();
 
   if (!currentUser) return null;
 
@@ -197,6 +197,36 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) =>
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* My Tickets */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">My Tickets</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {(!myTickets || myTickets.length === 0) ? (
+            <div className="text-sm text-muted-foreground">No tickets purchased yet.</div>
+          ) : (
+            <div className="space-y-3">
+              {myTickets.map(t => {
+                const ev = events.find(e => e.id === t.eventId);
+                return (
+                  <div key={t.id} className="p-3 border rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">{ev?.name || 'Event'}</div>
+                        <div className="text-xs text-muted-foreground">{t.tierName} • Qty {t.quantity} • {ev?.date} {ev?.time}</div>
+                      </div>
+                      <div className="text-xs bg-black text-white px-2 py-1 rounded">QR</div>
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-2 break-all">{t.qrData}</div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </CardContent>

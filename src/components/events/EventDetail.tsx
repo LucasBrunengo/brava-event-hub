@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogPortal, DialogO
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { QuickPay } from './QuickPay';
+import { useApp } from '@/context/AppContext';
 
 interface EventDetailProps {
   event: Event;
@@ -27,7 +28,7 @@ interface EventDetailProps {
 }
 
 export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare, portalContainer }) => {
-  const { currentUser, setViewedProfile } = useApp();
+  const { currentUser, setViewedProfile, purchaseTickets } = useApp();
   const [isEditing, setIsEditing] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
@@ -78,6 +79,10 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   };
 
   const getSelectedTicketPrice = () => {
+    if (event.ticketTiers && event.ticketTiers.length > 0) {
+      const tier = event.ticketTiers.find(t => (ticketType === 'vip' ? t.id === 'first' : t.id === 'early')) || event.ticketTiers[0];
+      return tier.price;
+    }
     const base = event.isPromoted && event.discountPercentage ? (getDiscountedPrice() || 0) : (event.ticketPrice || 0);
     const multiplier = ticketType === 'vip' ? 2 : 1;
     return base * multiplier;
@@ -91,6 +96,10 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
     // Demo purchase flow
     setShowPurchaseModal(false);
     setDisplayRsvpStatus('going');
+    if (purchaseTickets && event.ticketTiers && event.ticketTiers.length > 0) {
+      const tierId = ticketType === 'vip' ? 'first' : 'early';
+      purchaseTickets(event.id, tierId, ticketQuantity);
+    }
   };
 
   if (isEditing) {
@@ -205,14 +214,16 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
               )}
             </div>
 
-              {event.ticketPrice && (
+              {(event.ticketPrice || (event.ticketTiers && event.ticketTiers.length)) && (
                 <Button 
                   onClick={() => setShowPurchaseModal(true)}
                   className="w-full brava-gradient"
                 >
                   <Ticket className="w-4 h-4 mr-2" />
                   Buy Tickets in App
-                  {` - €${(event.isPromoted && event.discountPercentage ? getDiscountedPrice() : event.ticketPrice)?.toFixed(2)}`}
+                  {event.ticketTiers && event.ticketTiers.length
+                    ? ` - from €${Math.min(...event.ticketTiers.map(t => t.price)).toFixed(2)}`
+                    : ` - €${(event.isPromoted && event.discountPercentage ? getDiscountedPrice() : event.ticketPrice)?.toFixed(2)}`}
                 </Button>
               )}
           </div>
@@ -228,10 +239,24 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
               <DialogTitle className="text-lg">Buy Tickets</DialogTitle>
             </DialogHeader>
             <div className="p-4 space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant={ticketType === 'general' ? 'default' : 'outline'} onClick={() => setTicketType('general')}>General</Button>
-                <Button variant={ticketType === 'vip' ? 'default' : 'outline'} onClick={() => setTicketType('vip')}>VIP</Button>
-              </div>
+              {event.ticketTiers && event.ticketTiers.length > 0 ? (
+                <div className="space-y-2">
+                  {event.ticketTiers.map(t => {
+                    const soldOut = t.sold >= t.quantity;
+                    return (
+                      <Button key={t.id} variant="outline" disabled={soldOut} className={`w-full justify-between ${soldOut ? 'opacity-60' : ''}`} onClick={() => setTicketType(t.id === 'first' ? 'vip' : 'general')}>
+                        <span>{t.name}</span>
+                        <span>€{t.price.toFixed(2)} {soldOut && '(Sold out)'}</span>
+                      </Button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-3">
+                  <Button variant={ticketType === 'general' ? 'default' : 'outline'} onClick={() => setTicketType('general')}>Early Bird</Button>
+                  <Button variant={ticketType === 'vip' ? 'default' : 'outline'} onClick={() => setTicketType('vip')}>First Release</Button>
+                </div>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="quantity">Quantity</Label>
                 <Input id="quantity" type="number" min={1} max={8} value={ticketQuantity} onChange={(e) => setTicketQuantity(Math.max(1, Math.min(8, Number(e.target.value))))} />

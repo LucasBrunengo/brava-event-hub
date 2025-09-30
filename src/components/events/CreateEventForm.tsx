@@ -30,9 +30,16 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
   const [invitedFriends, setInvitedFriends] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [reasonSelected, setReasonSelected] = useState<null | 'entertainment' | 'wellness' | 'dinner' | 'custom'>(null);
+  const [entertainmentSub, setEntertainmentSub] = useState<'bars' | 'karaoke' | 'clubs' | null>(null);
   const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null);
   const [reservationDate, setReservationDate] = useState<string | null>(null);
   const [reservationTime, setReservationTime] = useState<string | null>(null);
+  const [promotePublic, setPromotePublic] = useState(false);
+  const [publicFeePaid, setPublicFeePaid] = useState(false);
+  const [ticketPriceInput, setTicketPriceInput] = useState<string>('');
+  const [ticketTotalQty, setTicketTotalQty] = useState<string>('');
+  const [tierEarlyQty, setTierEarlyQty] = useState<string>('');
+  const [tierFirstQty, setTierFirstQty] = useState<string>('');
 
   const { toast } = useToast();
 
@@ -51,8 +58,14 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const eventData = {
+    const tiers = [
+      tierEarlyQty ? { id: 'early', name: 'Early Bird', price: ticketPriceInput ? Number(ticketPriceInput) * 0.8 : 0, quantity: Number(tierEarlyQty), sold: 0 } : null,
+      tierFirstQty ? { id: 'first', name: 'First Release', price: ticketPriceInput ? Number(ticketPriceInput) : 0, quantity: Number(tierFirstQty), sold: 0 } : null,
+    ].filter(Boolean) as any[];
+
+    const eventData: any = {
       category: reasonSelected || 'custom',
+      subcategory: entertainmentSub || undefined,
       venueId: selectedVenue?.id,
       name: eventName,
       description,
@@ -60,10 +73,13 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
       time: reservationTime || time,
       location,
       isPublic,
+      isPromoted: isPublic ? promotePublic : false,
+      ticketPrice: ticketPriceInput ? Number(ticketPriceInput) : undefined,
+      totalTickets: ticketTotalQty ? Number(ticketTotalQty) : undefined,
+      ticketTiers: tiers,
       attendees: isPublic ? [] : invitedFriends.map(id => users.find(u => u.id === id)).filter(Boolean),
     };
-    // createEvent(eventData); // This would be the call to the context
-    console.log("Creating event with data:", eventData)
+    createEvent(eventData);
     onEventCreated();
   };
 
@@ -122,21 +138,43 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                   Change category
                 </Button>
               </div>
+              {reasonSelected === 'entertainment' && (
+                <div className="space-y-2">
+                  <Label>Choose subcategory</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { key: 'bars', label: 'Bars' },
+                      { key: 'karaoke', label: 'Karaoke' },
+                      { key: 'clubs', label: 'Clubs' },
+                    ].map(opt => (
+                      <Button key={opt.key} type="button" variant={entertainmentSub === (opt.key as any) ? 'default' : 'outline'} onClick={() => setEntertainmentSub(opt.key as any)}>
+                        {opt.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
               {(reasonSelected === 'dinner' || reasonSelected === 'wellness') && (
                 <div className="space-y-3">
                   <Label>Select a venue</Label>
                   <Input placeholder={reasonSelected === 'dinner' ? 'Search restaurants...' : 'Search wellness centers...'} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                   <div className="grid grid-cols-1 gap-3 max-h-56 overflow-y-auto">
-                    {mockVenues.filter(v => (reasonSelected === 'dinner' ? v.category === 'restaurant' : v.category === 'wellness'))
+                    {mockVenues
+                      .filter(v => (reasonSelected === 'dinner' ? v.category === 'restaurant' : v.category === 'wellness'))
                       .filter(v => v.name.toLowerCase().includes(searchQuery.toLowerCase()) || (v.cuisines || []).some(c => c.toLowerCase().includes(searchQuery.toLowerCase())))
+                      .sort((a,b) => (b.promoted === true ? 1 : 0) - (a.promoted === true ? 1 : 0) || (a.distanceKm || 0) - (b.distanceKm || 0))
                       .map(v => (
-                        <button key={v.id} type="button" onClick={() => { setSelectedVenue(v); setLocation(v.address); setEventName(v.name); }} className={`w-full text-left border rounded-md p-3 hover:bg-muted ${selectedVenue?.id === v.id ? 'ring-2 ring-primary' : ''}`}>
+                        <button key={v.id} type="button" onClick={() => { setSelectedVenue(v); setLocation(v.address); setEventName(v.name); }} className={`w-full text-left border rounded-xl p-4 hover:bg-muted transition ${selectedVenue?.id === v.id ? 'ring-2 ring-purple-500 shadow-lg' : ''}`}>
                           <div className="flex items-center gap-3">
-                            {v.imageUrl && (<img src={v.imageUrl} alt={v.name} className="w-12 h-12 object-cover rounded" />)}
+                            {v.imageUrl && (<img src={v.imageUrl} alt={v.name} className="w-16 h-16 object-cover rounded" />)}
                             <div>
                               <div className="font-semibold">{v.name}</div>
                               <div className="text-xs text-muted-foreground">{v.address}</div>
                               {v.cuisines && <div className="text-xs mt-1">{v.cuisines.join(', ')}</div>}
+                              <div className="text-xs mt-1 flex items-center gap-2">
+                                {typeof v.distanceKm === 'number' && <span>{v.distanceKm.toFixed(1)} km</span>}
+                                {v.promoted && <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded">Promoted</span>}
+                              </div>
                             </div>
                           </div>
                         </button>
@@ -163,8 +201,8 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
             <Input placeholder="Event Name" value={eventName} onChange={(e) => setEventName(e.target.value)} required />
             <Textarea placeholder="Event Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
             <div className="grid grid-cols-2 gap-4">
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-              <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
+              <Input type="date" value={reservationDate || date} onChange={(e) => { setDate(e.target.value); setReservationDate(e.target.value); }} required />
+              <Input type="time" value={reservationTime || time} onChange={(e) => { setTime(e.target.value); setReservationTime(e.target.value); }} required />
             </div>
             <Input placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} required />
           </CardContent>
@@ -234,6 +272,53 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                   </div>
                 ))}
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {isPublic && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Public Event Options</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-3 rounded-md border bg-muted/30">
+                <div className="font-medium">One-time publishing fee: €30</div>
+                <div className="text-sm text-muted-foreground">Optional promotion for extra visibility: +€10</div>
+                <div className="flex items-center gap-2 mt-2">
+                  <Switch id="promote" checked={promotePublic} onCheckedChange={setPromotePublic} />
+                  <Label htmlFor="promote">Add promotion</Label>
+                </div>
+                <div className="mt-3">
+                  <Button type="button" className="w-full" onClick={() => setPublicFeePaid(true)}>
+                    Pay €{promotePublic ? 40 : 30} now
+                  </Button>
+                </div>
+              </div>
+              {publicFeePaid && (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label>Base Ticket Price (€)</Label>
+                      <Input type="number" min="0" step="0.01" value={ticketPriceInput} onChange={(e) => setTicketPriceInput(e.target.value)} />
+                    </div>
+                    <div>
+                      <Label>Total Tickets</Label>
+                      <Input type="number" min="0" value={ticketTotalQty} onChange={(e) => setTicketTotalQty(e.target.value)} />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label>Early Bird Qty</Label>
+                      <Input type="number" min="0" value={tierEarlyQty} onChange={(e) => setTierEarlyQty(e.target.value)} />
+                    </div>
+                    <div>
+                      <Label>First Release Qty</Label>
+                      <Input type="number" min="0" value={tierFirstQty} onChange={(e) => setTierFirstQty(e.target.value)} />
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         )}

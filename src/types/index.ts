@@ -31,6 +31,11 @@ export interface Event {
   discountPercentage?: number;
   comments?: Comment[];
   isPast?: boolean;
+  category?: string;
+  venueId?: string;
+  totalTickets?: number;
+  soldTickets?: number;
+  ticketTiers?: TicketTier[];
 }
 
 export type VenueCategory = 'restaurant' | 'wellness' | 'entertainment' | 'other';
@@ -50,6 +55,8 @@ export interface Venue {
   tags?: string[]; // amenities like yoga, sauna, live-music
   hasReservations: boolean;
   availability?: VenueAvailabilitySlot[];
+  promoted?: boolean;
+  distanceKm?: number;
 }
 
 export interface EventPhoto {
@@ -105,6 +112,14 @@ export interface Payment {
   paidAt?: string;
 }
 
+export interface TicketTier {
+  id: string;
+  name: string; // e.g., Early Bird, First Release
+  price: number;
+  quantity: number; // total allocation for the tier
+  sold: number; // sold within the tier
+}
+
 export interface Comment {
   id: string;
   eventId: string;
@@ -155,4 +170,15 @@ export interface Message {
   paymentMethods?: string[];
   isRead: boolean;
   createdAt: string;
+}
+
+export interface MyTicket {
+  id: string;
+  userId: string;
+  eventId: string;
+  tierId: string;
+  tierName: string;
+  quantity: number;
+  qrData: string;
+  purchasedAt: string;
 }

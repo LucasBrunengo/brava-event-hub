@@ -508,7 +508,9 @@ export const mockVenues: Venue[] = [
     availability: [
       { date: new Date().toISOString().split('T')[0], times: ['18:00', '18:30', '19:00', '20:00'] },
       { date: new Date(Date.now() + 24*60*60*1000).toISOString().split('T')[0], times: ['18:00', '19:30', '21:00'] }
-    ]
+    ],
+    promoted: true,
+    distanceKm: 0.8
   },
   {
     id: 'v2',
@@ -521,7 +523,9 @@ export const mockVenues: Venue[] = [
     hasReservations: true,
     availability: [
       { date: new Date().toISOString().split('T')[0], times: ['19:00', '19:30', '20:00', '21:00'] }
-    ]
+    ],
+    promoted: false,
+    distanceKm: 1.7
   },
   {
     id: 'v3',
@@ -534,18 +538,41 @@ export const mockVenues: Venue[] = [
     availability: [
       { date: new Date().toISOString().split('T')[0], times: ['09:00', '11:00', '17:00'] },
       { date: new Date(Date.now() + 2*24*60*60*1000).toISOString().split('T')[0], times: ['10:00', '12:00', '18:00'] }
-    ]
+    ],
+    promoted: true,
+    distanceKm: 2.3
   },
   {
     id: 'v4',
     name: 'Eixample Gym Club',
     category: 'wellness',
-    address: 'Carrer d\'Aragó, 150, Barcelona',
+    address: "Carrer d'Aragó, 150, Barcelona",
     imageUrl: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=300&fit=crop',
-    tags: ['gym', 'sauna'],
+    tags: ['gym', 'sauna', 'functional'],
     hasReservations: true,
     availability: [
       { date: new Date().toISOString().split('T')[0], times: ['08:00', '13:00', '19:00'] }
-    ]
-  }
+    ],
+    promoted: false,
+    distanceKm: 1.2
+  },
+  // Additional restaurants
+  { id: 'v5', name: 'Trattoria Roma', category: 'restaurant', address: 'Passeig de Gràcia, 12', hasReservations: true, cuisines: ['Italian', 'Pasta'], tags: ['romantic'], availability: [], promoted: false, distanceKm: 2.1 },
+  { id: 'v6', name: 'El Asador', category: 'restaurant', address: 'Carrer de Valencia, 45', hasReservations: true, cuisines: ['Steakhouse', 'Grill'], tags: ['reservations'], availability: [], promoted: true, distanceKm: 3.0 },
+  { id: 'v7', name: 'Green Bowl', category: 'restaurant', address: 'Carrer de Pelai, 9', hasReservations: true, cuisines: ['Healthy', 'Vegan'], tags: ['vegan-options'], availability: [], promoted: false, distanceKm: 0.9 },
+  { id: 'v8', name: 'La Paella House', category: 'restaurant', address: 'Ronda de Sant Pere, 3', hasReservations: true, cuisines: ['Spanish', 'Paella'], tags: [], availability: [], promoted: false, distanceKm: 2.7 },
+  { id: 'v9', name: 'Bao Republic', category: 'restaurant', address: 'Carrer de Tallers, 22', hasReservations: true, cuisines: ['Asian', 'Street Food'], tags: [], availability: [], promoted: true, distanceKm: 1.5 },
+  // Additional wellness
+  { id: 'v10', name: 'DIR Functional Sagrada Família', category: 'wellness', address: 'Av. Gaudí, 30', hasReservations: true, tags: ['functional', 'classes'], availability: [], promoted: true, distanceKm: 2.9 },
+  { id: 'v11', name: 'Hot Yoga BCN', category: 'wellness', address: 'Carrer de Casp, 88', hasReservations: true, tags: ['yoga', 'hot-yoga'], availability: [], promoted: false, distanceKm: 1.1 },
+  { id: 'v12', name: 'Urban Spa Retreat', category: 'wellness', address: 'Passeig de Sant Joan, 40', hasReservations: true, tags: ['spa', 'sauna'], availability: [], promoted: false, distanceKm: 3.4 },
+  // Bars/Karaoke/Clubs (entertainment)
+  { id: 'v13', name: 'Barkadia', category: 'entertainment', address: 'Born, 12', hasReservations: false, tags: ['bar'], availability: [], promoted: true, distanceKm: 1.8 },
+  { id: 'v14', name: 'Sing It Karaoke', category: 'entertainment', address: 'Eixample, 77', hasReservations: true, tags: ['karaoke'], availability: [], promoted: false, distanceKm: 2.2 },
+  { id: 'v15', name: 'Club Aurora', category: 'entertainment', address: 'Port Olímpic', hasReservations: false, tags: ['club'], availability: [], promoted: true, distanceKm: 3.9 },
+  { id: 'v16', name: 'Taproom BCN', category: 'entertainment', address: 'Gràcia, 15', hasReservations: false, tags: ['bar'], availability: [], promoted: false, distanceKm: 2.6 },
+  { id: 'v17', name: 'K-Town Karaoke', category: 'entertainment', address: 'Les Corts, 20', hasReservations: true, tags: ['karaoke'], availability: [], promoted: false, distanceKm: 4.1 },
+  { id: 'v18', name: 'Velvet Night', category: 'entertainment', address: 'Diagonal, 300', hasReservations: false, tags: ['club'], availability: [], promoted: true, distanceKm: 2.0 },
+  { id: 'v19', name: 'Gastro Bar 58', category: 'entertainment', address: 'Poble Sec, 58', hasReservations: true, tags: ['bar'], availability: [], promoted: false, distanceKm: 1.3 },
+  { id: 'v20', name: "Chef's Table BCN", category: 'restaurant', address: 'El Raval, 5', hasReservations: true, cuisines: ['Fine Dining'], tags: [], availability: [], promoted: true, distanceKm: 2.8 }
 ];
