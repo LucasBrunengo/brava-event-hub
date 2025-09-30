@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Users, Calendar, Filter } from 'lucide-react';
+import { Plus, Users, Calendar, Filter, Search } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { EventsList } from '@/components/events/EventsList';
 import { PublicEventsList } from '@/components/events/PublicEventsList';
@@ -22,6 +22,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
 }) => {
   const { currentUser } = useApp();
   const [filter, setFilter] = useState<'my-events' | 'public'>('public');
+  const [publicCategory, setPublicCategory] = useState<'all' | 'entertainment' | 'dinner' | 'wellness' | 'other'>('all');
+  const [publicSearch, setPublicSearch] = useState('');
   
   const organizedCount = myEvents.filter(event => event.organizerId === currentUser?.id).length;
   const attendingCount = myEvents.filter(event => 
@@ -112,13 +114,46 @@ export const Dashboard: React.FC<DashboardProps> = ({
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Discover Public Events</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">Discover Public Events</CardTitle>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Filter className="w-4 h-4" /> Filters
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
+            <div className="space-y-3 mb-3">
+              <div className="grid grid-cols-4 gap-2">
+                {([
+                  {key:'all',label:'All'},
+                  {key:'entertainment',label:'Entertainment'},
+                  {key:'dinner',label:'Dinner'},
+                  {key:'wellness',label:'Wellness'},
+                ] as const).map(opt => (
+                  <Button key={opt.key} variant={publicCategory===opt.key?'default':'outline'} onClick={() => setPublicCategory(opt.key as any)} className={publicCategory===opt.key?'brava-gradient':''}>
+                    {opt.label}
+                  </Button>
+                ))}
+              </div>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  className="w-full pl-9 pr-3 py-2 border rounded-md text-sm"
+                  placeholder="Search public events..."
+                  value={publicSearch}
+                  onChange={(e)=>setPublicSearch(e.target.value)}
+                />
+              </div>
+            </div>
+            {(() => {
+              const filtered = publicEvents
+                .filter(ev => publicCategory==='all' ? true : (ev.category===publicCategory))
+                .filter(ev => ev.name.toLowerCase().includes(publicSearch.toLowerCase()) || (ev.description||'').toLowerCase().includes(publicSearch.toLowerCase()));
             <PublicEventsList 
-              events={publicEvents} 
+              events={filtered} 
               onEventClick={onEventClick}
             />
+            })()}
           </CardContent>
         </Card>
       )}
