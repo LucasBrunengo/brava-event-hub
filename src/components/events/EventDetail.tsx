@@ -96,8 +96,8 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
     // Demo purchase flow
     setShowPurchaseModal(false);
     setDisplayRsvpStatus('going');
-    if (purchaseTickets && event.ticketTiers && event.ticketTiers.length > 0) {
-      const tierId = ticketType === 'vip' ? 'first' : 'early';
+    if (purchaseTickets) {
+      const tierId = event.ticketTiers && event.ticketTiers.length > 0 ? (ticketType === 'vip' ? 'first' : 'early') : 'first';
       purchaseTickets(event.id, tierId, ticketQuantity);
     }
   };
