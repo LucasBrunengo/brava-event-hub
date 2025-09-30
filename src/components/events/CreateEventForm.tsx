@@ -152,6 +152,31 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                       </Button>
                     ))}
                   </div>
+                  {entertainmentSub && (
+                    <div className="space-y-3 pt-2">
+                      <Label>Recommended {entertainmentSub}</Label>
+                      <div className="grid grid-cols-1 gap-3 max-h-56 overflow-y-auto">
+                        {mockVenues
+                          .filter(v => v.category === 'entertainment' && v.tags?.includes(entertainmentSub))
+                          .sort((a,b) => (b.promoted === true ? 1 : 0) - (a.promoted === true ? 1 : 0) || (a.distanceKm || 0) - (b.distanceKm || 0))
+                          .map(v => (
+                            <button key={v.id} type="button" onClick={() => { setSelectedVenue(v); setLocation(v.address); setEventName(v.name); }} className={`w-full text-left border rounded-xl p-4 hover:bg-muted transition ${selectedVenue?.id === v.id ? 'ring-2 ring-purple-500 shadow-lg' : ''}`}>
+                              <div className="flex items-center gap-3">
+                                {v.imageUrl && (<img src={v.imageUrl} alt={v.name} className="w-16 h-16 object-cover rounded" />)}
+                                <div>
+                                  <div className="font-semibold">{v.name}</div>
+                                  <div className="text-xs text-muted-foreground">{v.address}</div>
+                                  <div className="text-xs mt-1 flex items-center gap-2">
+                                    {typeof v.distanceKm === 'number' && <span>{v.distanceKm.toFixed(1)} km</span>}
+                                    {v.promoted && <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded">Promoted</span>}
+                                  </div>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
               {(reasonSelected === 'dinner' || reasonSelected === 'wellness') && (
@@ -276,7 +301,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
           </Card>
         )}
 
-        {isPublic && (
+        {isPublic && reasonSelected === 'custom' && (
           <Card>
             <CardHeader>
               <CardTitle>Public Event Options</CardTitle>

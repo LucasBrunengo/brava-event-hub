@@ -134,6 +134,12 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
               <Edit className="w-4 h-4 mr-2" />
               Edit Event
             </Button>
+            <Button variant="outline" size="sm">
+              📈 Analytics
+            </Button>
+            <Button variant="outline" size="sm">
+              💲 {event.soldTickets || 0}
+            </Button>
             <Button variant="outline" size="sm" onClick={handleInviteFriends}>
               <User className="w-4 h-4 mr-2" />
               Invite Friends

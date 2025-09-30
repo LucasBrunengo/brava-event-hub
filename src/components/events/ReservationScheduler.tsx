@@ -34,9 +34,11 @@ export const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({ venu
       </CardHeader>
       <CardContent className="space-y-3">
         <UICalendar
+          key={`${venue.id}-${selectedDate || 'none'}`}
           mode="single"
           selected={selectedDate ? new Date(selectedDate) : undefined}
           onSelect={handleDateChange}
+          defaultMonth={selectedDate ? new Date(selectedDate) : undefined}
           disabled={(date) => !availableDates.has(date.toISOString().split('T')[0])}
         />
         <div className="grid grid-cols-3 gap-2">

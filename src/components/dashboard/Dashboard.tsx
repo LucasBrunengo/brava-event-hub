@@ -21,7 +21,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   publicEvents
 }) => {
   const { currentUser } = useApp();
-  const [filter, setFilter] = useState<'my-events' | 'public'>('my-events');
+  const [filter, setFilter] = useState<'my-events' | 'public'>('public');
   
   const organizedCount = myEvents.filter(event => event.organizerId === currentUser?.id).length;
   const attendingCount = myEvents.filter(event => 
@@ -103,7 +103,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </CardHeader>
           <CardContent>
             <EventsList 
-              events={myEvents} 
+              events={myEvents.slice(0, 5)} 
               onEventClick={onEventClick}
               emptyMessage="You have no upcoming events. Why not create one?"
             />
