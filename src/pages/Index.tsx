@@ -11,6 +11,8 @@ import { BottomNav } from '@/components/layout/BottomNav';
 import { NotificationsPanel } from '@/components/layout/NotificationsPanel';
 import { ChatPanel } from '@/components/layout/ChatPanel';
 import { ShareEventModal } from '@/components/events/ShareEventModal';
+import { OrganizerAnalyticsModal } from '@/components/dashboard/OrganizerAnalyticsModal';
+import { TicketSalesModal } from '@/components/dashboard/TicketSalesModal';
 import { Button } from '@/components/ui/button';
 import { Bell, MessageCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -39,6 +41,8 @@ const Index = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [showTicketSalesModal, setShowTicketSalesModal] = useState(false);
   
   const [isLoading, setIsLoading] = useState(true);
   const portalContainerRef = useRef<HTMLDivElement>(null);
@@ -171,7 +175,29 @@ const Index = () => {
             <span className="font-semibold text-lg">Brava</span>
           </div>
           <div className="flex items-center gap-2">
-            {/* Premium disabled: free for all users */}
+            {/* Show analytics/ticket sales only if user has promoted events */}
+            {events.some(e => e.organizerId === currentUser?.id && e.isPromoted && e.ticketTiers?.length) && (
+              <>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-xs px-2"
+                  onClick={() => setShowAnalyticsModal(true)}
+                  title="Organizer Analytics"
+                >
+                  📈
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-xs px-2"
+                  onClick={() => setShowTicketSalesModal(true)}
+                  title="Ticket Sales"
+                >
+                  💲
+                </Button>
+              </>
+            )}
             <Button variant="ghost" size="sm" className="relative" onClick={() => setShowNotifications(!showNotifications)}>
               <Bell className="w-5 h-5" />
               {unreadNotifications > 0 && (
@@ -255,6 +281,23 @@ const Index = () => {
           onClose={() => setShowShareModal(false)}
           isOpen={showShareModal}
           container={portalContainerRef.current}
+        />
+      )}
+
+      {/* Organizer Modals */}
+      {showAnalyticsModal && (
+        <OrganizerAnalyticsModal
+          isOpen={showAnalyticsModal}
+          onClose={() => setShowAnalyticsModal(false)}
+          ticketedEvents={events.filter(e => e.organizerId === currentUser?.id && (e.ticketTiers?.length || e.ticketPrice))}
+        />
+      )}
+
+      {showTicketSalesModal && (
+        <TicketSalesModal
+          isOpen={showTicketSalesModal}
+          onClose={() => setShowTicketSalesModal(false)}
+          ticketedEvents={events.filter(e => e.organizerId === currentUser?.id && (e.ticketTiers?.length || e.ticketPrice))}
         />
       )}
       

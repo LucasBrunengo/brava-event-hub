@@ -183,12 +183,12 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
               )}
               {(reasonSelected === 'dinner' || reasonSelected === 'wellness') && (
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <Label>Select a venue</Label>
+                  <div className="space-y-2">
+                    <Label className="text-base font-semibold">Select a Venue</Label>
                     {reasonSelected === 'dinner' && (
                       <div className="flex flex-wrap gap-2">
                         {['Italian','Japanese','Spanish','Vegan','Steakhouse','Healthy','Seafood','Asian','Fine Dining'].map(c => (
-                          <Button key={c} type="button" size="sm" variant={cuisineFilter===c?'default':'outline'} onClick={() => setCuisineFilter(cuisineFilter===c?null:c)}>{c}</Button>
+                          <Button key={c} type="button" size="sm" variant={cuisineFilter===c?'default':'outline'} onClick={() => setCuisineFilter(cuisineFilter===c?null:c)} className="text-xs px-2 py-1 h-auto">{c}</Button>
                         ))}
                       </div>
                     )}
@@ -200,7 +200,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                           {key:'barre',label:'Barre'},
                           {key:'spa',label:'Spa'}
                         ].map(o => (
-                          <Button key={o.key} type="button" size="sm" variant={wellnessSub===o.key as any?'default':'outline'} onClick={() => setWellnessSub(wellnessSub===o.key as any?null:o.key as any)}>{o.label}</Button>
+                          <Button key={o.key} type="button" size="sm" variant={wellnessSub===o.key as any?'default':'outline'} onClick={() => setWellnessSub(wellnessSub===o.key as any?null:o.key as any)} className="text-xs px-2 py-1 h-auto">{o.label}</Button>
                         ))}
                       </div>
                     )}
@@ -238,14 +238,17 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                         selectedTime={reservationTime}
                         onSelect={(d, t) => { setReservationDate(d); setReservationTime(t); setDate(d); setTime(t); }}
                       />
-                      {reservationDate && (
-                        <div className="grid grid-cols-2 gap-2">
-                          {(['Functional','HIIT','Yoga Flow','Barre Intro','Spin','Pilates'] as string[]).map((cls, idx) => (
-                            <div key={idx} className="p-2 border rounded text-xs flex items-center justify-between">
-                              <span>{cls}</span>
-                              <Button type="button" size="sm" variant="outline">{reservationTime || 'Select time'}</Button>
-                            </div>
-                          ))}
+                      {reservationDate && reservationTime && reasonSelected === 'wellness' && (
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">Available Classes</Label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {(['Functional Training','HIIT','Yoga Flow','Barre Intro','Spin Class','Pilates','Body Pump','Stretching'] as string[]).map((cls, idx) => (
+                              <Button key={idx} type="button" variant="outline" className="p-2 text-xs h-auto flex flex-col items-center gap-1">
+                                <span className="font-medium">{cls}</span>
+                                <span className="text-[10px] text-muted-foreground">{reservationTime}</span>
+                              </Button>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>

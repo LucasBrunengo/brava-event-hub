@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -7,6 +7,7 @@ import { useApp } from '@/context/AppContext';
 import { LogOut, Calendar, Users, Clock, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { Event } from '@/types';
+import { TicketModal } from './TicketModal';
 
 interface ProfilePageProps {
   onPastEventClick?: (event: Event) => void;
@@ -14,6 +15,7 @@ interface ProfilePageProps {
 
 export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) => {
   const { currentUser, events, expenses, logout, myTickets } = useApp();
+  const [selectedTicket, setSelectedTicket] = useState<{ event: Event; ticket: any } | null>(null);
 
   if (!currentUser) return null;
 
@@ -214,23 +216,39 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) =>
             <div className="space-y-3">
               {myTickets.map(t => {
                 const ev = events.find(e => e.id === t.eventId);
+                if (!ev) return null;
                 return (
-                  <div key={t.id} className="p-3 border rounded-lg">
+                  <button
+                    key={t.id}
+                    onClick={() => setSelectedTicket({ event: ev, ticket: t })}
+                    className="w-full p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                  >
                     <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium">{ev?.name || 'Event'}</div>
-                        <div className="text-xs text-muted-foreground">{t.tierName} • Qty {t.quantity} • {ev?.date} {ev?.time}</div>
+                      <div className="text-left">
+                        <div className="font-medium">{ev.name}</div>
+                        <div className="text-xs text-muted-foreground">{t.tierName} • Qty {t.quantity} • {ev.date} {ev.time}</div>
                       </div>
-                      <div className="text-xs bg-black text-white px-2 py-1 rounded">QR</div>
+                      <div className="text-xs bg-black text-white px-3 py-1.5 rounded font-medium">
+                        View QR
+                      </div>
                     </div>
-                    <div className="text-[10px] text-muted-foreground mt-2 break-all">{t.qrData}</div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Ticket Modal */}
+      {selectedTicket && (
+        <TicketModal
+          isOpen={!!selectedTicket}
+          onClose={() => setSelectedTicket(null)}
+          event={selectedTicket.event}
+          ticketData={selectedTicket.ticket}
+        />
+      )}
 
       {/* Payment Methods */}
       <Card>

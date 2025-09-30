@@ -75,22 +75,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <p className="text-sm text-muted-foreground">Events Attending</p>
           </CardContent>
         </Card>
-        {myTicketedEvents.length > 0 && (
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="w-6 h-6 mx-auto mb-2">📈</div>
-              <p className="text-sm font-semibold">Organizer Analytics</p>
-            </CardContent>
-          </Card>
-        )}
-        {myTicketedEvents.length > 0 && (
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="w-6 h-6 mx-auto mb-2">💲</div>
-              <p className="text-sm font-semibold">Ticket Sales</p>
-            </CardContent>
-          </Card>
-        )}
       </div>
 
       {/* Filter Buttons */}

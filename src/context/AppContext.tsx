@@ -145,6 +145,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
 
     setEvents(prev => [...prev, newEvent]);
+
+    // Add notification for event creation
+    const newNotification: Notification = {
+      id: `notif-${Date.now()}`,
+      type: 'event_update',
+      title: 'Event Created',
+      message: `Your event "${newEvent.name}" has been created successfully!`,
+      userId: currentUser.id,
+      relatedEventId: newEvent.id,
+      isRead: false,
+      createdAt: new Date().toISOString()
+    };
+    setNotifications(prev => [newNotification, ...prev]);
   };
 
   const updateEvent = (eventId: string, eventData: Partial<Event>) => {
@@ -346,17 +359,33 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       return { ...e, soldTickets: (e.soldTickets || 0) + toSell, ticketTiers: updatedTiers };
     }));
 
+    const event = events.find(e => e.id === eventId);
+    const tierName = (events.find(e => e.id === eventId)?.ticketTiers || []).find(t => t.id === tierId)?.name || 'Ticket';
+    
     const ticket: MyTicket = {
       id: `ticket-${Date.now()}`,
       userId: currentUser.id,
       eventId,
       tierId,
-      tierName: (events.find(e => e.id === eventId)?.ticketTiers || []).find(t => t.id === tierId)?.name || 'Ticket',
+      tierName,
       quantity,
       qrData: `${eventId}:${tierId}:${currentUser.id}:${Date.now()}`,
       purchasedAt: new Date().toISOString(),
     };
     setMyTickets(prev => [...prev, ticket]);
+
+    // Add notification for ticket purchase
+    const purchaseNotification: Notification = {
+      id: `notif-${Date.now()}`,
+      type: 'event_update',
+      title: 'Ticket Purchased',
+      message: `You purchased ${quantity} ${tierName} ticket(s) for "${event?.name}"`,
+      userId: currentUser.id,
+      relatedEventId: eventId,
+      isRead: false,
+      createdAt: new Date().toISOString()
+    };
+    setNotifications(prev => [purchaseNotification, ...prev]);
   };
 
   const value: AppContextType = {
