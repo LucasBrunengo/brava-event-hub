@@ -18,7 +18,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogPortal, DialogO
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { QuickPay } from './QuickPay';
-import { useApp } from '@/context/AppContext';
 
 interface EventDetailProps {
   event: Event;

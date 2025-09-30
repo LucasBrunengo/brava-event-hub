@@ -167,7 +167,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               const filtered = publicEvents
                 .filter(ev => publicCategory==='all' ? true : (ev.category===publicCategory))
                 .filter(ev => ev.name.toLowerCase().includes(publicSearch.toLowerCase()) || (ev.description||'').toLowerCase().includes(publicSearch.toLowerCase()));
-            <PublicEventsList 
+            return <PublicEventsList 
               events={filtered} 
               onEventClick={onEventClick}
             />

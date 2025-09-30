@@ -277,8 +277,8 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
               onClick={() => setIsPublic(!isPublic)}
             >
               <div className="flex items-center space-x-2">
-                <Globe className={`w-5 h-5 ${isPublic ? 'text-blue-500' : 'text-muted-foreground'}`} />
-                <Label htmlFor="privacy-switch">Public</Label>
+                <Lock className={`w-5 h-5 ${!isPublic ? 'text-blue-500' : 'text-muted-foreground'}`} />
+                <Label htmlFor="privacy-switch">Private</Label>
               </div>
               <div className="relative">
                 <Switch
@@ -288,8 +288,8 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                 />
               </div>
               <div className="flex items-center space-x-2">
-                <Lock className={`w-5 h-5 ${!isPublic ? 'text-blue-500' : 'text-muted-foreground'}`} />
-                <Label htmlFor="privacy-switch">Private</Label>
+                <Globe className={`w-5 h-5 ${isPublic ? 'text-blue-500' : 'text-muted-foreground'}`} />
+                <Label htmlFor="privacy-switch">Public</Label>
               </div>
             </div>
           </CardContent>
