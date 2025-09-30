@@ -574,10 +574,9 @@ export const mockVenues: Venue[] = [
   { id: 'v17', name: 'K-Town Karaoke', category: 'entertainment', address: 'Les Corts, 20', hasReservations: true, tags: ['karaoke'], availability: [], promoted: false, distanceKm: 4.1 },
   { id: 'v18', name: 'Velvet Night', category: 'entertainment', address: 'Diagonal, 300', hasReservations: false, tags: ['club'], availability: [], promoted: true, distanceKm: 2.0 },
   { id: 'v19', name: 'Gastro Bar 58', category: 'entertainment', address: 'Poble Sec, 58', hasReservations: true, tags: ['bar'], availability: [], promoted: false, distanceKm: 1.3 },
-  { id: 'v20', name: "Chef's Table BCN", category: 'restaurant', address: 'El Raval, 5', hasReservations: true, cuisines: ['Fine Dining'], tags: [], availability: [], promoted: true, distanceKm: 2.8 }
-];
+  { id: 'v20', name: "Chef's Table BCN", category: 'restaurant', address: 'El Raval, 5', hasReservations: true, cuisines: ['Fine Dining'], tags: [], availability: [], promoted: true, distanceKm: 2.8 },
 
-// Bulk additions for restaurants
+  // Bulk additions for restaurants
 { id: 'vr21', name: 'Pizza Napo BCN', category: 'restaurant', address: 'Gràcia 101', hasReservations: true, cuisines: ['Italian','Pizza'], tags: ['family'], availability: [], promoted: false, distanceKm: 2.2, imageUrl:'https://images.unsplash.com/photo-1548366086-7e4b24f95f3b?w=400&h=300&fit=crop' },
 { id: 'vr22', name: 'Ramen House', category: 'restaurant', address: 'Eixample 55', hasReservations: true, cuisines: ['Asian','Japanese'], tags: [], availability: [], promoted: true, distanceKm: 1.9, imageUrl:'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop' },
 { id: 'vr23', name: 'Curry Corner', category: 'restaurant', address: 'Born 23', hasReservations: true, cuisines: ['Indian'], tags: [], availability: [], promoted: false, distanceKm: 3.6, imageUrl:'https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop' },
