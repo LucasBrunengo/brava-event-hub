@@ -31,6 +31,8 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
   const [searchQuery, setSearchQuery] = useState('');
   const [reasonSelected, setReasonSelected] = useState<null | 'entertainment' | 'wellness' | 'dinner' | 'custom'>(null);
   const [entertainmentSub, setEntertainmentSub] = useState<'bars' | 'karaoke' | 'clubs' | null>(null);
+  const [wellnessSub, setWellnessSub] = useState<'gym' | 'yoga' | 'barre' | 'spa' | null>(null);
+  const [cuisineFilter, setCuisineFilter] = useState<string | null>(null);
   const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null);
   const [reservationDate, setReservationDate] = useState<string | null>(null);
   const [reservationTime, setReservationTime] = useState<string | null>(null);
@@ -181,11 +183,33 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
               )}
               {(reasonSelected === 'dinner' || reasonSelected === 'wellness') && (
                 <div className="space-y-3">
-                  <Label>Select a venue</Label>
+                  <div className="flex items-center justify-between gap-2">
+                    <Label>Select a venue</Label>
+                    {reasonSelected === 'dinner' && (
+                      <div className="flex flex-wrap gap-2">
+                        {['Italian','Japanese','Spanish','Vegan','Steakhouse','Healthy','Seafood','Asian','Fine Dining'].map(c => (
+                          <Button key={c} type="button" size="sm" variant={cuisineFilter===c?'default':'outline'} onClick={() => setCuisineFilter(cuisineFilter===c?null:c)}>{c}</Button>
+                        ))}
+                      </div>
+                    )}
+                    {reasonSelected === 'wellness' && (
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          {key:'gym',label:'Gym'},
+                          {key:'yoga',label:'Yoga'},
+                          {key:'barre',label:'Barre'},
+                          {key:'spa',label:'Spa'}
+                        ].map(o => (
+                          <Button key={o.key} type="button" size="sm" variant={wellnessSub===o.key as any?'default':'outline'} onClick={() => setWellnessSub(wellnessSub===o.key as any?null:o.key as any)}>{o.label}</Button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                   <Input placeholder={reasonSelected === 'dinner' ? 'Search restaurants...' : 'Search wellness centers...'} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                   <div className="grid grid-cols-1 gap-3 max-h-56 overflow-y-auto">
                     {mockVenues
                       .filter(v => (reasonSelected === 'dinner' ? v.category === 'restaurant' : v.category === 'wellness'))
+                      .filter(v => reasonSelected==='dinner' ? (!cuisineFilter || (v.cuisines||[]).some(c => c.toLowerCase().includes(cuisineFilter.toLowerCase()))) : (!wellnessSub || (v.tags||[]).includes(wellnessSub)))
                       .filter(v => v.name.toLowerCase().includes(searchQuery.toLowerCase()) || (v.cuisines || []).some(c => c.toLowerCase().includes(searchQuery.toLowerCase())))
                       .sort((a,b) => (b.promoted === true ? 1 : 0) - (a.promoted === true ? 1 : 0) || (a.distanceKm || 0) - (b.distanceKm || 0))
                       .map(v => (
@@ -214,6 +238,16 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                         selectedTime={reservationTime}
                         onSelect={(d, t) => { setReservationDate(d); setReservationTime(t); setDate(d); setTime(t); }}
                       />
+                      {reservationDate && (
+                        <div className="grid grid-cols-2 gap-2">
+                          {(['Functional','HIIT','Yoga Flow','Barre Intro','Spin','Pilates'] as string[]).map((cls, idx) => (
+                            <div key={idx} className="p-2 border rounded text-xs flex items-center justify-between">
+                              <span>{cls}</span>
+                              <Button type="button" size="sm" variant="outline">{reservationTime || 'Select time'}</Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
