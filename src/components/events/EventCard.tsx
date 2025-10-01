@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, MapPin, User, Clock, Tag, Euro } from 'lucide-react';
 import { Event } from '@/types';
 import { format } from 'date-fns';
+import { useApp } from '@/context/AppContext';
 
 interface EventCardProps {
   event: Event;
@@ -11,6 +12,7 @@ interface EventCardProps {
 }
 
 export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
+  const { currentUser } = useApp();
   const eventDate = new Date(event.date);
   const goingCount = event.attendees.filter(a => a.status === 'going').length;
   const maybeCount = event.attendees.filter(a => a.status === 'maybe').length;
@@ -43,12 +45,32 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
     return event.ticketPrice * (1 - event.discountPercentage / 100);
   };
 
+  const getBorderColor = () => {
+    // My events (I'm the organizer) - purple
+    if (event.organizerId === currentUser?.id) return 'border-purple-500 border-2';
+    // Public events - blue
+    if (event.isPublic) return 'border-blue-500 border-2';
+    // Private events by friends - green
+    if (!event.isPublic && event.organizerId !== currentUser?.id) return 'border-green-500 border-2';
+    return '';
+  };
+
   return (
     <Card 
-      className="cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-[1.02] animate-fade-in"
+      className={`cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-[1.02] animate-fade-in ${getBorderColor()}`}
       onClick={onClick}
     >
       <CardContent className="p-4">
+        {/* Banner space for customization */}
+        {(event.customBanner || event.isPublic || !event.isPublic) && (
+          <div className="mb-3 -mx-4 -mt-4 h-16 rounded-t-lg overflow-hidden">
+            {event.customBanner ? (
+              <img src={event.customBanner} alt="Event banner" className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 opacity-20" />
+            )}
+          </div>
+        )}
         <div className="flex justify-between items-start mb-3">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">

@@ -61,14 +61,18 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4">
-        <Card>
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => {
+          setFilter('my-events');
+        }}>
           <CardContent className="p-4 text-center">
             <Calendar className="w-6 h-6 mx-auto mb-2 text-primary" />
             <p className="text-xl font-bold">{organizedCount}</p>
             <p className="text-sm text-muted-foreground">Events Organized</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => {
+          setFilter('my-events');
+        }}>
           <CardContent className="p-4 text-center">
             <Users className="w-6 h-6 mx-auto mb-2 text-primary" />
             <p className="text-xl font-bold">{attendingCount}</p>
@@ -128,11 +132,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <div className="grid grid-cols-4 gap-2">
                 {([
                   {key:'all',label:'All'},
-                  {key:'entertainment',label:'Entertainment'},
+                  {key:'entertainment',label:'Party'},
                   {key:'dinner',label:'Dinner'},
                   {key:'wellness',label:'Wellness'},
                 ] as const).map(opt => (
-                  <Button key={opt.key} variant={publicCategory===opt.key?'default':'outline'} onClick={() => setPublicCategory(opt.key as any)} className={publicCategory===opt.key?'brava-gradient':''}>
+                  <Button key={opt.key} variant={publicCategory===opt.key?'default':'outline'} onClick={() => setPublicCategory(opt.key as any)} className={`${publicCategory===opt.key?'brava-gradient':''} text-xs py-1 h-auto`}>
                     {opt.label}
                   </Button>
                 ))}

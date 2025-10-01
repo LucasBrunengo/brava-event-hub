@@ -36,6 +36,8 @@ export interface Event {
   totalTickets?: number;
   soldTickets?: number;
   ticketTiers?: TicketTier[];
+  customBanner?: string;
+  views?: number;
 }
 
 export type VenueCategory = 'restaurant' | 'wellness' | 'entertainment' | 'other';
@@ -118,6 +120,8 @@ export interface TicketTier {
   price: number;
   quantity: number; // total allocation for the tier
   sold: number; // sold within the tier
+  releaseDate?: string;
+  releaseTime?: string;
 }
 
 export interface Comment {

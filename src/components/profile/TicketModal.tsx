@@ -1,84 +1,54 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Card } from '@/components/ui/card';
 import { Event } from '@/types';
-import { QrCode, MapPin, Calendar, Clock } from 'lucide-react';
+import { Calendar, MapPin, Clock, User } from 'lucide-react';
 
 interface TicketModalProps {
   isOpen: boolean;
   onClose: () => void;
   event: Event;
-  ticketData: {
-    id: string;
-    tierName: string;
-    quantity: number;
-    qrData: string;
-  };
 }
 
-export const TicketModal: React.FC<TicketModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  event, 
-  ticketData 
-}) => {
+export const TicketModal: React.FC<TicketModalProps> = ({ isOpen, onClose, event }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-sm">
+      <DialogContent className="max-w-[85vw]">
         <DialogHeader>
-          <DialogTitle>Your Ticket</DialogTitle>
+          <DialogTitle className="text-center">Event Ticket</DialogTitle>
         </DialogHeader>
-        
-        <div className="space-y-4">
-          {/* Event Details */}
-          <Card className="p-4 space-y-3">
-            <h3 className="font-bold text-lg">{event.name}</h3>
-            
-            <div className="space-y-2 text-sm">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
-                <span>{event.location}</span>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-muted-foreground" />
-                <span>{event.date}</span>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-muted-foreground" />
-                <span>{event.time}</span>
-              </div>
+        <div className="space-y-3">
+          <div className="space-y-2 text-center">
+            <h3 className="font-bold text-base">{event.name}</h3>
+            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <Calendar className="w-3 h-3" />
+              <span>{event.date}</span>
+              <Clock className="w-3 h-3 ml-2" />
+              <span>{event.time}</span>
             </div>
-          </Card>
-
-          {/* Ticket Info */}
-          <Card className="p-4 space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Ticket Type:</span>
-              <span className="font-semibold">{ticketData.tierName}</span>
+            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <MapPin className="w-3 h-3" />
+              <span className="text-center">{event.location}</span>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Quantity:</span>
-              <span className="font-semibold">{ticketData.quantity}</span>
+            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <User className="w-3 h-3" />
+              <span>by {event.organizer.name}</span>
             </div>
-          </Card>
-
-          {/* QR Code */}
-          <Card className="p-6 bg-white dark:bg-gray-900">
-            <div className="flex flex-col items-center gap-3">
-              <div className="w-48 h-48 bg-white border-4 border-gray-200 rounded-lg flex items-center justify-center">
-                <QrCode className="w-40 h-40 text-gray-800" />
+          </div>
+          
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-lg border-2 border-purple-200 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-28 h-28 mx-auto bg-white rounded-lg flex items-center justify-center shadow-md">
+                <svg viewBox="0 0 100 100" className="w-24 h-24">
+                  <rect width="100" height="100" fill="white"/>
+                  {[...Array(10)].map((_, i) => [...Array(10)].map((_, j) => (
+                    <rect key={`${i}-${j}`} x={i*10} y={j*10} width="10" height="10" fill={Math.random()>0.5?"black":"white"}/>
+                  )))}
+                </svg>
               </div>
-              <p className="text-xs text-center text-muted-foreground break-all px-4">
-                {ticketData.qrData}
-              </p>
+              <p className="text-xs text-muted-foreground mt-2 font-medium">Scan at venue entrance</p>
+              <p className="text-[10px] text-muted-foreground mt-1">Ticket ID: {event.id.slice(0,8).toUpperCase()}</p>
             </div>
-          </Card>
-
-          <p className="text-xs text-center text-muted-foreground">
-            Show this QR code at the entrance
-          </p>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

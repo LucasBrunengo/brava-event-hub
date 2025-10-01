@@ -13,6 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { User, Venue } from '@/types';
 import { mockVenues } from '@/data/mockData';
 import ReservationScheduler from './ReservationScheduler';
+import { PaymentConfirmation } from './PaymentConfirmation';
 
 interface CreateEventFormProps {
   onBack: () => void;
@@ -40,8 +41,8 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
   const [publicFeePaid, setPublicFeePaid] = useState(false);
   const [ticketPriceInput, setTicketPriceInput] = useState<string>('');
   const [ticketTotalQty, setTicketTotalQty] = useState<string>('');
-  const [tierEarlyQty, setTierEarlyQty] = useState<string>('');
-  const [tierFirstQty, setTierFirstQty] = useState<string>('');
+  const [releases, setReleases] = useState<Array<{id: string, name: string, price: string, quantity: string, date: string, time: string}>>([]);
+  const [showPaymentConfirm, setShowPaymentConfirm] = useState(false);
 
   const { toast } = useToast();
 
@@ -60,10 +61,15 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const tiers = [
-      tierEarlyQty ? { id: 'early', name: 'Early Bird', price: ticketPriceInput ? Number(ticketPriceInput) * 0.8 : 0, quantity: Number(tierEarlyQty), sold: 0 } : null,
-      tierFirstQty ? { id: 'first', name: 'First Release', price: ticketPriceInput ? Number(ticketPriceInput) : 0, quantity: Number(tierFirstQty), sold: 0 } : null,
-    ].filter(Boolean) as any[];
+    const tiers = releases.map(r => ({
+      id: r.id,
+      name: r.name,
+      price: Number(r.price),
+      quantity: Number(r.quantity),
+      sold: Math.floor(Math.random() * Number(r.quantity) * 0.3), // Mock some sales
+      releaseDate: r.date,
+      releaseTime: r.time
+    }));
 
     const eventData: any = {
       category: reasonSelected || 'custom',
@@ -76,13 +82,42 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
       location,
       isPublic,
       isPromoted: isPublic ? promotePublic : false,
-      ticketPrice: ticketPriceInput ? Number(ticketPriceInput) : undefined,
-      totalTickets: ticketTotalQty ? Number(ticketTotalQty) : undefined,
-      ticketTiers: tiers,
+      ticketPrice: releases.length > 0 ? Number(releases[0].price) : (ticketPriceInput ? Number(ticketPriceInput) : undefined),
+      totalTickets: releases.reduce((sum, r) => sum + Number(r.quantity), 0) || (ticketTotalQty ? Number(ticketTotalQty) : undefined),
+      ticketTiers: tiers.length > 0 ? tiers : undefined,
       attendees: isPublic ? [] : invitedFriends.map(id => users.find(u => u.id === id)).filter(Boolean),
     };
     createEvent(eventData);
     onEventCreated();
+  };
+
+  const addRelease = () => {
+    if (releases.length < 5) {
+      setReleases([...releases, {
+        id: `release-${Date.now()}`,
+        name: `Release ${releases.length + 1}`,
+        price: '',
+        quantity: '',
+        date: '',
+        time: ''
+      }]);
+    }
+  };
+
+  const removeRelease = (id: string) => {
+    setReleases(releases.filter(r => r.id !== id));
+  };
+
+  const updateRelease = (id: string, field: string, value: string) => {
+    setReleases(releases.map(r => r.id === id ? {...r, [field]: value} : r));
+  };
+
+  const handlePayClick = () => {
+    setShowPaymentConfirm(true);
+    setTimeout(() => {
+      setPublicFeePaid(true);
+      setTimeout(() => setShowPaymentConfirm(false), 2000);
+    }, 1500);
   };
 
   return (
@@ -136,7 +171,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
             </CardHeader>
             <CardContent className="pt-0">
               <div className="flex flex-wrap gap-2 mb-4">
-                <Button type="button" variant="ghost" size="sm" onClick={() => setReasonSelected(null)}>
+                <Button type="button" variant="outline" size="sm" onClick={() => setReasonSelected(null)} className="shadow-md">
                   Change category
                 </Button>
               </div>
@@ -259,7 +294,10 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
           </Card>
         )}
         <Card>
-          <CardContent className="p-6 space-y-4">
+          <CardHeader>
+            <CardTitle>Event Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <Input placeholder="Event Name" value={eventName} onChange={(e) => setEventName(e.target.value)} required />
             <Textarea placeholder="Event Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
             <div className="grid grid-cols-2 gap-4">
@@ -352,33 +390,90 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                   <Label htmlFor="promote">Add promotion</Label>
                 </div>
                 <div className="mt-3">
-                  <Button type="button" className="w-full" onClick={() => setPublicFeePaid(true)}>
+                  <Button type="button" className="w-full" onClick={handlePayClick}>
                     Pay €{promotePublic ? 40 : 30} now
                   </Button>
                 </div>
               </div>
               {publicFeePaid && (
                 <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <Label>Base Ticket Price (€)</Label>
-                      <Input type="number" min="0" step="0.01" value={ticketPriceInput} onChange={(e) => setTicketPriceInput(e.target.value)} />
-                    </div>
-                    <div>
-                      <Label>Total Tickets</Label>
-                      <Input type="number" min="0" value={ticketTotalQty} onChange={(e) => setTicketTotalQty(e.target.value)} />
-                    </div>
+                  <div className="flex justify-between items-center">
+                    <Label className="font-semibold">Ticket Releases (up to 5)</Label>
+                    {releases.length < 5 && (
+                      <Button type="button" size="sm" variant="outline" onClick={addRelease}>
+                        + Add Release
+                      </Button>
+                    )}
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <Label>Early Bird Qty</Label>
-                      <Input type="number" min="0" value={tierEarlyQty} onChange={(e) => setTierEarlyQty(e.target.value)} />
-                    </div>
-                    <div>
-                      <Label>First Release Qty</Label>
-                      <Input type="number" min="0" value={tierFirstQty} onChange={(e) => setTierFirstQty(e.target.value)} />
-                    </div>
-                  </div>
+                  
+                  {releases.map((release, idx) => (
+                    <Card key={release.id} className="p-3">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <Input 
+                            placeholder="Release name" 
+                            value={release.name} 
+                            onChange={(e) => updateRelease(release.id, 'name', e.target.value)}
+                            className="text-sm"
+                          />
+                          <Button type="button" size="sm" variant="ghost" onClick={() => removeRelease(release.id)} className="ml-2">
+                            ✕
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <Label className="text-xs">Price (€)</Label>
+                            <Input 
+                              type="number" 
+                              min="0" 
+                              step="0.01" 
+                              placeholder="0.00"
+                              value={release.price} 
+                              onChange={(e) => updateRelease(release.id, 'price', e.target.value)}
+                              className="text-sm"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Quantity</Label>
+                            <Input 
+                              type="number" 
+                              min="0" 
+                              placeholder="0"
+                              value={release.quantity} 
+                              onChange={(e) => updateRelease(release.id, 'quantity', e.target.value)}
+                              className="text-sm"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <Label className="text-xs">Release Date</Label>
+                            <Input 
+                              type="date" 
+                              value={release.date} 
+                              onChange={(e) => updateRelease(release.id, 'date', e.target.value)}
+                              className="text-sm"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Release Time</Label>
+                            <Input 
+                              type="time" 
+                              value={release.time} 
+                              onChange={(e) => updateRelease(release.id, 'time', e.target.value)}
+                              className="text-sm"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                  
+                  {releases.length === 0 && (
+                    <p className="text-xs text-muted-foreground text-center py-2">
+                      Add ticket releases with different prices and dates
+                    </p>
+                  )}
                 </div>
               )}
             </CardContent>
@@ -387,6 +482,8 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
 
         <Button type="submit" className="w-full">Create Event</Button>
       </form>
+
+      <PaymentConfirmation isVisible={showPaymentConfirm} />
     </div>
   );
 };

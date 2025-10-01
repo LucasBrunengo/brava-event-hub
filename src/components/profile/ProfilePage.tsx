@@ -246,7 +246,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onPastEventClick }) =>
           isOpen={!!selectedTicket}
           onClose={() => setSelectedTicket(null)}
           event={selectedTicket.event}
-          ticketData={selectedTicket.ticket}
         />
       )}
 

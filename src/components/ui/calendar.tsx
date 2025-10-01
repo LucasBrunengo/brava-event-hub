@@ -13,10 +13,37 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const today = new Date();
+  const oneWeekFromNow = new Date();
+  oneWeekFromNow.setDate(today.getDate() + 7);
+
+  const modifiers = {
+    available: (date: Date) => {
+      return date >= today && date <= oneWeekFromNow && Math.random() > 0.3;
+    },
+    fullyBooked: (date: Date) => {
+      return date >= today && date <= oneWeekFromNow && Math.random() > 0.7;
+    },
+  };
+
+  const modifiersStyles = {
+    available: {
+      position: 'relative' as const,
+    },
+    fullyBooked: {
+      position: 'relative' as const,
+    },
+  };
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3", className)}
+      className={cn("p-3 pointer-events-auto", className)}
+      modifiers={modifiers}
+      modifiersStyles={modifiersStyles}
+      disabled={{ before: today }}
+      fromDate={today}
+      toDate={oneWeekFromNow}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
@@ -37,7 +64,7 @@ function Calendar({
         cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+          "h-9 w-9 p-0 font-normal aria-selected:opacity-100 relative"
         ),
         day_range_end: "day-range-end",
         day_selected:
@@ -54,6 +81,26 @@ function Calendar({
       components={{
         IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
+        Day: ({ date, ...dayProps }: any) => {
+          const isAvailable = modifiers.available(date);
+          const isFullyBooked = modifiers.fullyBooked(date);
+          const isPast = date < today;
+          
+          return (
+            <div className="relative">
+              <button {...dayProps} />
+              {isAvailable && !isPast && (
+                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-green-400" />
+              )}
+              {isFullyBooked && !isPast && (
+                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-red-300" />
+              )}
+              {isPast && (
+                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-gray-300" />
+              )}
+            </div>
+          );
+        },
       }}
       {...props}
     />

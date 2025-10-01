@@ -14,7 +14,7 @@ import { ShareEventModal } from '@/components/events/ShareEventModal';
 import { OrganizerAnalyticsModal } from '@/components/dashboard/OrganizerAnalyticsModal';
 import { TicketSalesModal } from '@/components/dashboard/TicketSalesModal';
 import { Button } from '@/components/ui/button';
-import { Bell, MessageCircle } from 'lucide-react';
+import { Bell, MessageCircle, BarChart3, Banknote } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Event } from '@/types';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
@@ -181,20 +181,20 @@ const Index = () => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-xs px-2"
+                  className="relative"
                   onClick={() => setShowAnalyticsModal(true)}
                   title="Organizer Analytics"
                 >
-                  📈
+                  <BarChart3 className="w-5 h-5" />
                 </Button>
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-xs px-2"
+                  className="relative"
                   onClick={() => setShowTicketSalesModal(true)}
                   title="Ticket Sales"
                 >
-                  💲
+                  <Banknote className="w-5 h-5" />
                 </Button>
               </>
             )}
