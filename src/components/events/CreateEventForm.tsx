@@ -30,7 +30,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
   const [isPublic, setIsPublic] = useState(true);
   const [invitedFriends, setInvitedFriends] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [reasonSelected, setReasonSelected] = useState<null | 'entertainment' | 'wellness' | 'dinner' | 'custom'>(null);
+  const [reasonSelected, setReasonSelected] = useState<null | 'entertainment' | 'wellness' | 'food' | 'custom'>(null);
   const [entertainmentSub, setEntertainmentSub] = useState<'bars' | 'karaoke' | 'clubs' | null>(null);
   const [wellnessSub, setWellnessSub] = useState<'gym' | 'yoga' | 'barre' | 'spa' | null>(null);
   const [cuisineFilter, setCuisineFilter] = useState<string | null>(null);
@@ -149,9 +149,9 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                 <Dumbbell className="w-5 h-5 mb-1" />
                 Wellness
               </Button>
-              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('dinner')}>
+              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('food')}>
                 <Salad className="w-5 h-5 mb-1" />
-                Dinner
+                Food
               </Button>
               <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('custom')}>
                 <Sparkles className="w-5 h-5 mb-1" />
@@ -216,11 +216,11 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                   )}
                 </div>
               )}
-              {(reasonSelected === 'dinner' || reasonSelected === 'wellness') && (
+              {(reasonSelected === 'food' || reasonSelected === 'wellness') && (
                 <div className="space-y-3">
                   <div className="space-y-2">
                     <Label className="text-base font-semibold">Select a Venue</Label>
-                    {reasonSelected === 'dinner' && (
+                    {reasonSelected === 'food' && (
                       <div className="flex flex-wrap gap-2">
                         {['Italian','Japanese','Spanish','Vegan','Steakhouse','Healthy','Seafood','Asian','Fine Dining'].map(c => (
                           <Button key={c} type="button" size="sm" variant={cuisineFilter===c?'default':'outline'} onClick={() => setCuisineFilter(cuisineFilter===c?null:c)} className="text-xs px-2 py-1 h-auto">{c}</Button>
@@ -240,11 +240,11 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                       </div>
                     )}
                   </div>
-                  <Input placeholder={reasonSelected === 'dinner' ? 'Search restaurants...' : 'Search wellness centers...'} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                  <Input placeholder={reasonSelected === 'food' ? 'Search restaurants...' : 'Search wellness centers...'} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                   <div className="grid grid-cols-1 gap-3 max-h-56 overflow-y-auto">
                     {mockVenues
-                      .filter(v => (reasonSelected === 'dinner' ? v.category === 'restaurant' : v.category === 'wellness'))
-                      .filter(v => reasonSelected==='dinner' ? (!cuisineFilter || (v.cuisines||[]).some(c => c.toLowerCase().includes(cuisineFilter.toLowerCase()))) : (!wellnessSub || (v.tags||[]).includes(wellnessSub)))
+                      .filter(v => (reasonSelected === 'food' ? v.category === 'restaurant' : v.category === 'wellness'))
+                      .filter(v => reasonSelected==='food' ? (!cuisineFilter || (v.cuisines||[]).some(c => c.toLowerCase().includes(cuisineFilter.toLowerCase()))) : (!wellnessSub || (v.tags||[]).includes(wellnessSub)))
                       .filter(v => v.name.toLowerCase().includes(searchQuery.toLowerCase()) || (v.cuisines || []).some(c => c.toLowerCase().includes(searchQuery.toLowerCase())))
                       .sort((a,b) => (b.promoted === true ? 1 : 0) - (a.promoted === true ? 1 : 0) || (a.distanceKm || 0) - (b.distanceKm || 0))
                       .map(v => (

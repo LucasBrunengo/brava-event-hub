@@ -206,7 +206,8 @@ export const mockEvents: Event[] = [
       { id: 'c5d', eventId: '5', userId: '6', user: mockUsers[5], message: "Pro tip: the food trucks near the main stage are the best.", createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c5e', eventId: '5', userId: '7', user: mockUsers[6], message: "Remember to bring sunscreen and a hat, it gets hot!", createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString() },
     ],
-    totalAttendees: 220000
+    totalAttendees: 220000,
+    customBanner: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&h=300&fit=crop'
   },
   {
     id: '6',
@@ -250,7 +251,8 @@ export const mockEvents: Event[] = [
       { id: 'c6d', eventId: '6', userId: '9', user: mockUsers[8], message: "It's Folamour and Kaytranada! It's a must-go.", createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c6e', eventId: '6', userId: '10', user: mockUsers[9], message: "Okay, I'm sold. Getting my ticket now.", createdAt: new Date(Date.now() - 24 * 24 * 60 * 60 * 1000).toISOString() },
     ],
-    totalAttendees: 85000
+    totalAttendees: 85000,
+    customBanner: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&h=300&fit=crop'
   },
   {
     id: '7',
@@ -281,7 +283,8 @@ export const mockEvents: Event[] = [
       { id: 'c7d', eventId: '7', userId: '8', user: mockUsers[7], message: "It's Carl Cox! It's going to be packed.", createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString() },
       { id: 'c7e', eventId: '7', userId: '9', user: mockUsers[8], message: "No way! Okay, we have to go early to get a good spot.", createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString() },
     ],
-    totalAttendees: 15000
+    totalAttendees: 15000,
+    customBanner: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&h=300&fit=crop'
   },
 
   // --- PAST EVENTS (RECENT) ---
@@ -363,7 +366,8 @@ export const mockEvents: Event[] = [
     ticketPrice: 15.00,
     ticketUrl: '#',
     photos: [],
-    comments: []
+    comments: [],
+    customBanner: 'https://images.unsplash.com/photo-1527224857830-43a7acc85260?w=800&h=300&fit=crop'
   },
   {
     id: 'pub2',
@@ -378,11 +382,12 @@ export const mockEvents: Event[] = [
     createdAt: new Date().toISOString(),
     hasExpenseSplitting: false,
     isPublic: true,
-    category: 'dinner',
+    category: 'food',
     ticketPrice: 65.00,
     ticketUrl: '#',
     photos: [],
-    comments: []
+    comments: [],
+    customBanner: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=300&fit=crop'
   },
   {
     id: 'pub3',
@@ -401,7 +406,8 @@ export const mockEvents: Event[] = [
     ticketPrice: 12.00,
     ticketUrl: '#',
     photos: [],
-    comments: []
+    comments: [],
+    customBanner: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=300&fit=crop'
   },
   {
     id: 'pub4',
@@ -416,11 +422,12 @@ export const mockEvents: Event[] = [
     createdAt: new Date().toISOString(),
     hasExpenseSplitting: false,
     isPublic: true,
-    category: 'dinner',
+    category: 'food',
     ticketPrice: 45.00,
     ticketUrl: '#',
     photos: [],
-    comments: []
+    comments: [],
+    customBanner: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=300&fit=crop'
   },
   {
     id: 'pub5',
@@ -439,7 +446,8 @@ export const mockEvents: Event[] = [
     ticketPrice: 20.00,
     ticketUrl: '#',
     photos: [],
-    comments: []
+    comments: [],
+    customBanner: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800&h=300&fit=crop'
   },
   {
     id: 'pub6',
@@ -454,11 +462,12 @@ export const mockEvents: Event[] = [
     createdAt: new Date().toISOString(),
     hasExpenseSplitting: false,
     isPublic: true,
-    category: 'dinner',
+    category: 'food',
     ticketPrice: 75.00,
     ticketUrl: '#',
     photos: [],
-    comments: []
+    comments: [],
+    customBanner: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=300&fit=crop'
   },
   {
     id: 'pub7',
@@ -477,7 +486,8 @@ export const mockEvents: Event[] = [
     ticketPrice: 25.00,
     ticketUrl: '#',
     photos: [],
-    comments: []
+    comments: [],
+    customBanner: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=300&fit=crop'
   },
   {
     id: 'pub8',
@@ -496,7 +506,8 @@ export const mockEvents: Event[] = [
     ticketPrice: 18.00,
     ticketUrl: '#',
     photos: [],
-    comments: []
+    comments: [],
+    customBanner: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800&h=300&fit=crop'
   }
 ];
 

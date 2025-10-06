@@ -13,6 +13,7 @@ import { ChatPanel } from '@/components/layout/ChatPanel';
 import { ShareEventModal } from '@/components/events/ShareEventModal';
 import { OrganizerAnalyticsModal } from '@/components/dashboard/OrganizerAnalyticsModal';
 import { TicketSalesModal } from '@/components/dashboard/TicketSalesModal';
+import { VenuesMap } from '@/components/events/VenuesMap';
 import { Button } from '@/components/ui/button';
 import { Bell, MessageCircle, BarChart3, Banknote } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -20,7 +21,7 @@ import { Event } from '@/types';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
 import PhoneFrame from '@/components/layout/PhoneFrame';
 
-type View = 'dashboard' | 'create' | 'profile' | 'event-detail' | 'past-event-detail';
+type View = 'dashboard' | 'create' | 'profile' | 'event-detail' | 'past-event-detail' | 'map';
 
 const Index = () => {
   const { 
@@ -108,19 +109,22 @@ const Index = () => {
     setCurrentView('dashboard');
   };
 
-  const handleTabChange = (tab: 'events' | 'create' | 'profile') => {
+  const handleTabChange = (tab: 'events' | 'create' | 'profile' | 'map') => {
     if (tab === 'events') {
       setCurrentView('dashboard');
     } else if (tab === 'create') {
       setCurrentView('create');
     } else if (tab === 'profile') {
       setCurrentView('profile');
+    } else if (tab === 'map') {
+      setCurrentView('map');
     }
   };
 
-  const getActiveTab = (): 'events' | 'create' | 'profile' => {
+  const getActiveTab = (): 'events' | 'create' | 'profile' | 'map' => {
     if (currentView === 'create') return 'create';
     if (currentView === 'profile') return 'profile';
+    if (currentView === 'map') return 'map';
     return 'events';
   };
 
@@ -239,6 +243,7 @@ const Index = () => {
             )}
             {currentView === 'past-event-detail' && selectedEvent && <PastEventDetail event={selectedEvent} onBack={handleBack} />}
             {currentView === 'profile' && <ProfilePage onPastEventClick={handlePastEventClick} />}
+            {currentView === 'map' && <VenuesMap />}
           </div>
         </div>
         

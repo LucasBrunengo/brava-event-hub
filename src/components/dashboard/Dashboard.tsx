@@ -22,7 +22,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 }) => {
   const { currentUser, events } = useApp();
   const [filter, setFilter] = useState<'my-events' | 'public'>('public');
-  const [publicCategory, setPublicCategory] = useState<'all' | 'entertainment' | 'dinner' | 'wellness' | 'other'>('all');
+  const [publicCategory, setPublicCategory] = useState<'all' | 'entertainment' | 'food' | 'wellness' | 'other'>('all');
   const [publicSearch, setPublicSearch] = useState('');
   
   const organizedCount = myEvents.filter(event => event.organizerId === currentUser?.id).length;
@@ -84,7 +84,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Filter Buttons */}
       <div className="flex items-center gap-2">
         <Filter className="w-5 h-5 text-muted-foreground" />
-        <h3 className="font-semibold text-lg">Filter Events</h3>
+        <span className="font-semibold">Filters</span>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <Button
@@ -133,7 +133,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 {([
                   {key:'all',label:'All'},
                   {key:'entertainment',label:'Party'},
-                  {key:'dinner',label:'Dinner'},
+                  {key:'food',label:'Food'},
                   {key:'wellness',label:'Wellness'},
                 ] as const).map(opt => (
                   <Button key={opt.key} variant={publicCategory===opt.key?'default':'outline'} onClick={() => setPublicCategory(opt.key as any)} className={`${publicCategory===opt.key?'brava-gradient':''} text-xs py-1 h-auto`}>

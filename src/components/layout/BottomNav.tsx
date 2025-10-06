@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Calendar, Plus, User } from 'lucide-react';
+import { Calendar, Plus, User, Map } from 'lucide-react';
 
 interface BottomNavProps {
-  activeTab: 'events' | 'create' | 'profile';
-  onTabChange: (tab: 'events' | 'create' | 'profile') => void;
+  activeTab: 'events' | 'create' | 'profile' | 'map';
+  onTabChange: (tab: 'events' | 'create' | 'profile' | 'map') => void;
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
@@ -29,6 +29,16 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) 
         >
           <Plus className="w-5 h-5" />
           <span className="text-xs">Create</span>
+        </Button>
+        
+        <Button
+          variant={activeTab === 'map' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => onTabChange('map')}
+          className="flex flex-col items-center gap-1 h-auto py-2"
+        >
+          <Map className="w-5 h-5" />
+          <span className="text-xs">Map</span>
         </Button>
         
         <Button

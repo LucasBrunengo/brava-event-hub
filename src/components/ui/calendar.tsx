@@ -14,24 +14,32 @@ function Calendar({
   ...props
 }: CalendarProps) {
   const today = new Date();
-  const oneWeekFromNow = new Date();
+  today.setHours(0, 0, 0, 0);
+  const oneWeekFromNow = new Date(today);
   oneWeekFromNow.setDate(today.getDate() + 7);
+
+  const getAvailabilityForDate = (date: Date) => {
+    const daysSinceToday = Math.floor((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    const seed = daysSinceToday + date.getDate();
+    const rand = Math.sin(seed) * 10000;
+    const value = rand - Math.floor(rand);
+    return value;
+  };
 
   const modifiers = {
     available: (date: Date) => {
-      return date >= today && date <= oneWeekFromNow && Math.random() > 0.3;
+      const dateOnly = new Date(date);
+      dateOnly.setHours(0, 0, 0, 0);
+      if (dateOnly < today || dateOnly > oneWeekFromNow) return false;
+      const value = getAvailabilityForDate(dateOnly);
+      return value > 0.3 && value <= 0.7;
     },
     fullyBooked: (date: Date) => {
-      return date >= today && date <= oneWeekFromNow && Math.random() > 0.7;
-    },
-  };
-
-  const modifiersStyles = {
-    available: {
-      position: 'relative' as const,
-    },
-    fullyBooked: {
-      position: 'relative' as const,
+      const dateOnly = new Date(date);
+      dateOnly.setHours(0, 0, 0, 0);
+      if (dateOnly < today || dateOnly > oneWeekFromNow) return false;
+      const value = getAvailabilityForDate(dateOnly);
+      return value > 0.7;
     },
   };
 
@@ -40,7 +48,6 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn("p-3 pointer-events-auto", className)}
       modifiers={modifiers}
-      modifiersStyles={modifiersStyles}
       disabled={{ before: today }}
       fromDate={today}
       toDate={oneWeekFromNow}
@@ -64,7 +71,7 @@ function Calendar({
         cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100 relative"
+          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
         ),
         day_range_end: "day-range-end",
         day_selected:
@@ -81,22 +88,32 @@ function Calendar({
       components={{
         IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
-        Day: ({ date, ...dayProps }: any) => {
-          const isAvailable = modifiers.available(date);
-          const isFullyBooked = modifiers.fullyBooked(date);
-          const isPast = date < today;
+        Day: ({ date, displayMonth, ...dayProps }: any) => {
+          const dateOnly = new Date(date);
+          dateOnly.setHours(0, 0, 0, 0);
+          const isPast = dateOnly < today;
+          const isAvailable = modifiers.available(dateOnly);
+          const isFullyBooked = modifiers.fullyBooked(dateOnly);
           
           return (
-            <div className="relative">
-              <button {...dayProps} />
-              {isAvailable && !isPast && (
-                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-green-400" />
+            <div className="relative w-9 h-9">
+              <button 
+                {...dayProps}
+                className={cn(
+                  dayProps.className,
+                  "w-full h-full flex items-center justify-center"
+                )}
+              >
+                {date.getDate()}
+              </button>
+              {!isPast && isAvailable && (
+                <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-green-300" />
               )}
-              {isFullyBooked && !isPast && (
-                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-red-300" />
+              {!isPast && isFullyBooked && (
+                <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-red-300" />
               )}
               {isPast && (
-                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-gray-300" />
+                <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-gray-300" />
               )}
             </div>
           );
