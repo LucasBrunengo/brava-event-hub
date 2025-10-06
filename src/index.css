@@ -185,7 +185,7 @@ html, body {
   }
 
   .phone-screen {
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #b8c5d3 100%);
     border-radius: 28px;
     overflow: hidden;
     height: 100%;

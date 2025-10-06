@@ -37,6 +37,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
   const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null);
   const [reservationDate, setReservationDate] = useState<string | null>(null);
   const [reservationTime, setReservationTime] = useState<string | null>(null);
+  const [numPeople, setNumPeople] = useState<number>(2);
   const [promotePublic, setPromotePublic] = useState(false);
   const [publicFeePaid, setPublicFeePaid] = useState(false);
   const [ticketPriceInput, setTicketPriceInput] = useState<string>('');
@@ -267,6 +268,25 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                   {selectedVenue?.hasReservations && (
                     <div className="space-y-3">
                       <div className="text-xs text-muted-foreground">This venue supports free reservations in-app.</div>
+                      {reasonSelected === 'food' && (
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">Number of People</Label>
+                          <div className="flex gap-2">
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map(n => (
+                              <Button
+                                key={n}
+                                type="button"
+                                size="sm"
+                                variant={numPeople === n ? 'default' : 'outline'}
+                                onClick={() => setNumPeople(n)}
+                                className="w-10 h-10 p-0"
+                              >
+                                {n}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       <ReservationScheduler
                         venue={selectedVenue}
                         selectedDate={reservationDate}
@@ -300,11 +320,20 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
           <CardContent className="space-y-4">
             <Input placeholder="Event Name" value={eventName} onChange={(e) => setEventName(e.target.value)} required />
             <Textarea placeholder="Event Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
-            <div className="grid grid-cols-2 gap-4">
-              <Input type="date" value={reservationDate || date} onChange={(e) => { setDate(e.target.value); setReservationDate(e.target.value); }} required />
-              <Input type="time" value={reservationTime || time} onChange={(e) => { setTime(e.target.value); setReservationTime(e.target.value); }} required />
-            </div>
-            <Input placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} required />
+            {reasonSelected === 'custom' && (
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <Input type="date" value={reservationDate || date} onChange={(e) => { setDate(e.target.value); setReservationDate(e.target.value); }} required />
+                  <Input type="time" value={reservationTime || time} onChange={(e) => { setTime(e.target.value); setReservationTime(e.target.value); }} required />
+                </div>
+                <Input placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} required />
+              </>
+            )}
+            {(reasonSelected === 'food' || reasonSelected === 'wellness') && !reservationDate && (
+              <div className="text-sm text-muted-foreground">
+                Please select a venue and time from the calendar above
+              </div>
+            )}
           </CardContent>
         </Card>
         

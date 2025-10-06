@@ -26,9 +26,16 @@ export const PublicEventsList: React.FC<PublicEventsListProps> = ({
     );
   }
 
+  // Sort events: promoted events first, then by date
+  const sortedEvents = [...events].sort((a, b) => {
+    if (a.isPromoted && !b.isPromoted) return -1;
+    if (!a.isPromoted && b.isPromoted) return 1;
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+
   return (
     <div className="space-y-3">
-      {events.map((event) => (
+      {sortedEvents.map((event) => (
         <EventCard
           key={event.id}
           event={event}

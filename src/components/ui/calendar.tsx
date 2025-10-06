@@ -32,15 +32,20 @@ function Calendar({
       dateOnly.setHours(0, 0, 0, 0);
       if (dateOnly < today || dateOnly > oneWeekFromNow) return false;
       const value = getAvailabilityForDate(dateOnly);
-      return value > 0.3 && value <= 0.7;
+      return value > 0.3 && value <= 0.8;
     },
     fullyBooked: (date: Date) => {
       const dateOnly = new Date(date);
       dateOnly.setHours(0, 0, 0, 0);
       if (dateOnly < today || dateOnly > oneWeekFromNow) return false;
       const value = getAvailabilityForDate(dateOnly);
-      return value > 0.7;
+      return value > 0.8;
     },
+    isPast: (date: Date) => {
+      const dateOnly = new Date(date);
+      dateOnly.setHours(0, 0, 0, 0);
+      return dateOnly < today;
+    }
   };
 
   return (
@@ -91,9 +96,9 @@ function Calendar({
         Day: ({ date, displayMonth, ...dayProps }: any) => {
           const dateOnly = new Date(date);
           dateOnly.setHours(0, 0, 0, 0);
-          const isPast = dateOnly < today;
-          const isAvailable = modifiers.available(dateOnly);
-          const isFullyBooked = modifiers.fullyBooked(dateOnly);
+          const isPast = modifiers.isPast(dateOnly);
+          const isAvailable = !isPast && modifiers.available(dateOnly);
+          const isFullyBooked = !isPast && modifiers.fullyBooked(dateOnly);
           
           return (
             <div className="relative w-9 h-9">
@@ -101,19 +106,21 @@ function Calendar({
                 {...dayProps}
                 className={cn(
                   dayProps.className,
-                  "w-full h-full flex items-center justify-center"
+                  "w-full h-full flex items-center justify-center text-sm",
+                  isPast && "text-muted-foreground opacity-50 cursor-not-allowed"
                 )}
+                disabled={isPast || dayProps.disabled}
               >
                 {date.getDate()}
               </button>
-              {!isPast && isAvailable && (
-                <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-green-300" />
+              {isAvailable && (
+                <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-green-400" />
               )}
-              {!isPast && isFullyBooked && (
-                <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-red-300" />
+              {isFullyBooked && (
+                <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-red-400" />
               )}
               {isPast && (
-                <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-gray-300" />
+                <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-gray-400" />
               )}
             </div>
           );
