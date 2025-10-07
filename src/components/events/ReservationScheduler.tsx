@@ -1,56 +1,98 @@
-import React, { useMemo } from 'react';
-import { Venue } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar as UICalendar } from '@/components/ui/calendar';
+import React, { useState } from 'react';
+import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Clock } from 'lucide-react';
+import { Venue } from '@/types';
+import { generateWeekAvailability } from '@/data/generateWeekAvailability';
 
 interface ReservationSchedulerProps {
   venue: Venue;
-  selectedDate: string | null; // YYYY-MM-DD
-  selectedTime: string | null; // HH:mm
+  selectedDate: string | null;
+  selectedTime: string | null;
   onSelect: (date: string, time: string) => void;
 }
 
-export const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({ venue, selectedDate, selectedTime, onSelect }) => {
-  const availableDates = useMemo(() => new Set((venue.availability || []).map(a => a.date)), [venue.availability]);
-  const timesForSelectedDate = useMemo(() => {
-    const slot = (venue.availability || []).find(a => a.date === selectedDate);
-    return slot ? slot.times : [];
-  }, [venue.availability, selectedDate]);
+const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
+  venue,
+  selectedDate,
+  selectedTime,
+  onSelect,
+}) => {
+  const [date, setDate] = useState<Date | undefined>(selectedDate ? new Date(selectedDate) : undefined);
+  
+  // Generate week availability
+  const weekAvailability = generateWeekAvailability();
 
-  const handleDateChange = (date: Date | undefined) => {
-    if (!date) return;
-    const iso = date.toISOString().split('T')[0];
-    const times = (venue.availability || []).find(a => a.date === iso)?.times || [];
+  const getAvailableTimesForDate = (dateToCheck: Date): string[] => {
+    const dateStr = dateToCheck.toISOString().split('T')[0];
+    const dayAvailability = weekAvailability.find(a => a.date === dateStr);
+    return dayAvailability?.times || [];
+  };
+
+  const availableTimes = date ? getAvailableTimesForDate(date) : [];
+
+  const handleDateSelect = (newDate: Date | undefined) => {
+    if (!newDate) return;
+    setDate(newDate);
+    const times = getAvailableTimesForDate(newDate);
     if (times.length > 0) {
-      onSelect(iso, times[0]);
+      // Auto-select first available time
+      onSelect(newDate.toISOString().split('T')[0], times[0]);
+    }
+  };
+
+  const handleTimeSelect = (time: string) => {
+    if (date) {
+      onSelect(date.toISOString().split('T')[0], time);
     }
   };
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Reserve a date & time</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <UICalendar
-          key={`${venue.id}-${selectedDate || 'none'}`}
-          mode="single"
-          selected={selectedDate ? new Date(selectedDate) : undefined}
-          onSelect={handleDateChange}
-          defaultMonth={selectedDate ? new Date(selectedDate) : undefined}
-          disabled={(date) => !availableDates.has(date.toISOString().split('T')[0])}
-        />
-        <div className="grid grid-cols-3 gap-2">
-          {timesForSelectedDate.map(time => (
-            <Button key={time} variant={time === selectedTime ? 'default' : 'outline'} onClick={() => onSelect(selectedDate as string, time)} className="h-10">
-              {time}
-            </Button>
-          ))}
-          {timesForSelectedDate.length === 0 && (
-            <div className="text-sm text-muted-foreground col-span-3">No times available for selected date.</div>
-          )}
+      <CardContent className="p-4 space-y-3">
+        <div className="border rounded-lg overflow-hidden">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={handleDateSelect}
+            className="pointer-events-auto"
+            disabled={(checkDate) => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const oneWeekFromNow = new Date(today);
+              oneWeekFromNow.setDate(today.getDate() + 7);
+              return checkDate < today || checkDate > oneWeekFromNow;
+            }}
+          />
         </div>
+
+        {date && availableTimes.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Available Times</p>
+            <div className="grid grid-cols-3 gap-2">
+              {availableTimes.map((time) => (
+                <Button
+                  key={time}
+                  type="button"
+                  variant={selectedTime === time ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleTimeSelect(time)}
+                  className="text-xs h-9"
+                >
+                  <Clock className="w-3 h-3 mr-1" />
+                  {time}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {date && availableTimes.length === 0 && (
+          <div className="text-sm text-muted-foreground text-center py-2">
+            No available time slots for this date. Please select another date.
+          </div>
+        )}
       </CardContent>
     </Card>
   );

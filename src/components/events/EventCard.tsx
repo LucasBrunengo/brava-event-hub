@@ -63,9 +63,9 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick }) => {
       <CardContent className="p-4">
         {/* Banner space for customization */}
         {(event.customBanner || event.isPublic || !event.isPublic) && (
-          <div className="mb-3 -mx-4 -mt-4 h-24 rounded-t-lg overflow-hidden">
+          <div className="mb-3 -mx-4 -mt-4 h-32 rounded-t-lg overflow-hidden">
             {event.customBanner ? (
-              <img src={event.customBanner} alt="Event banner" className="w-full h-full object-cover object-center" />
+              <img src={event.customBanner} alt="Event banner" className="w-full h-full object-cover object-top" />
             ) : (
               <div className="w-full h-full bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 opacity-20" />
             )}

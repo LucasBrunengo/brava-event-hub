@@ -306,6 +306,7 @@ export const mockEvents: Event[] = [
     isPublic: true,
     isPast: true,
     hasExpenseSplitting: false,
+    customBanner: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800&h=300&fit=crop',
     photos: [
       { id: 'p1', url: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400&h=400&fit=crop&crop=center', uploadedBy: '1', taggedUsers: ['3', '6'], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },
       { id: 'p2', url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop&crop=center', uploadedBy: '3', taggedUsers: ['1'], uploadedAt: new Date().toISOString(), reactions: [], comments: [] },

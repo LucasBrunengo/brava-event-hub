@@ -27,7 +27,7 @@ export const TicketModal: React.FC<TicketModalProps> = ({ isOpen, onClose, event
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-[75vw] max-h-[60vh] overflow-y-auto">
+        <DialogContent className="max-w-[70vw] max-h-[55vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-center">Event Ticket</DialogTitle>
           </DialogHeader>

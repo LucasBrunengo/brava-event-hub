@@ -101,14 +101,7 @@ html, body {
   }
 
   body {
-    background: linear-gradient(135deg, 
-      #1a1a2e 0%, 
-      #16213e 25%, 
-      #0f3460 50%, 
-      #533483 75%, 
-      #7209b7 100%);
-    background-attachment: fixed;
-    @apply text-foreground min-h-screen;
+    @apply bg-gray-50 text-foreground min-h-screen;
   }
 
   /* Hide scrollbars completely for phone simulation */
@@ -185,7 +178,7 @@ html, body {
   }
 
   .phone-screen {
-    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #b8c5d3 100%);
+    @apply bg-gray-50;
     border-radius: 28px;
     overflow: hidden;
     height: 100%;

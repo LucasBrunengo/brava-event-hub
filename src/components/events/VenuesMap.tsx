@@ -22,8 +22,7 @@ export const VenuesMap: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-background">
-      {/* Header */}
+    <div className="h-[calc(100vh-180px)] flex flex-col bg-gray-50">{/* Header */}
       <div className="p-4 border-b">
         <h2 className="text-xl font-bold mb-3">Venues Map</h2>
         
