@@ -142,21 +142,21 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('entertainment')}>
-                <PartyPopper className="w-5 h-5 mb-1" />
-                Entertainment
+              <Button variant="outline" className="h-20 flex flex-col items-center justify-center border-2 hover:border-primary hover:bg-primary/5" onClick={() => setReasonSelected('entertainment')}>
+                <PartyPopper className="w-5 h-5 mb-1 text-primary" />
+                <span className="font-medium">Entertainment</span>
               </Button>
-              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('wellness')}>
-                <Dumbbell className="w-5 h-5 mb-1" />
-                Wellness
+              <Button variant="outline" className="h-20 flex flex-col items-center justify-center border-2 hover:border-primary hover:bg-primary/5" onClick={() => setReasonSelected('wellness')}>
+                <Dumbbell className="w-5 h-5 mb-1 text-primary" />
+                <span className="font-medium">Wellness</span>
               </Button>
-              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('food')}>
-                <Salad className="w-5 h-5 mb-1" />
-                Food
+              <Button variant="outline" className="h-20 flex flex-col items-center justify-center border-2 hover:border-primary hover:bg-primary/5" onClick={() => setReasonSelected('food')}>
+                <Salad className="w-5 h-5 mb-1 text-primary" />
+                <span className="font-medium">Food</span>
               </Button>
-              <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => setReasonSelected('custom')}>
-                <Sparkles className="w-5 h-5 mb-1" />
-                Custom
+              <Button variant="outline" className="h-20 flex flex-col items-center justify-center border-2 hover:border-primary hover:bg-primary/5" onClick={() => setReasonSelected('custom')}>
+                <Sparkles className="w-5 h-5 mb-1 text-primary" />
+                <span className="font-medium">Custom</span>
               </Button>
             </div>
           </CardContent>
@@ -337,10 +337,11 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>Event Privacy</CardTitle>
-          </CardHeader>
+        {reasonSelected === 'custom' && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Event Privacy</CardTitle>
+            </CardHeader>
           <CardContent>
             <div 
               className="flex items-center justify-between space-x-4 rounded-md border p-4 cursor-pointer"
@@ -364,8 +365,9 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
             </div>
           </CardContent>
         </Card>
+        )}
 
-        {!isPublic && (
+        {!isPublic && reasonSelected === 'custom' && (
           <Card>
             <CardHeader>
               <CardTitle>Invite Friends</CardTitle>
@@ -396,7 +398,6 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                     </div>
                     <Checkbox
                       checked={invitedFriends.includes(friend.id)}
-                      onCheckedChange={() => handleToggleFriend(friend.id)}
                     />
                   </div>
                 ))}
@@ -405,7 +406,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
           </Card>
         )}
 
-        {isPublic && reasonSelected === 'custom' && (
+        {isPublic && (
           <Card>
             <CardHeader>
               <CardTitle>Public Event Options</CardTitle>

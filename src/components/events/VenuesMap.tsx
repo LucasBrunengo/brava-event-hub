@@ -22,8 +22,8 @@ export const VenuesMap: React.FC = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-180px)] flex flex-col bg-gray-50">{/* Header */}
-      <div className="p-4 border-b">
+    <div className="flex flex-col bg-gray-50" style={{ height: 'calc(100vh - 140px)' }}>
+      <div className="p-4 border-b bg-background">
         <h2 className="text-xl font-bold mb-3">Venues Map</h2>
         
         {/* Category Filters */}

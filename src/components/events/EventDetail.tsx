@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogPortal, DialogO
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { QuickPay } from './QuickPay';
+import { PaymentConfirmation } from './PaymentConfirmation';
 
 interface EventDetailProps {
   event: Event;
@@ -33,6 +34,7 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [ticketQuantity, setTicketQuantity] = useState(1);
   const [ticketType, setTicketType] = useState<'general' | 'vip'>('general');
+  const [showPaymentConfirm, setShowPaymentConfirm] = useState(false);
 
   const currentUserAttendee = event.attendees.find(a => a.userId === currentUser?.id);
   const [displayRsvpStatus, setDisplayRsvpStatus] = useState(currentUserAttendee?.status || null);
@@ -94,6 +96,8 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   const handlePurchase = () => {
     // Demo purchase flow
     setShowPurchaseModal(false);
+    setShowPaymentConfirm(true);
+    setTimeout(() => setShowPaymentConfirm(false), 2000);
     setDisplayRsvpStatus('going');
     if (purchaseTickets) {
       const tierId = event.ticketTiers && event.ticketTiers.length > 0 ? (ticketType === 'vip' ? 'first' : 'early') : 'first';
@@ -112,7 +116,9 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
   }
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <>
+      <PaymentConfirmation isVisible={showPaymentConfirm} />
+      <div className="space-y-6 animate-slide-up">
       {/* Back Button */}
       <div className="flex items-center">
         <Button variant="ghost" size="sm" onClick={onBack}>
@@ -418,7 +424,8 @@ export const EventDetail: React.FC<EventDetailProps> = ({ event, onBack, onShare
         <TabsContent value="comments">
           <CommentSection eventId={event.id} />
         </TabsContent>
-      </Tabs>
-    </div>
+       </Tabs>
+     </div>
+     </>
   );
-}; 
+};

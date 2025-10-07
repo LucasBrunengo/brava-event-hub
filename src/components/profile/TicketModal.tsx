@@ -27,11 +27,11 @@ export const TicketModal: React.FC<TicketModalProps> = ({ isOpen, onClose, event
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-[70vw] max-h-[55vh] overflow-y-auto">
+        <DialogContent className="max-w-[65vw] max-h-[50vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-center">Event Ticket</DialogTitle>
           </DialogHeader>
-          <div className="space-y-3">
+          <div className="space-y-3 p-4">
             <div className="space-y-2 text-center">
               <h3 className="font-bold text-base">{event.name}</h3>
               <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
