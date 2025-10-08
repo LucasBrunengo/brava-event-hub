@@ -22,8 +22,8 @@ export const VenuesMap: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col bg-gray-50" style={{ height: 'calc(100vh - 140px)' }}>
-      <div className="p-4 border-b bg-background">
+    <div className="flex flex-col bg-gray-50 h-full">
+      <div className="p-4 border-b bg-background shrink-0">
         <h2 className="text-xl font-bold mb-3">Venues Map</h2>
         
         {/* Category Filters */}
@@ -60,7 +60,7 @@ export const VenuesMap: React.FC = () => {
       </div>
 
       {/* Map Placeholder */}
-      <div className="relative h-64 bg-muted border-b">
+      <div className="relative h-48 bg-muted border-b shrink-0">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center space-y-2">
             <MapPin className="w-12 h-12 mx-auto text-muted-foreground" />
@@ -69,9 +69,9 @@ export const VenuesMap: React.FC = () => {
           </div>
         </div>
         {/* Simulated pins */}
-        <div className="absolute top-20 left-16 w-8 h-8 bg-primary rounded-full border-4 border-white shadow-lg animate-bounce" />
-        <div className="absolute top-32 right-24 w-8 h-8 bg-primary rounded-full border-4 border-white shadow-lg" />
-        <div className="absolute bottom-12 left-1/3 w-8 h-8 bg-primary rounded-full border-4 border-white shadow-lg" />
+        <div className="absolute top-12 left-16 w-6 h-6 bg-primary rounded-full border-3 border-white shadow-lg animate-bounce" />
+        <div className="absolute top-20 right-24 w-6 h-6 bg-primary rounded-full border-3 border-white shadow-lg" />
+        <div className="absolute bottom-8 left-1/3 w-6 h-6 bg-primary rounded-full border-3 border-white shadow-lg" />
       </div>
 
       {/* Venues List */}

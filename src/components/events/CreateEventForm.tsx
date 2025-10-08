@@ -81,8 +81,8 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
       date: reservationDate || date,
       time: reservationTime || time,
       location,
-      isPublic,
-      isPromoted: isPublic ? promotePublic : false,
+      isPublic: reasonSelected === 'custom' ? isPublic : false,
+      isPromoted: isPublic && reasonSelected === 'custom' ? promotePublic : false,
       ticketPrice: releases.length > 0 ? Number(releases[0].price) : (ticketPriceInput ? Number(ticketPriceInput) : undefined),
       totalTickets: releases.reduce((sum, r) => sum + Number(r.quantity), 0) || (ticketTotalQty ? Number(ticketTotalQty) : undefined),
       ticketTiers: tiers.length > 0 ? tiers : undefined,
@@ -329,6 +329,19 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                 <Input placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} required />
               </>
             )}
+            {reasonSelected === 'food' && !reservationDate && (
+              <div className="space-y-2">
+                <Label>Number of People</Label>
+                <Input 
+                  type="number" 
+                  min="1" 
+                  max="20" 
+                  value={numPeople} 
+                  onChange={(e) => setNumPeople(Number(e.target.value))} 
+                  placeholder="How many people?"
+                />
+              </div>
+            )}
             {(reasonSelected === 'food' || reasonSelected === 'wellness') && !reservationDate && (
               <div className="text-sm text-muted-foreground">
                 Please select a venue and time from the calendar above
@@ -366,8 +379,9 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
           </CardContent>
         </Card>
         )}
-
-        {!isPublic && reasonSelected === 'custom' && (
+        
+        {/* Invite Friends Section */}
+        {(!isPublic && reasonSelected === 'custom') || ((reasonSelected === 'food' || reasonSelected === 'wellness' || reasonSelected === 'entertainment') && reservationDate) ? (
           <Card>
             <CardHeader>
               <CardTitle>Invite Friends</CardTitle>
@@ -404,9 +418,9 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
               </div>
             </CardContent>
           </Card>
-        )}
+        ) : null}
 
-        {isPublic && (
+        {isPublic && reasonSelected === 'custom' && (
           <Card>
             <CardHeader>
               <CardTitle>Public Event Options</CardTitle>

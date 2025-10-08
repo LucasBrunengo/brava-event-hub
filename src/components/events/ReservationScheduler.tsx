@@ -20,7 +20,7 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
   onSelect,
 }) => {
   const [date, setDate] = useState<Date | undefined>(selectedDate ? new Date(selectedDate) : undefined);
-  const [weekAvailability] = useState(() => generateWeekAvailability());
+  const weekAvailability = generateWeekAvailability();
 
   const getAvailableTimesForDate = (dateToCheck: Date): string[] => {
     const dateStr = dateToCheck.toISOString().split('T')[0];

@@ -18,7 +18,7 @@ export const TicketSalesModal: React.FC<TicketSalesModalProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[65vw] max-h-[50vh] overflow-y-auto">
+      <DialogContent className="max-w-[85vw] max-h-[70vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Ticket Sales Overview</DialogTitle>
         </DialogHeader>
