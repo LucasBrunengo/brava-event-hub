@@ -381,7 +381,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
         )}
         
         {/* Invite Friends Section */}
-        {(!isPublic && reasonSelected === 'custom') || ((reasonSelected === 'food' || reasonSelected === 'wellness' || reasonSelected === 'entertainment') && reservationDate) ? (
+        {((!isPublic && reasonSelected === 'custom') || (reasonSelected === 'food' || reasonSelected === 'wellness' || reasonSelected === 'entertainment')) && (
           <Card>
             <CardHeader>
               <CardTitle>Invite Friends</CardTitle>
@@ -418,7 +418,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
               </div>
             </CardContent>
           </Card>
-        ) : null}
+        )}
 
         {isPublic && reasonSelected === 'custom' && (
           <Card>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,7 +20,9 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
   onSelect,
 }) => {
   const [date, setDate] = useState<Date | undefined>(selectedDate ? new Date(selectedDate) : undefined);
-  const weekAvailability = generateWeekAvailability();
+  
+  // Memoize week availability so it doesn't change on every render
+  const weekAvailability = useMemo(() => generateWeekAvailability(), []);
 
   const getAvailableTimesForDate = (dateToCheck: Date): string[] => {
     const dateStr = dateToCheck.toISOString().split('T')[0];
@@ -49,12 +51,13 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
   return (
     <Card>
       <CardContent className="p-4 space-y-3">
-        <div className="border rounded-lg overflow-hidden">
+        <p className="text-sm font-medium">Select Date & Time</p>
+        <div className="border rounded-lg overflow-hidden bg-background">
           <Calendar
             mode="single"
             selected={date}
             onSelect={handleDateSelect}
-            className="pointer-events-auto"
+            className="w-full pointer-events-auto"
             disabled={(checkDate) => {
               const today = new Date();
               today.setHours(0, 0, 0, 0);
@@ -67,7 +70,7 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
 
         {date && availableTimes.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium">Available Times</p>
+            <p className="text-sm font-medium">Available Times for {date.toLocaleDateString()}</p>
             <div className="grid grid-cols-3 gap-2">
               {availableTimes.map((time) => (
                 <Button
@@ -89,6 +92,12 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
         {date && availableTimes.length === 0 && (
           <div className="text-sm text-muted-foreground text-center py-2">
             No available time slots for this date. Please select another date.
+          </div>
+        )}
+        
+        {!date && (
+          <div className="text-sm text-muted-foreground text-center py-2">
+            Please select a date to see available times
           </div>
         )}
       </CardContent>
