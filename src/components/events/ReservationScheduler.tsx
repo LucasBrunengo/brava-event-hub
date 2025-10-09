@@ -48,7 +48,7 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
     <Card>
       <CardContent className="p-4 space-y-3">
         <p className="text-sm font-medium">Select Date & Time</p>
-        <div className="border rounded-lg overflow-hidden bg-background">
+        <div className="border rounded-lg overflow-hidden bg-background" onClick={(e) => e.preventDefault()}>
           <Calendar
             mode="single"
             selected={date}

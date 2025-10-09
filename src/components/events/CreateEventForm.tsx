@@ -287,12 +287,19 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                           </div>
                         </div>
                       )}
-                      <ReservationScheduler
-                        venue={selectedVenue}
-                        selectedDate={reservationDate}
-                        selectedTime={reservationTime}
-                        onSelect={(d, t) => { setReservationDate(d); setReservationTime(t); setDate(d); setTime(t); }}
-                      />
+                      <div onClickCapture={(e) => {
+                        const target = e.target as HTMLElement;
+                        if (target.tagName === 'BUTTON' && !target.getAttribute('type')) {
+                          e.stopPropagation();
+                        }
+                      }}>
+                        <ReservationScheduler
+                          venue={selectedVenue}
+                          selectedDate={reservationDate}
+                          selectedTime={reservationTime}
+                          onSelect={(d, t) => { setReservationDate(d); setReservationTime(t); setDate(d); setTime(t); }}
+                        />
+                      </div>
                       {reservationDate && reservationTime && reasonSelected === 'wellness' && (
                         <div className="space-y-2">
                           <Label className="text-sm font-medium">Available Classes</Label>
