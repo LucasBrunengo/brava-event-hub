@@ -319,7 +319,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
           </CardHeader>
           <CardContent className="space-y-4">
             <Input placeholder="Event Name" value={eventName} onChange={(e) => setEventName(e.target.value)} required />
-            <Textarea placeholder="Event Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+            <Textarea placeholder="Event Description (optional)" value={description} onChange={(e) => setDescription(e.target.value)} />
             {reasonSelected === 'custom' && (
               <>
                 <div className="grid grid-cols-2 gap-4">

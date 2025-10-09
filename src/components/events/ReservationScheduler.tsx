@@ -35,11 +35,7 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
   const handleDateSelect = (newDate: Date | undefined) => {
     if (!newDate) return;
     setDate(newDate);
-    const times = getAvailableTimesForDate(newDate);
-    if (times.length > 0) {
-      // Auto-select first available time
-      onSelect(newDate.toISOString().split('T')[0], times[0]);
-    }
+    // Don't auto-select time, just show available times
   };
 
   const handleTimeSelect = (time: string) => {
