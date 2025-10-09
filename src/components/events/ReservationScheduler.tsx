@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
 import { Venue } from '@/types';
 import { generateWeekAvailability } from '@/data/generateWeekAvailability';
+import CustomCalendar from './CustomCalendar';
 
 interface ReservationSchedulerProps {
   venue: Venue;
@@ -44,29 +44,21 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
     }
   };
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const oneWeekFromNow = new Date(today);
+  oneWeekFromNow.setDate(today.getDate() + 7);
+
   return (
     <Card onClick={(e) => e.stopPropagation()}>
       <CardContent className="p-4 space-y-3">
         <p className="text-sm font-medium">Select Date & Time</p>
-        <div 
-          className="border rounded-lg overflow-hidden bg-background"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-        >
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={handleDateSelect}
-            className="w-full pointer-events-auto"
-            disabled={(checkDate) => {
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              const oneWeekFromNow = new Date(today);
-              oneWeekFromNow.setDate(today.getDate() + 7);
-              return checkDate < today || checkDate > oneWeekFromNow;
-            }}
+        <div className="border rounded-lg p-3 bg-background">
+          <CustomCalendar
+            selectedDate={date || null}
+            onSelectDate={handleDateSelect}
+            minDate={today}
+            maxDate={oneWeekFromNow}
           />
         </div>
 
