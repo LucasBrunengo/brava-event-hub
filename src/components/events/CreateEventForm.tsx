@@ -86,7 +86,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
       ticketPrice: releases.length > 0 ? Number(releases[0].price) : (ticketPriceInput ? Number(ticketPriceInput) : undefined),
       totalTickets: releases.reduce((sum, r) => sum + Number(r.quantity), 0) || (ticketTotalQty ? Number(ticketTotalQty) : undefined),
       ticketTiers: tiers.length > 0 ? tiers : undefined,
-      attendees: isPublic ? [] : invitedFriends.map(id => users.find(u => u.id === id)).filter(Boolean),
+      invitedFriends: invitedFriends,
     };
     createEvent(eventData);
     onEventCreated();

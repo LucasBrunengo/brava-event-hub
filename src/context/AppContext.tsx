@@ -117,7 +117,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setCurrentUser(null);
   };
 
-  const createEvent = (eventData: Partial<Event>) => {
+  const createEvent = (eventData: Partial<Event> & { invitedFriends?: string[] }) => {
     if (!currentUser) return;
     
     const newEvent: Event = {
@@ -158,6 +158,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       createdAt: new Date().toISOString()
     };
     setNotifications(prev => [newNotification, ...prev]);
+
+    // If there are invited friends, invite them to the event
+    if (eventData.invitedFriends && eventData.invitedFriends.length > 0) {
+      setTimeout(() => {
+        inviteFriendsToEvent(
+          newEvent.id, 
+          eventData.invitedFriends!, 
+          `${currentUser.name} has invited you to ${newEvent.name}!`
+        );
+      }, 100);
+    }
   };
 
   const updateEvent = (eventId: string, eventData: Partial<Event>) => {
@@ -297,13 +308,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const inviteFriendsToEvent = (eventId: string, friendIds: string[], message: string) => {
     if (!currentUser) return;
 
-    // Find the event
-    const event = events.find(e => e.id === eventId);
-    if (!event) return;
+    // Find the event using the events state in the closure
+    setEvents(prev => {
+      const event = prev.find(e => e.id === eventId);
+      if (!event) return prev;
 
-    // Add friends to the event attendees
-    setEvents(prev => 
-      prev.map(e => {
+      // Add friends to the event attendees
+      const updatedEvents = prev.map(e => {
         if (e.id === eventId) {
           const newAttendees = [...e.attendees];
           
@@ -322,24 +333,41 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           return { ...e, attendees: newAttendees };
         }
         return e;
-      })
-    );
+      });
 
-    // Send notifications to invited friends
-    friendIds.forEach(friendId => {
-      const newNotification: Notification = {
-        id: `notification-${Date.now()}-${friendId}`,
-        type: 'event_invite',
-        title: `You're invited to ${event.name}!`,
-        message: message || `${currentUser.name} has invited you to their event.`,
-        userId: friendId,
-        relatedEventId: eventId,
-        relatedUserId: currentUser.id,
-        isRead: false,
-        createdAt: new Date().toISOString()
-      };
-      
-      setNotifications(prev => [...prev, newNotification]);
+      // Send notifications and messages to invited friends
+      friendIds.forEach(friendId => {
+        const newNotification: Notification = {
+          id: `notification-${Date.now()}-${friendId}`,
+          type: 'event_invite',
+          title: `You're invited to ${event.name}!`,
+          message: message || `${currentUser.name} has invited you to their event.`,
+          userId: friendId,
+          relatedEventId: eventId,
+          relatedUserId: currentUser.id,
+          isRead: false,
+          createdAt: new Date().toISOString()
+        };
+        
+        setNotifications(prev => [...prev, newNotification]);
+
+        // Also send a message with event invite link
+        const inviteMessage: Message = {
+          id: `msg-${Date.now()}-${friendId}`,
+          senderId: currentUser.id,
+          receiverId: friendId,
+          sender: currentUser,
+          type: 'event_invite',
+          content: message || `${currentUser.name} has invited you to ${event.name}!`,
+          eventId: eventId,
+          isRead: false,
+          createdAt: new Date().toISOString()
+        };
+        
+        setMessages(prev => [...prev, inviteMessage]);
+      });
+
+      return updatedEvents;
     });
   };
 
