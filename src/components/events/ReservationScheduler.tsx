@@ -45,10 +45,16 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
   };
 
   return (
-    <Card>
+    <Card onClick={(e) => e.stopPropagation()}>
       <CardContent className="p-4 space-y-3">
         <p className="text-sm font-medium">Select Date & Time</p>
-        <div className="border rounded-lg overflow-hidden bg-background" onClick={(e) => e.preventDefault()}>
+        <div 
+          className="border rounded-lg overflow-hidden bg-background"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
           <Calendar
             mode="single"
             selected={date}
@@ -74,7 +80,11 @@ const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
                   type="button"
                   variant={selectedTime === time ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => handleTimeSelect(time)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleTimeSelect(time);
+                  }}
                   className="text-xs h-9"
                 >
                   <Clock className="w-3 h-3 mr-1" />
