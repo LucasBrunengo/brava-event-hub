@@ -407,8 +407,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                 {filteredFriends.map(friend => (
                   <div 
                     key={friend.id} 
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-muted cursor-pointer"
-                    onClick={() => handleToggleFriend(friend.id)}
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-muted"
                   >
                     <div className="flex items-center gap-3">
                       <Avatar className="w-8 h-8">
@@ -419,6 +418,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                     </div>
                     <Checkbox
                       checked={invitedFriends.includes(friend.id)}
+                      onCheckedChange={() => handleToggleFriend(friend.id)}
                     />
                   </div>
                 ))}
