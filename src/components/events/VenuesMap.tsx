@@ -1,16 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { mockVenues } from '@/data/mockData';
 import { MapPin, Star, Navigation } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 export const VenuesMap: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'restaurant' | 'wellness' | 'entertainment'>('all');
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<L.Map | null>(null);
+  const markersRef = useRef<L.Marker[]>([]);
   
   const filteredVenues = selectedCategory === 'all' 
     ? mockVenues 
     : mockVenues.filter(v => v.category === selectedCategory);
+
+  // Initialize map
+  useEffect(() => {
+    if (!mapContainer.current || map.current) return;
+
+    // Create map centered on Barcelona
+    map.current = L.map(mapContainer.current).setView([41.3851, 2.1734], 13);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map.current);
+
+    // Fix marker icon issue with Leaflet
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    });
+
+    return () => {
+      map.current?.remove();
+      map.current = null;
+    };
+  }, []);
+
+  // Update markers when filtered venues change
+  useEffect(() => {
+    if (!map.current) return;
+
+    // Clear existing markers
+    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current = [];
+
+    // Add markers for filtered venues
+    filteredVenues.forEach((venue) => {
+      // Generate coordinates based on venue location (mock coordinates around Barcelona)
+      const lat = 41.3851 + (Math.random() - 0.5) * 0.1;
+      const lng = 2.1734 + (Math.random() - 0.5) * 0.1;
+
+      const marker = L.marker([lat, lng]).addTo(map.current!);
+      marker.bindPopup(`
+        <div class="p-2">
+          <h3 class="font-semibold">${venue.name}</h3>
+          <p class="text-sm text-muted-foreground">${venue.category}</p>
+          <p class="text-sm">${venue.distanceKm} km away</p>
+        </div>
+      `);
+      markersRef.current.push(marker);
+    });
+
+    // Adjust map bounds to show all markers
+    if (markersRef.current.length > 0) {
+      const group = L.featureGroup(markersRef.current);
+      map.current.fitBounds(group.getBounds().pad(0.1));
+    }
+  }, [filteredVenues]);
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -59,20 +123,8 @@ export const VenuesMap: React.FC = () => {
         </div>
       </div>
 
-      {/* Map Placeholder */}
-      <div className="relative h-52 bg-muted border-b shrink-0 flex-none">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center space-y-2">
-            <MapPin className="w-12 h-12 mx-auto text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">Interactive Map</p>
-            <p className="text-xs text-muted-foreground">{filteredVenues.length} venues nearby</p>
-          </div>
-        </div>
-        {/* Simulated pins */}
-        <div className="absolute top-10 left-12 w-6 h-6 bg-primary rounded-full border-3 border-white shadow-lg animate-bounce" />
-        <div className="absolute top-20 right-16 w-6 h-6 bg-primary rounded-full border-3 border-white shadow-lg" />
-        <div className="absolute bottom-6 left-1/3 w-6 h-6 bg-primary rounded-full border-3 border-white shadow-lg" />
-      </div>
+      {/* Interactive Map */}
+      <div ref={mapContainer} className="h-52 border-b shrink-0 flex-none" />
 
       {/* Venues List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
