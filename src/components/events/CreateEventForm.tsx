@@ -35,6 +35,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
   const [wellnessSub, setWellnessSub] = useState<'gym' | 'yoga' | 'barre' | 'spa' | null>(null);
   const [cuisineFilter, setCuisineFilter] = useState<string | null>(null);
   const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null);
+  const [selectedClass, setSelectedClass] = useState<string | null>(null);
   const [reservationDate, setReservationDate] = useState<string | null>(null);
   const [reservationTime, setReservationTime] = useState<string | null>(null);
   const [numPeople, setNumPeople] = useState<number>(2);
@@ -72,11 +73,16 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
       releaseTime: r.time
     }));
 
+    // For wellness events with a selected class, use venue name + class name
+    const finalEventName = reasonSelected === 'wellness' && selectedClass && selectedVenue 
+      ? `${selectedVenue.name} - ${selectedClass}`
+      : eventName;
+
     const eventData: any = {
       category: reasonSelected || 'custom',
-      subcategory: entertainmentSub || undefined,
+      subcategory: entertainmentSub || wellnessSub || undefined,
       venueId: selectedVenue?.id,
-      name: eventName,
+      name: finalEventName,
       description,
       date: reservationDate || date,
       time: reservationTime || time,
@@ -305,7 +311,20 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ onBack, onEven
                           <Label className="text-sm font-medium">Available Classes</Label>
                           <div className="grid grid-cols-2 gap-2">
                             {(['Functional Training','HIIT','Yoga Flow','Barre Intro','Spin Class','Pilates','Body Pump','Stretching'] as string[]).map((cls, idx) => (
-                              <Button key={idx} type="button" variant="outline" className="p-2 text-xs h-auto flex flex-col items-center gap-1">
+                              <Button 
+                                key={idx} 
+                                type="button" 
+                                variant={selectedClass === cls ? 'default' : 'outline'} 
+                                className="p-2 text-xs h-auto flex flex-col items-center gap-1"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setSelectedClass(cls);
+                                  if (selectedVenue) {
+                                    setEventName(`${selectedVenue.name} - ${cls}`);
+                                  }
+                                }}
+                              >
                                 <span className="font-medium">{cls}</span>
                                 <span className="text-[10px] text-muted-foreground">{reservationTime}</span>
                               </Button>
