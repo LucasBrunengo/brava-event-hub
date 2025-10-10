@@ -11,11 +11,22 @@ export const VenuesMap: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'restaurant' | 'wellness' | 'entertainment'>('all');
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
-  const markersRef = useRef<L.Marker[]>([]);
+  const markersRef = useRef<Map<string, L.Marker>>(new Map());
+  const venueCoordinatesRef = useRef<Map<string, [number, number]>>(new Map());
   
   const filteredVenues = selectedCategory === 'all' 
     ? mockVenues 
     : mockVenues.filter(v => v.category === selectedCategory);
+
+  const handleVenueClick = (venueId: string) => {
+    const marker = markersRef.current.get(venueId);
+    const coords = venueCoordinatesRef.current.get(venueId);
+    
+    if (marker && coords && map.current) {
+      map.current.setView(coords, 16, { animate: true });
+      marker.openPopup();
+    }
+  };
 
   // Initialize map
   useEffect(() => {
@@ -50,15 +61,18 @@ export const VenuesMap: React.FC = () => {
 
     // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());
-    markersRef.current = [];
+    markersRef.current.clear();
+    venueCoordinatesRef.current.clear();
 
     // Add markers for filtered venues
     filteredVenues.forEach((venue) => {
-      // Generate coordinates based on venue location (mock coordinates around Barcelona)
-      const lat = 41.3851 + (Math.random() - 0.5) * 0.1;
-      const lng = 2.1734 + (Math.random() - 0.5) * 0.1;
+      // Generate consistent coordinates based on venue id (mock coordinates around Barcelona)
+      const seed = venue.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const lat = 41.3851 + ((seed % 100) - 50) / 1000;
+      const lng = 2.1734 + ((seed % 80) - 40) / 1000;
+      const coords: [number, number] = [lat, lng];
 
-      const marker = L.marker([lat, lng]).addTo(map.current!);
+      const marker = L.marker(coords).addTo(map.current!);
       marker.bindPopup(`
         <div class="p-2">
           <h3 class="font-semibold">${venue.name}</h3>
@@ -66,12 +80,14 @@ export const VenuesMap: React.FC = () => {
           <p class="text-sm">${venue.distanceKm} km away</p>
         </div>
       `);
-      markersRef.current.push(marker);
+      
+      markersRef.current.set(venue.id, marker);
+      venueCoordinatesRef.current.set(venue.id, coords);
     });
 
     // Adjust map bounds to show all markers
-    if (markersRef.current.length > 0) {
-      const group = L.featureGroup(markersRef.current);
+    if (markersRef.current.size > 0) {
+      const group = L.featureGroup(Array.from(markersRef.current.values()));
       map.current.fitBounds(group.getBounds().pad(0.1));
     }
   }, [filteredVenues]);
@@ -129,7 +145,11 @@ export const VenuesMap: React.FC = () => {
       {/* Venues List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
         {filteredVenues.map((venue) => (
-          <Card key={venue.id} className="overflow-hidden hover:shadow-md transition-shadow">
+          <Card 
+            key={venue.id} 
+            className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+            onClick={() => handleVenueClick(venue.id)}
+          >
             <CardContent className="p-0">
               <div className="flex gap-3">
                 {venue.imageUrl && (
